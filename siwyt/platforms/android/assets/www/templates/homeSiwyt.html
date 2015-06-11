@@ -1,0 +1,27 @@
+{{!--aggiungere controllo se la collezione non è vuota--}}
+<ul class="table-view">
+  {{!-- ciclo la collezione di bacheche--}}
+  {{#each this}}
+  <li class="table-view-cell">
+    <a class="navigate-right">
+      <span class="badge">5</span>
+      {{nome}}
+    </a>
+  </li>
+  {{/each}}
+</ul>
+
+<nav class="bar bar-tab">
+  <a class="tab-item active" id="home">
+    <span class="icon icon-home"></span>
+    <span class="tab-label">Home</span>
+  </a>
+  <a class="tab-item" id="contacts">
+    <span class="icon icon-person"></span>
+    <span class="tab-label">Contacts</span>
+  </a>
+  <a class="tab-item" id="profile">
+    <span class="icon icon-person"></span>
+    <span class="tab-label">Profile</span>
+  </a>
+</nav>
