@@ -16,6 +16,11 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.homeSiwyt;
       /*
+      $("body").on("swipeLeft",function(){
+        console.log("CIAO");
+      });                       
+      */
+      /*
       var prova = document.getElementById("content");
       prova.addEventListener("tap", go);
       function go(event){
@@ -25,12 +30,11 @@ define(function(require) {
       };
       */
       // here we can register to inTheDOM or removing events
-      // this.listenTo(this, "inTheDOM", function() {
-      //   $('#content').on("swipe", function(data){
-      //     console.log(data);
-      //   });
-      // });
-      // this.listenTo(this, "removing", functionName);
+      //this.listenTo(this, "inTheDOM", function() {
+      //  console.log("CCCCCCCCCC");
+      // $('#content').on("swipe", this.goToContacts);
+      //});
+      //this.listenTo(this, "removing", functionName);
 
       // by convention, all the inner views of a view must be stored in this.subViews
     },
@@ -40,8 +44,10 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #profile": "goToProfile",
-      "tap #contacts": "goToContacts"
+      //"tap": "goToContacts",
+      "tap .rigabacheca": "goToBacheca",
+      "tap #new": "goToCreateBacheca",
+      "swipeLeft": "goToContacts"
     },
 
     render: function() {
@@ -50,19 +56,35 @@ define(function(require) {
 
       return this;
     },
-
-    goToProfile: function(e) {
-      Backbone.history.navigate("profile", {
-        trigger: true
-      });
-
+    /*
+    swipeControls: function(e) {
+        if e.type == 'right'{
+            this.goToProfile()
+        }
+        else{
+            this.goToContacts()
+        }
     },
+    */
 
     goToContacts: function(e) {
+      $(".active").attr("class","tab-item");
+      $("#contacts").attr("class","tab-item active");
       Backbone.history.navigate("contacts", {
         trigger: true
       });
+    },
+    goToCreateBacheca: function(e){
+      Backbone.history.navigate("createBacheca", {
+        trigger: true
+      });
+    },
+    goToBacheca: function(e){
+      Backbone.history.navigate("bacheca/"+e.currentTarget.id, {
+        trigger: true
+      });
     }
+    
   });
 
   return HomeSiwyt;

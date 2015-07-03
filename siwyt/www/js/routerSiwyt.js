@@ -13,7 +13,10 @@ define(function(require) {
   var Contacts = require("views/pages/Contacts");
   var Profile = require("views/pages/Profile");
   var Settings = require("views/pages/Settings");
+  var Register = require("views/pages/Register");
+  var Login = require("views/pages/Login")
   var Bacheche = require("collections/Bacheche");
+  var CreateBacheca = require("views/pages/CreateBacheca")
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -23,11 +26,15 @@ define(function(require) {
       "": "showStructure",
       "homeSiwyt": "homeSiwyt",
       "profile": "profile",
+      "register": "register",
+      "login":"login",
       "contacts": "contacts",
-      "settings": "settings"
+      "settings": "settings",
+      "bacheca/:id": "showNoticeboard",
+      "createBacheca": "create"
     },
 
-    firstView: "homeSiwyt",
+    firstView: "login",
 
     initialize: function(options) {
       this.currentView = undefined;
@@ -57,8 +64,18 @@ define(function(require) {
       this.changePage(page);
     },
 
+    login: function(){
+      var page = new Login();
+      this.changePage(page);
+    },
+
     settings: function(){
       var page = new Settings();
+      this.navigate(page);
+    },
+
+    register: function(){
+      var page = new Register();
       this.changePage(page);
     },
 
@@ -137,6 +154,11 @@ define(function(require) {
       var page = new MapView();
       this.changePage(page);
     },
+    create: function(){
+      var page = new CreateBacheca();
+      this.changePage(page);
+    }
+    ,
 
     // load the structure view
     showStructure: function() {
@@ -152,6 +174,10 @@ define(function(require) {
       this.navigate(this.firstView, {trigger: true});
     },
 
+    showNoticeboard: function(id){
+        alert("showNoticeboard"+id);
+        this.homeSiwyt();
+    }
   });
 
   return AppRouter;

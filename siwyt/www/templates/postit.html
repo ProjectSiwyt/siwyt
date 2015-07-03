@@ -1,0 +1,26 @@
+<header class="bar bar-nav no-border">
+    <a class="icon pull-left"href=""><i class="fa fa-angle-left"></i></a>
+    <h1 class="title">Post-it</h1>
+    <a class="icon pull-right"href=""><i class="fa fa-cog"></i></a>
+</header>
+
+<div class="div">
+    <div class="parag">
+        <h1 class="centered">{{nome}}</h1>
+        <div class="author">by {{autore}}</div>
+        <div class="posted">posted on {{data}} {{ora}}</div>
+    </div>
+    {{#each commenti}}        
+    <div class="row"></div>        
+    <div class="parag">
+        {{contenuto}} <span class="posted">{{data}} {{ora}}</span>
+        <div class="author">by {{autore}}</div>
+    </div>
+    {{/each}}
+    <div class="row"></div>
+</div>
+
+<form>
+    <input type="text" placeholder="ADD COMMENT"/>
+    <input type="submit" value="SUBMIT"\>
+</form>

@@ -6,15 +6,15 @@ define(function(require) {
   var Utils = require("utils");
 
 
-  var Profile = Utils.Page.extend({
+  var Register = Utils.Page.extend({
 
-    constructorName: "Profile",
+    constructorName: "Register",
 
     model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.profile;
+      this.template = Utils.templates.register;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -26,31 +26,29 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "profile",
+    id: "register",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToContacts"
+      "tap .btn btn-block": "goToHome",
     },
 
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 
       return this;
     },
 
-    goToContacts: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
-      Backbone.history.navigate("contacts", {
+
+    goToHome: function(e) {
+      Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });
-
     }
   });
 
-  return Profile;
+  return Register;
 
 });

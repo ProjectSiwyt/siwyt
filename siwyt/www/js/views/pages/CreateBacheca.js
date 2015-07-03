@@ -1,20 +1,22 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var MyModel = require("models/MyModel");
-  var Utente = require("models/Utente");
+  var Bacheca = require("models/Bacheca");
   var Utils = require("utils");
 
 
-  var Profile = Utils.Page.extend({
+  var CreateBacheca = Utils.Page.extend({
 
-    constructorName: "Profile",
+    constructorName: "CreateBacheca",
 
-    model: Utente,
+    model: Bacheca,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.profile;
+      this.template = Utils.templates.createBacheca;
+      
+      //document.getElementById("title").innerHTML="Create Noticeboard"
+      
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -26,31 +28,28 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "profile",
+    id: "createBacheca",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToContacts"
+      "tap #submit": "goToBacheca",
     },
 
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 
       return this;
     },
 
-    goToContacts: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
-      Backbone.history.navigate("contacts", {
+    goToBacheca: function(e) {
+      Backbone.history.navigate("bacheca/"+document.getElementById("idBacheca").value, {
         trigger: true
       });
-
     }
   });
 
-  return Profile;
+  return CreateBacheca;
 
 });
