@@ -31,8 +31,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToHome",
-      "swipeLeft": "goToProfile"
+      "tap #profile": "goToProfile",
+      "tap #home": "goToHome"
     },
 
     render: function() {
@@ -43,8 +43,6 @@ define(function(require) {
     },
 
     goToProfile: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#profile").attr("class","tab-item active");
       Backbone.history.navigate("profile", {
         trigger: true
       });
@@ -52,8 +50,6 @@ define(function(require) {
     },
 
     goToHome: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#home").attr("class","tab-item active");
       Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });

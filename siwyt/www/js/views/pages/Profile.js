@@ -31,7 +31,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToContacts"
+      "tap #contacts": "goToContacts",
+      "tap #home": "goToHome"
     },
 
     render: function() {
@@ -42,12 +43,16 @@ define(function(require) {
     },
 
     goToContacts: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
       Backbone.history.navigate("contacts", {
         trigger: true
       });
 
+    },
+
+    goToHome: function(e) {
+      Backbone.history.navigate("homeSiwyt", {
+        trigger: true
+      });
     }
   });
 

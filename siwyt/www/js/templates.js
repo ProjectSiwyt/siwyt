@@ -15,8 +15,5 @@ define({
     homeSiwyt: "templates/homeSiwyt.html",
     contacts: "templates/contacts.html",
     profile: "templates/profile.html",
-    create: "templates/createBacheca.html",
-    login: "templates/login.html",
-    register: "templates/register.html",
-    settings: "templates/appSettings.html"
+    settings: "templates/settings.html"
 });

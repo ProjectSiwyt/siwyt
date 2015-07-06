@@ -4,20 +4,21 @@ define(function(require) {
   var Backbone = require("backbone");
   var Utils = require("utils");
 
-  var StructureViewSiwyt = Backbone.View.extend({
+  var StructureView = Backbone.View.extend({
 
-    constructorName: "StructureViewSiwyt",
+    constructorName: "StructureView",
 
     id: "main",
 
     events: {
-      "tap #settings": "settings",
+      "tap #nav1": "myView",
+      "tap #nav2": "map"
     },
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
-      // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.structureSiwyt;
+      // load the precompiled template
+      this.template = Utils.templates.structure;
       //this.on("inTheDOM", this.rendered);
       // bind the back event to the goBack function
       //document.getElementById("back").addEventListener("back", this.goBack(), false);
@@ -41,17 +42,23 @@ define(function(require) {
 
     setActiveTabBarElement: function(elementId) {
       // here we assume that at any time at least one tab bar element is active
-      //document.getElementsByClassName("active")[0].classList.remove("active");
-      //document.getElementById(elementId).classList.add("active");
+      document.getElementsByClassName("active")[0].classList.remove("active");
+      document.getElementById(elementId).classList.add("active");
     },
 
-    settings: function(event){
-      Backbone.history.navigate("settings",{
+    map: function(event) {
+      Backbone.history.navigate("map", {
+        trigger: true
+      });
+    },
+
+    myView: function(event) {
+      Backbone.history.navigate("myview", {
         trigger: true
       });
     }
   });
 
-  return StructureViewSiwyt;
+  return StructureView;
 
 });
