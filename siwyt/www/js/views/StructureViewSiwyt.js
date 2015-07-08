@@ -11,7 +11,12 @@ define(function(require) {
     id: "main",
 
     events: {
-      "tap #settings": "settings",
+     "tap #settings": "goToSettings",
+     "tap #back" : "goBack",
+     "tap #home" : "goToHome",
+     "tap #contacts" : "goToContacts",
+     "tap #profile" : "goToProfile"
+
     },
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
@@ -28,6 +33,7 @@ define(function(require) {
       this.el.innerHTML = this.template({});
       // cache a reference to the content element
       this.contentElement = this.$el.find('#content')[0];
+      $("#home").attr("class","tab-item active");
       return this;
     },
 
@@ -36,7 +42,7 @@ define(function(require) {
 
     // generic go-back function
     goBack: function() {
-      //window.history.back();
+      window.history.back();
     },
 
     setActiveTabBarElement: function(elementId) {
@@ -45,11 +51,36 @@ define(function(require) {
       //document.getElementById(elementId).classList.add("active");
     },
 
-    settings: function(event){
+    goToSettings: function(event){
       Backbone.history.navigate("settings",{
         trigger: true
       });
+    },
+
+    goToProfile: function(event){
+      $(".active").attr("class","tab-item");
+      $("#profile").attr("class","tab-item active");
+      Backbone.history.navigate("profile",{
+        trigger: true
+      });
+    },
+
+    goToHome: function(event){
+      $(".active").attr("class","tab-item");
+      $("#home").attr("class","tab-item active");
+      Backbone.history.navigate("homeSiwyt",{
+        trigger: true
+      });
+    },
+
+    goToContacts: function(event){
+      $(".active").attr("class","tab-item");
+      $("#contacts").attr("class","tab-item active");
+      Backbone.history.navigate("contacts",{
+        trigger: true
+      });
     }
+
   });
 
   return StructureViewSiwyt;

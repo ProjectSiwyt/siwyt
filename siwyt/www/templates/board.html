@@ -1,0 +1,63 @@
+<header>
+    <h1 class="title">{{nome}}</h1>
+    <a href=""><i class="fa fa-plus-square-o"></i></a>
+</header>
+
+<ul class="table-view">
+    <li class="table-view-cell media">
+        <a class="navigate-right" href="">                        
+            <div class="media-body">
+                Homepage
+            </div>
+        </a>
+    </li>
+    <li class="table-view-cell media">
+        <a class="navigate-right" href="">                        
+            <div class="media-body">
+                New Post-it
+            </div>
+        </a>
+    </li>
+    <li class="table-view-cell media">
+        <a class="navigate-right" href="">                        
+            <div class="media-body">
+                Board Management
+            </div>
+        </a>
+    </li>
+    <li class="table-view-cell media">
+        <a class="navigate-right" href="">                        
+            <div class="media-body">
+                Export to PDF
+            </div>
+        </a>
+    </li>
+</ul>
+
+<div id="board-content" class="body-board">
+    {{#each postits}}
+    <div>
+        <span>{{nome}}</span>
+        <span>{{autore}}</span>
+        <span>{{data}} {{ora}}</span>
+        <i class="fa fa-pencil"></i> <!--Da collegare con popup-->
+    </div>
+    {{/each}}
+</div>
+
+<!--Popup menu to manage postit-->
+<div class="popup">
+     <!--Da definire-->
+    <ul>
+        <li>New relation</li>
+        <li>Rename</li>
+        <li>Change Color 
+            <select>
+                {{color}}
+            </select>
+        </li>
+        <li>Font</li>
+        <li>Size</li>
+        <li>Delete</li>
+    </ul>
+</div>
