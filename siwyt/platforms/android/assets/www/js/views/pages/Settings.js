@@ -31,7 +31,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-
+      "tap #logout":"logout"
+        //ad ogni tap su una delle impostazioni va cambiata l'impostazione e aggiornato il valore fra le cose locali.
     },
 
     render: function() {
@@ -39,6 +40,11 @@ define(function(require) {
 
       return this;
     },
+    logout: function(e){
+        Backbone.history.navigate("homeSiwyt", {
+          trigger: true
+        });
+    }
   });
 
   return Settings;

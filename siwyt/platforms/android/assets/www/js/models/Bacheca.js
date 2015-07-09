@@ -5,9 +5,15 @@ define(function(require) {
 	var Bacheca = Backbone.Model.extend({
 		defaults: {
 			id: "Not specified",
-			nome: "Not specified",
+			nome: "Not specified"
 		},
-		constructorName: "Bacheca"
+		constructorName: "Bacheca",
+
+		parse: function(response) {
+        	//unwrap the response from the server....
+        	if (response.data) return response.data;
+        	return response;
+    	}
 	});
 
 	return Bacheca;

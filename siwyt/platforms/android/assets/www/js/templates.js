@@ -15,5 +15,11 @@ define({
     homeSiwyt: "templates/homeSiwyt.html",
     contacts: "templates/contacts.html",
     profile: "templates/profile.html",
-    settings: "templates/settings.html"
+    settings: "templates/settings.html",
+    createBacheca: "templates/createBacheca.html",
+    bacheca: "templates/bacheca.html",
+    addContacts: "templates/addContacts.html",
+    postit: "templates/postit.html",
+    noticeboardManagement: "templates/noticeboardManagement.html",
+    showListNoticeboards: "templates/showListNoticeboards.html"
 });

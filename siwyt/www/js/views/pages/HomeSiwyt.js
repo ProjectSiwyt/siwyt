@@ -2,8 +2,10 @@ define(function(require) {
 
   var Backbone = require("backbone");
   var MyModel = require("models/MyModel");
+  var Bacheche = require("collections/Bacheche");
   var Bacheca = require("models/Bacheca");
   var Utils = require("utils");
+  var ShowListNoticeboards = require("views/pages/ShowListNoticeboards");
   var $ = require("jquery");
 
   var HomeSiwyt = Utils.Page.extend({
@@ -15,20 +17,18 @@ define(function(require) {
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.homeSiwyt;
-      /*
-      $("body").on("swipeLeft",function(){
-        console.log("CIAO");
-      });                       
-      */
-      /*
-      var prova = document.getElementById("content");
-      prova.addEventListener("tap", go);
-      function go(event){
-        Backbone.history.navigate("contacts", {
-        trigger: true
+      document.getElementById("navigation").style.display="block";
+      document.getElementById("header").style.display="block";
+      document.getElementById("title").innerHTML="Noticeboards"
+      spinner.spin();
+      var dati = new Bacheche();
+      dati.fetch().done(function(){
+        spinner.stop();
+        this.subView = (new ShowListNoticeboards({collection: dati})).render().el;
+        //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
+        $('#NoticeboardsList').append(this.subView);
       });
-      };
-      */
+     
       // here we can register to inTheDOM or removing events
       //this.listenTo(this, "inTheDOM", function() {
       //  console.log("CCCCCCCCCC");
@@ -45,31 +45,17 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       //"tap": "goToContacts",
-      "tap .rigabacheca": "goToBacheca",
       "tap #new": "goToCreateBacheca",
       "swipeLeft": "goToContacts"
     },
 
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 
       return this;
     },
-    /*
-    swipeControls: function(e) {
-        if e.type == 'right'{
-            this.goToProfile()
-        }
-        else{
-            this.goToContacts()
-        }
-    },
-    */
-
     goToContacts: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
       Backbone.history.navigate("contacts", {
         trigger: true
       });
@@ -79,11 +65,6 @@ define(function(require) {
         trigger: true
       });
     },
-    goToBacheca: function(e){
-      Backbone.history.navigate("bacheca/"+e.currentTarget.id, {
-        trigger: true
-      });
-    }
     
   });
 

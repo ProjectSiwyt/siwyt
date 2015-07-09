@@ -114,7 +114,14 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-#container{
-    height: 100%;
-    width: 100%;
-}
+.modal {
+        display: block;
+        overflow: hidden;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba( 255, 255, 255, 1 ) url('img/loader.gif') 50% 50% no-repeat;
+      }

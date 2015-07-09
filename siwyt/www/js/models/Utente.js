@@ -10,9 +10,15 @@ define(function(require) {
 			mail: "Not specified",
 			username: "Not specified",
 			password: "Not specified",
-			confermato: false
+			confermato: "false"
 		},
-		constructorName: "Utente"
+		constructorName: "Utente",
+		
+		parse: function(response) {
+        	//unwrap the response from the server....
+        	if (response.data) return response.data;
+        	return response;
+    	}
 	});
 
 	return Utente;

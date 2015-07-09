@@ -1,7 +1,7 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var Bacheca = require("models/Bacheca");
+  var Utente = require("models/Utente");
   var Utils = require("utils");
 
 
@@ -9,13 +9,13 @@ define(function(require) {
 
     constructorName: "CreateBacheca",
 
-    model: Bacheca,
+    model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.createBacheca;
-      
-      //document.getElementById("title").innerHTML="Create Noticeboard"
+      document.getElementById("navigation").style.display="none";      
+      document.getElementById("title").innerHTML="Create Noticeboard"
       
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -34,6 +34,7 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap #submit": "goToBacheca",
+      "tap #addMembers": "goToAddContacts"
     },
 
     render: function() {
@@ -44,7 +45,12 @@ define(function(require) {
     },
 
     goToBacheca: function(e) {
-      Backbone.history.navigate("bacheca/"+document.getElementById("idBacheca").value, {
+      Backbone.history.navigate("newBacheca/"+document.getElementById("idBacheca").value, {
+        trigger: true
+      });
+    },
+    goToAddContacts: function(e) {
+      Backbone.history.navigate("addContacts", {
         trigger: true
       });
     }

@@ -4,15 +4,18 @@ define(function(require) {
 
 	var Amministratore = Backbone.Model.extend({
 		defaults: {
-		id: "Not specified",
-		nome: "Not specified",
-		cognome: "Not specified",
-		mail: "Not specified",
-		username: "Not specified",
-		password: "Not specified",
-		confermato: false
-	},
-	constructorName: "Amministratore"
+			id: "Not specified",
+			idUtente: "Not specified",
+			idBacheca: "Not specified",
+		},
+	
+		constructorName: "Amministratore",
+
+		parse: function(response) {
+        	//unwrap the response from the server....
+        	if (response.data) return response.data;
+        	return response;
+    	}
 	});
 
 	return Amministratore;

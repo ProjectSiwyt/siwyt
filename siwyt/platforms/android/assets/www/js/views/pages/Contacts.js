@@ -1,7 +1,6 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
 
@@ -31,8 +30,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #profile": "goToProfile",
-      "tap #home": "goToHome"
+      "swipeLeft": "goToProfile",
+      "swipeRight": "goToHome"
     },
 
     render: function() {

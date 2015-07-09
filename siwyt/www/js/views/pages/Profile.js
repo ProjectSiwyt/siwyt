@@ -42,8 +42,6 @@ define(function(require) {
     },
 
     goToContacts: function(e) {
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
       Backbone.history.navigate("contacts", {
         trigger: true
       });

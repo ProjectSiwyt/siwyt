@@ -1,7 +1,9 @@
 define(function(require) {
 
   var $ = require("jquery");
+  var _= require("underscore");
   var Backbone = require("backbone");
+  var Baasbox=require("baasbox");
   var Bacheca = require("models/Bacheca");
   var Utente = require("models/Utente");
   var Utenti = require("collections/Utenti");
@@ -14,6 +16,12 @@ define(function(require) {
   var Profile = require("views/pages/Profile");
   var Settings = require("views/pages/Settings");
   var Bacheche = require("collections/Bacheche");
+  var BachecaHome = require("views/pages/BachecaHome");
+  var CreateBacheca = require("views/pages/CreateBacheca");
+  var AddContacts = require("views/pages/AddContacts");
+  var Postit = require("models/Postit");
+  var Postits = require("collections/Postits");
+  var ShowListNoticeboards = require("views/pages/ShowListNoticeboards");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -24,38 +32,42 @@ define(function(require) {
       "homeSiwyt": "homeSiwyt",
       "profile": "profile",
       "contacts": "contacts",
-      "settings": "settings"
+      "settings": "settings",
+      "bacheca/:id": "showNoticeboard",
+      "createBacheca": "create",
+      "addContacts": "addContacts",
+      "newBacheca/:nome": "newBacheca"
     },
 
     firstView: "homeSiwyt",
+    BAASBOX_URL : "http://localhost:9000",
+    BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
       this.currentView = undefined;
+        //initialize BaasBox
+      BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
+      BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
+      
+      //at the moment we log in as admin  
+      BaasBox.login("admin", "admin")
+          .done(function (user) {
+              console.log("Logged in ", user);
+              //once we are logged in, let's start backbone
+              Backbone.history.start();
+      })
+          .fail(function (err) {
+            console.log("error ", err);
+      });
     },
 
     homeSiwyt: function() {
       // highlight the nav1 tab bar element as the current one
-      //this.structureView.setActiveTabBarElement("nav1");
-      // create a model with an arbitrary attribute for testing the template engine
-      var model = new Bacheca({
-        id: "1",
-        nome: "Prova"
-      });
-      var model2 = new Bacheca({
-        id: "2",
-        nome: "Prova2"
-      });
-      var collection = new Bacheche();
-
-      collection.add(model);
-      collection.add(model2);
-      // create the view
-      var page = new HomeSiwyt({
-        model: collection
-      });
-      // show the view
+      this.structureView.setActiveTabBarElement("home");
+      var page= new HomeSiwyt();
       this.changePage(page);
-    },
+
+     },
 
     settings: function(){
       var page = new Settings();
@@ -63,7 +75,8 @@ define(function(require) {
     },
 
     contacts: function() {
-      this.structureView.setActiveTabBarElement("nav1");
+      this.structureView.setActiveTabBarElement("contacts");
+      /*
       var model= new Utente({
         id:"2",
         nome: "Luca",
@@ -92,14 +105,30 @@ define(function(require) {
       collection.add(model);
       collection.add(model2);
       collection.add(model3);
+      console.log(collection);
       var page = new Contacts({
         model: collection
       });
       console.log(page);
       this.changePage(page);
+      */
+      
+      //this.collection.each(this.renderOne, this);
+      var ccc = new Utenti({model: Utente}); //= var contacts = new ContactManager.Collections.Contacts();
+      var contactsDefer= ccc.fetch();
+      console.log(ccc);
+      var THIS=this;
+      contactsDefer.done(function(res){
+        console.log(res);
+        var page = new Contacts({
+            model: ccc
+        });
+        THIS.changePage(page);
+      });
     },
 
     profile: function(){
+      this.structureView.setActiveTabBarElement("profile");
       var model= new Utente({
         id:"1",
         nome: "Luca",
@@ -109,34 +138,27 @@ define(function(require) {
         password: "luca__91"
         //confermato non lo inserisco tanto è false di defaulta
       });
+      console.log(model);
       var page = new Profile({
         model: model
       });
       this.changePage(page);
     },
 
-    myView: function() {
-      // highlight the nav1 tab bar element as the current one
-      this.structureView.setActiveTabBarElement("nav1");
-      // create a model with an arbitrary attribute for testing the template engine
-      var model = new MyModel({
-        key: "testValue"
+    create: function(){
+      var model= new Utente({
+        id:"1",
+        nome: "Luca",
+        cognome: "Mangifesta",
+        mail: "luca.mangifesta@student.univaq.it",
+        username: "luca__91",
+        password: "luca__91"
+        //confermato non lo inserisco tanto è false di default
       });
-      // create the view
-      var page = new MyView({
-        model: model
-      });
-      // show the view
+      var page = new CreateBacheca();
       this.changePage(page);
-    },
-
-    map: function() {
-      // highlight the nav2 tab bar element as the current one
-      this.structureView.setActiveTabBarElement("nav2");
-      // create the view and show it
-      var page = new MapView();
-      this.changePage(page);
-    },
+    }
+    ,
 
     // load the structure view
     showStructure: function() {
@@ -152,6 +174,133 @@ define(function(require) {
       this.navigate(this.firstView, {trigger: true});
     },
 
+    showNoticeboard: function(id){
+        alert("showNoticeboard "+id);
+        /*
+        
+        //VALORI DI PROVA INIZIO
+        var model = new Bacheca({
+          id: "1",
+          nome: "Prova"
+        });
+        var model2 = new Bacheca({
+          id: "2",
+          nome: "Prova2"
+        });
+        var collection = new Bacheche();
+
+        collection.add(model);
+        collection.add(model2);
+        //VALORI DI PROVA FINE
+        console.log(collection.models);
+        var model3 = (_.where(collection.models, {id : id}))[0];
+        console.log(model3);
+        */
+        /*
+        var model=new Postit({
+            id: "p1",
+            contenuto: "ciao",
+            autore: "Luca Mangifesta",
+            data: "03/07/2015",
+            ora:"12:12"
+        });
+        var model2=new Postit({
+            id: "p2",
+            contenuto: "ciao",
+            autore: "Luca Mangifesta",
+            data: "03/07/2015",
+            ora:"12:12"
+        });
+        var model3=new Postit({
+            id: "p3",
+            contenuto: "ciao",
+            autore: "Luca Mangifesta",
+            data: "03/07/2015",
+            ora:"12:12"
+        });
+        var collection= new Postits;
+        collection.add(model);
+        collection.add(model2);
+        collection.add(model3);
+        var page = new BachecaHome({
+            model: collection
+        });
+        this.changePage(page);
+        */
+        var THIS=this;
+        BaasBox.loadCollection("Bacheca")
+        .done(function(res) {
+          for (var i=0; i<res.length; i++){
+            if( res[i].id == id){
+              console.log(res[i]);
+              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);  //res[i].
+              var model= new Bacheca({
+                id: res[i].id, 
+                nome: res[i].nome
+              });
+              console.log(model);
+              var page = new BachecaHome({
+                model: model
+              });
+              THIS.changePage(page);
+            }
+          }
+        })
+        .fail(function(error) {
+          console.log("error ", error);
+        })
+    },
+    addContacts: function(){
+      var model= new Utente({
+        id:"2",
+        nome: "Luca",
+        cognome: "Di Chiro",
+        mail: "luca.dichiro@student.univaq.it",
+        username: "bosco",
+        password: "bosco"
+      });
+      var model2= new Utente({
+        id:"3",
+        nome: "Nicholas",
+        cognome: "Angelucci",
+        mail: "nicholas.angelucci@student.univaq.it",
+        username: "richolas",
+        password: "richolas"
+      });
+      var model3= new Utente({
+        id:"4",
+        nome: "Vincenzo",
+        cognome: "Lanzieri",
+        mail: "vincenzo.lanzieri@student.univaq.it",
+        username: "vinzenio",
+        password: "vinzenio"
+      });
+      var collection= new Utenti();
+      collection.add(model);
+      collection.add(model2);
+      collection.add(model3);
+      var page = new AddContacts({
+        model: collection
+      });
+      this.changePage(page);
+    },
+    newBacheca: function(nome){
+      //aggiunge una nuova riga alla collezione "Bacheca"
+      var post = new Object();
+      post.nome = nome;
+      var THIS=this
+      //post.body = "Body of my post.";     
+      BaasBox.save(post, "Bacheca")
+        .done(function(res) {
+          console.log("res ", res);
+          Backbone.history.navigate("bacheca/"+res.id, {
+            trigger: true
+          });
+        })
+        .fail(function(error) {
+          console.log("error ", error);
+        })
+     } 
   });
 
   return AppRouter;

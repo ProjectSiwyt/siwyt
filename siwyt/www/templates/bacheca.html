@@ -1,0 +1,41 @@
+<h3 >BACHECA HOME</h3>
+<div id="contenutoBacheca">
+<button id="addPostit">+</button>
+
+<button id="aprimenu">>></button>
+<ul id="menu" style="display:none">
+<li id="goToHome">Board Lists</li>
+<li id="newPostit">New Post-it</li>
+<li>Board Management</li>
+<li>Export-to-pdf</li>
+</ul>
+</div>
+<canvas id = "mycanvas" style:"height:100%; width:100%">
+    
+<div id="board-content" class="body-board">
+{{#each this}}
+<div id="{{id}}" class="postit moveable block">
+        <span>{{contenuto}}</span>
+        <span>{{autore}}</span>
+        <span>{{data}}</span>
+        <i class="fa fa-pencil"></i> <!--Da collegare con popup-->
+</div>
+<div id="popupPostit{{id}}" class="popup" style="display:none">
+     <!--Da definire-->
+    <ul>
+        <li>New relation</li>
+        <li>Rename</li>
+        <li>Change Color 
+            <select>
+                {{color}}
+            </select>
+        </li>
+        <li>Font</li>
+        <li>Size</li>
+        <li>Delete</li>
+    </ul>
+</div>
+{{/each}}
+</div>
+
+</canvas>

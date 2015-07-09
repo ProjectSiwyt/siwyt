@@ -1,20 +1,22 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
 
 
-  var Login = Utils.Page.extend({
+  var CreateBacheca = Utils.Page.extend({
 
-    constructorName: "Login",
+    constructorName: "CreateBacheca",
 
     model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.login;
+      this.template = Utils.templates.createBacheca;
+      document.getElementById("navigation").style.display="none";      
+      document.getElementById("title").innerHTML="Create Noticeboard"
+      
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -26,13 +28,13 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "login",
+    id: "createBacheca",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #btn_login": "goToHome",
-      "tap #sign_up": "goToRegister"
+      "tap #submit": "goToBacheca",
+      "tap #addMembers": "goToAddContacts"
     },
 
     render: function() {
@@ -42,22 +44,18 @@ define(function(require) {
       return this;
     },
 
-
-    goToHome: function(e) {
-      // ***************   con baasBox fare la parte di validazione dati e stampare errore o andare alla home   *****************************
-      //debugger;
-      Backbone.history.navigate("homeSiwyt", {
+    goToBacheca: function(e) {
+      Backbone.history.navigate("newBacheca/"+document.getElementById("idBacheca").value, {
         trigger: true
       });
     },
-  
-  goToRegister: function(e) {
-      Backbone.history.navigate("register", {
+    goToAddContacts: function(e) {
+      Backbone.history.navigate("addContacts", {
         trigger: true
       });
     }
-
   });
-  return Login;
+
+  return CreateBacheca;
 
 });

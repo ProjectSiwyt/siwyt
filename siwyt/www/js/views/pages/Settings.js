@@ -4,14 +4,13 @@ define(function(require) {
   var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
-  var $ = require("jquery");
 
 
   var Settings = Utils.Page.extend({
 
     constructorName: "Settings",
 
-    model: Utente,
+    //model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
@@ -32,21 +31,20 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goBack"
+      "tap #logout":"logout"
+        //ad ogni tap su una delle impostazioni va cambiata l'impostazione e aggiornato il valore fra le cose locali.
     },
 
     render: function() {
-      $("#back").attr("style","display:block");
       $(this.el).html(this.template());
-      //$(this.el).html(this.template(this.model.models));
+
       return this;
     },
-
-     goBack: function() {
-       $("#back").attr("style","display:none");
-      window.history.back();
-    },
-
+    logout: function(e){
+        Backbone.history.navigate("homeSiwyt", {
+          trigger: true
+        });
+    }
   });
 
   return Settings;

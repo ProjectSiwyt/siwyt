@@ -3,6 +3,7 @@ define(function(require) {
   var $ = require("jquery");
   var Backbone = require("backbone");
   var Utils = require("utils");
+  var Spinner= require("spin");
 
   var StructureViewSiwyt = Backbone.View.extend({
 
@@ -11,18 +12,21 @@ define(function(require) {
     id: "main",
 
     events: {
-     "tap #settings": "goToSettings",
-     "tap #back" : "goBack",
-     "tap #home" : "goToHome",
-     "tap #contacts" : "goToContacts",
-     "tap #profile" : "goToProfile"
-
+      "tap #settings": "settings",
+      "tap #profile": "goToProfile",
+      "tap #contacts": "goToContacts",
+      "tap #home": "goToHome",
+      "tap #back": "goBack",
     },
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
       // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureSiwyt;
+      
+      $(document).ajaxStart(function(){
+          document.getElementById("spinner")
+      });
       //this.on("inTheDOM", this.rendered);
       // bind the back event to the goBack function
       //document.getElementById("back").addEventListener("back", this.goBack(), false);
@@ -31,9 +35,12 @@ define(function(require) {
     render: function() {
       // load the template
       this.el.innerHTML = this.template({});
+      spinner = new Spinner().spin();
+      this.el.appendChild(spinner.el);
+      spinner.stop();
+
       // cache a reference to the content element
       this.contentElement = this.$el.find('#content')[0];
-      $("#home").attr("class","tab-item active");
       return this;
     },
 
@@ -44,43 +51,34 @@ define(function(require) {
     goBack: function() {
       window.history.back();
     },
+    goToProfile: function(e) {
+      Backbone.history.navigate("profile", {
+        trigger: true
+      });
 
-    setActiveTabBarElement: function(elementId) {
-      // here we assume that at any time at least one tab bar element is active
-      //document.getElementsByClassName("active")[0].classList.remove("active");
-      //document.getElementById(elementId).classList.add("active");
     },
 
-    goToSettings: function(event){
+    goToContacts: function(e) {
+      Backbone.history.navigate("contacts", {
+        trigger: true
+      });
+    },
+    goToHome: function(e) {
+      Backbone.history.navigate("homeSiwyt", {
+        trigger: true
+      });
+    },
+    setActiveTabBarElement: function(elementId) {
+      // here we assume that at any time at least one tab bar element is active
+      document.getElementsByClassName("active")[0].classList.remove("active");
+      document.getElementById(elementId).classList.add("active");
+    },
+
+    settings: function(event){
       Backbone.history.navigate("settings",{
         trigger: true
       });
-    },
-
-    goToProfile: function(event){
-      $(".active").attr("class","tab-item");
-      $("#profile").attr("class","tab-item active");
-      Backbone.history.navigate("profile",{
-        trigger: true
-      });
-    },
-
-    goToHome: function(event){
-      $(".active").attr("class","tab-item");
-      $("#home").attr("class","tab-item active");
-      Backbone.history.navigate("homeSiwyt",{
-        trigger: true
-      });
-    },
-
-    goToContacts: function(event){
-      $(".active").attr("class","tab-item");
-      $("#contacts").attr("class","tab-item active");
-      Backbone.history.navigate("contacts",{
-        trigger: true
-      });
     }
-
   });
 
   return StructureViewSiwyt;
