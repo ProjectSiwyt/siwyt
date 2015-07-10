@@ -2,17 +2,29 @@
     <h1 class="title">Sign Up</h1>
 </header>
 <form class="margin-lr">
-    <span>Information Notice</span>
+    {{#if error_name}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="NAME">
-    <span>Information Notice</span>
+    {{#if error_surname}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="SURNAME">
-    <span>Information Notice</span>
+    {{#if error_email}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="EMAIL">
-    <span>Information Notice</span>
+    {{#if error_username}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="USERNAME">
-    <span>Information Notice</span>
+    {{#if error_password}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="PASSWORD">
-    <span>Information Notice</span>
+    {{#if error_confpass}}
+        <span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="CONFIRM PASSWORD">              
     <button class="btn btn-block">REGISTER</button>        
 </form>

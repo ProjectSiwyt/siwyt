@@ -4,9 +4,11 @@
   {{#each this}}
   <li class="table-view-cell">
     <a class="navigate-right">
-      <span class="badge">5</span>
-      {{nome}}
+      <button id="addRemoveMembers">+</button>
+      {{nome}} {{cognome}}
     </a>
   </li>
   {{/each}}
 </ul>
+
+<button id="submitAddContacts">DONE</button>

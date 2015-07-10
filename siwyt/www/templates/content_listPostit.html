@@ -1,0 +1,31 @@
+{{#each postits}}
+<div id="{{id}}" class="postit moveable block">
+    <span>{{nome}}</span>
+    <span>{{autore}}</span>
+    <span>{{data}} {{ora}}</span>
+    <i class="fa fa-pencil"></i>
+    <!--Da collegare con popup-->
+</div>
+{{/each}}
+<!--Popup menu to manage postit-->
+<div id="popupPostit{{id}}" class="popup" style="display:none">
+    <!--Da definire-->
+    <ul>
+        <li>New relation</li>
+        <li>Rename</li>
+        <li>Change Color:
+            <input type="color" id="html5colorpicker" value="#ff0000">
+        </li>
+        <li>Font:
+            <select>
+                <option>Font 1</option>
+                <option>Font 2</option>
+                <option>Font 3</option>
+            </select>
+        </li>
+        <li>Size:
+            <input type="text" value="12" />
+        </li>
+        <li>Delete</li>
+    </ul>
+</div>

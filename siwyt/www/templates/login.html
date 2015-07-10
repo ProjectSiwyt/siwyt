@@ -5,7 +5,10 @@
     <h3 class="subtitle centered">Welcome</h3>
 </p>
 <form class="margin-lr">
-    <span>Information Notice</span>
+	{{!--controllo degli errori, se presenti verranno stampati--}}
+	{{#if error_login}}
+    	<span>{{error_text}}</span>
+    {{/if}}
     <input type="text" placeholder="EMAIL">
     <input type="text" placeholder="PASSWORD">              
     <button id="btn_login" class="btn btn-block">LOGIN</button>

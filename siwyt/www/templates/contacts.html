@@ -1,12 +1,9 @@
-{{!--aggiungere controllo se la collezione non è vuota--}}
-<ul class="table-view">
-  {{!-- ciclo la collezione di bacheche--}}
-  {{#each this}}
-  <li class="table-view-cell">
-    <a class="navigate-right">
-      <span class="badge">5</span>
-      {{nome}} {{cognome}}
-    </a>
-  </li>
-  {{/each}}
-</ul>
+<form>
+	<input type="search" name="contactsearch">
+  	<input type="submit">
+</form>
+<div id="contacts-content"></div>
+<form>
+	<input type="text" placeholder="Insert email to invite to Siwyt">
+	<input type="submit">
+</form>
