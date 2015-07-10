@@ -240,30 +240,96 @@ define(function(require) {
   var Bacheca = require("models/Bacheca");
   var Utils = require("utils");
   var Postit = require("models/Postit");
+  var Postits = require("collections/Postits");
+  var Baasbox=require("baasbox");
+  var ShowPostitsNoticeboard= require("views/pages/ShowPostitsNoticeboard");
+
+  var Bacheche = require("collections/Bacheche");
 
   var BachecaHome = Utils.Page.extend({
 
     constructorName: "BachecaHome",
 
-    model: Postit,
+    model: Bacheca,
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.bacheca;
+      this.template = Utils.templates.structureBoard;
       moverno=1;
       document.getElementById("header").style.display="none";
       document.getElementById("navigation").style.display="none";
       spinner.stop();
 
-      // here we can register to inTheDOM or removing events
-      // this.listenTo(this, "inTheDOM", function() {
-      //   $('#content').on("swipe", function(data){
-      //     console.log(data);
-      //   });
-      // });
-      // this.listenTo(this, "removing", functionName);
 
-      // by convention, all the inner views of a view must be stored in this.subViews
+      this.bacheca = new Bacheca();
+      
+      this.bacheca.on("evento", this.appendTitle, this);
+      this.bacheca.on("error", this.error);
+      
+
+      this.postits = new Postit();
+      this.postits.on("elencopostits", this.appendItems, this);
+      //this.bacheca.setbacheca(idasd);
+
+      //console.log(b.setbacheca(idasd));
+
+
+      /*
+      console.log(this.model);
+      //var id= this.model;
+      BaasBox.loadCollection("Bacheca")
+        .done(function(res) {
+          console.log("res ", res);
+
+          for (var i=0; i<res.length; i++){
+            if( res[i].id == idasd){
+              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);
+              var model= new Bacheca({
+                id: res[i].id, 
+                nome: res[i].nome
+              });
+            }
+          }
+        })
+        .fail(function(error) {
+          console.log("error ", error);
+        })
+        */
+  /*
+      var dati = new Bacheche();
+      var id= this.model;
+      dati.fetch()
+        .done(function(res){
+          for (var i=0; i<res.length; i++){
+            if( res[i].id == id){
+              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);
+            }
+          }
+        });
+        .fail(function(error) {
+          console.log("error ", error);
+        })
+*/
+
+          /*
+          for (var i=0; i<res.length; i++){
+            if( res[i].id == id){
+              console.log(res[i]);
+              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);  //res[i].
+              var model= new Bacheca({
+                id: res[i].id, 
+                nome: res[i].nome
+              });
+              console.log(model);
+              var page = new BachecaHome({
+                model: model
+              });
+              THIS.changePage(page);
+            }
+          }
+          */
+        
+
     },
 
     id: "bachecahome",
@@ -273,15 +339,44 @@ define(function(require) {
     events: {
       "tap #goToMap": "goToMap",
       "tap #aprimenu": "gestionemenu",
-      "tap #addPostit": "aggiungi",
+      "tap #addPostit": "aggiungi2",
       "tap #goToHome": "goToHome",
       "tap #newPostit": "aggiungi2",
       "tap .postit": "goToComments",
       "longTap .postit": "gestionePopup",
     },
 
+    error: function(){
+      alert("aggiungere errore in un elemento del dom con id errrore")
+    },
+
+    showNoticeboard: function(idb){
+      this.bacheca.noticeboardData(idb);
+    },
+    //CHIAMO NEL MODEL FUNZIONE CHE MI PRENDE I POSTITS
+    getPostits: function(idb){
+      this.postits.elencoPostit(idb);
+    },
+    appendTitle: function(result){
+      document.getElementById("titleBacheca").innerHTML=result.nome;
+      //chiamo la funzione per prendere i postit
+      this.getPostits(result.id);
+    },
+    appendItems: function(result){
+      console.log(result);
+      var b= new Postits();
+      for (var i=0; i<result.length; i++){
+          b.add(result[i]);
+          console.log(result[i]);
+      }
+      this.subView = (new ShowPostitsNoticeboard({collection: b})).render().el;
+      console.log(this.subView);
+        //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
+      //$('#boardContent').append(this.subView);
+      document.getElementById("boardContent").appendChild(this.subView);
+    },
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       return this;
     },
 
@@ -354,11 +449,13 @@ define(function(require) {
         alert("goToComments");
     },
     gestionePopup: function(e){
-      if(document.getElementById("popupPostit"+e.currentTarget.id).style.display=="none"){
-          document.getElementById("popupPostit"+e.currentTarget.id).style.display="block";
+      var popup= document.getElementById("popupPostit"+e.currentTarget.id);
+      console.log(popup);
+      if(popup.style.display=="none"){
+          popup.style.display="block";
       }
       else{
-        document.getElementById("popupPostit"+e.currentTarget.id).style.display="none";
+        popup.style.display="none";
       }
       console.log(e.currentTarget.id);
     }

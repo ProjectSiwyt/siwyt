@@ -25,8 +25,9 @@ define(function(require) {
       this.template = Utils.templates.structureSiwyt;
       
       $(document).ajaxStart(function(){
-          document.getElementById("spinner")
+          document.getElementById("spinner");
       });
+      
       //this.on("inTheDOM", this.rendered);
       // bind the back event to the goBack function
       //document.getElementById("back").addEventListener("back", this.goBack(), false);

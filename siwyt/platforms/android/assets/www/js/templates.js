@@ -9,17 +9,23 @@
 //  - key: the name of the template as it must be referenced by the Backbone view
 //  - value: the path of the html file containing the HTML fragment of the template
 define({
-    structure: "templates/structure.html",
-    myview: "templates/myview.html",
-    structureSiwyt: "templates/structureSiwyt.html",
-    homeSiwyt: "templates/homeSiwyt.html",
-    contacts: "templates/contacts.html",
+    structureSiwyt: "templates/structure_siwyt.html",
+    structureHomeSiwyt: "templates/structure_homeSiwyt.html",
+    structurePostit: "templates/structure_postit.html",
+    contentListContacts: "templates/content_listContacts.html",
+    structureCreateBoard: "templates/structure_createBoard.html",
+    structureBoard: "templates/structure_board.html",
+    structureAddContacts: "templates/structure_addContacts.html",
+    structureContacts: "templates/structure_contacts.html",
+    structureBoardManagement: "templates/structure_boardManagement.html",
+    contentListPostits: "templates/content_listPostits.html",
+    contentListMembers: "templates/content_listMembers.html",
+    contentListComments: "templates/content_listComments.html",
+    contentListAddContacts: "templates/content_listAddContacts.html",
+    contentListBoards: "templates/content_listBoards.html",
+    register: "templates/register.html",
+    login: "templates/login.html",
     profile: "templates/profile.html",
-    settings: "templates/settings.html",
-    createBacheca: "templates/createBacheca.html",
-    bacheca: "templates/bacheca.html",
-    addContacts: "templates/addContacts.html",
-    postit: "templates/postit.html",
-    noticeboardManagement: "templates/noticeboardManagement.html",
-    showListNoticeboards: "templates/showListNoticeboards.html"
+    appSettings: "templates/appSettings.html"
+    
 });

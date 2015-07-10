@@ -16,27 +16,18 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.homeSiwyt;
+      this.template = Utils.templates.structureHomeSiwyt;
       document.getElementById("navigation").style.display="block";
       document.getElementById("header").style.display="block";
-      document.getElementById("title").innerHTML="Noticeboards"
       spinner.spin();
+      document.getElementById("title").innerHTML="Noticeboards"
       var dati = new Bacheche();
       dati.fetch().done(function(){
-        spinner.stop();
         this.subView = (new ShowListNoticeboards({collection: dati})).render().el;
         //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
         $('#NoticeboardsList').append(this.subView);
       });
-     
-      // here we can register to inTheDOM or removing events
-      //this.listenTo(this, "inTheDOM", function() {
-      //  console.log("CCCCCCCCCC");
-      // $('#content').on("swipe", this.goToContacts);
-      //});
-      //this.listenTo(this, "removing", functionName);
-
-      // by convention, all the inner views of a view must be stored in this.subViews
+      
     },
 
     id: "homeSiwyt",
@@ -50,6 +41,7 @@ define(function(require) {
     },
 
     render: function() {
+      spinner.stop();
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 

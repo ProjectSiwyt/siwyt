@@ -10,8 +10,6 @@ define(function(require) {
   var MyModel = require("models/MyModel");
   var StructureViewSiwyt = require("views/structureViewSiwyt");
   var HomeSiwyt = require("views/pages/HomeSiwyt");
-  var MyView = require("views/pages/MyView");
-  var MapView = require("views/pages/MapView");
   var Contacts = require("views/pages/Contacts");
   var Profile = require("views/pages/Profile");
   var Settings = require("views/pages/Settings");
@@ -146,15 +144,6 @@ define(function(require) {
     },
 
     create: function(){
-      var model= new Utente({
-        id:"1",
-        nome: "Luca",
-        cognome: "Mangifesta",
-        mail: "luca.mangifesta@student.univaq.it",
-        username: "luca__91",
-        password: "luca__91"
-        //confermato non lo inserisco tanto è false di default
-      });
       var page = new CreateBacheca();
       this.changePage(page);
     }
@@ -174,32 +163,20 @@ define(function(require) {
       this.navigate(this.firstView, {trigger: true});
     },
 
-    showNoticeboard: function(id){
-        alert("showNoticeboard "+id);
+    showNoticeboard: function(idb){
+        alert("mangif "+idb);
         
-        var THIS=this;
-        BaasBox.loadCollection("Bacheca")
-        .done(function(res) {
-          for (var i=0; i<res.length; i++){
-            if( res[i].id == id){
-              console.log(res[i]);
-              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);  //res[i].
-              var model= new Bacheca({
-                id: res[i].id, 
-                nome: res[i].nome
-              });
-              console.log(model);
-              var page = new BachecaHome({
-                model: model
-              });
-              THIS.changePage(page);
-            }
-          }
-        })
-        .fail(function(error) {
-          console.log("error ", error);
-        })
+
+        var page = new BachecaHome();
+
+        page.showNoticeboard(idb);
+
+
+        console.log(page);
+        this.changePage(page);
+
     },
+
     addContacts: function(){
       var model= new Utente({
         id:"2",

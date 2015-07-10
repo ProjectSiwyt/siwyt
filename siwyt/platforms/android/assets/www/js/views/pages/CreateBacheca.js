@@ -13,7 +13,7 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.createBacheca;
+      this.template = Utils.templates.structureCreateBoard;
       document.getElementById("navigation").style.display="none";      
       document.getElementById("title").innerHTML="Create Noticeboard"
       

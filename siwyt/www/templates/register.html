@@ -1,0 +1,30 @@
+<header class="bar bar-nav">
+    <h1 class="title">Sign Up</h1>
+</header>
+<form class="margin-lr">
+    {{#if error_name}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="NAME">
+    {{#if error_surname}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="SURNAME">
+    {{#if error_email}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="EMAIL">
+    {{#if error_username}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="USERNAME">
+    {{#if error_password}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="PASSWORD">
+    {{#if error_confpass}}
+        <span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="CONFIRM PASSWORD">              
+    <button class="btn btn-block">REGISTER</button>        
+</form>

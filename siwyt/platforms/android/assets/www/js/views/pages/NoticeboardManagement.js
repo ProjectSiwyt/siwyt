@@ -12,7 +12,7 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.noticeboardManagement;
+      this.template = Utils.templates.structureBoardManagement;
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {

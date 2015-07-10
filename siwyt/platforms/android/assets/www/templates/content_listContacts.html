@@ -1,0 +1,16 @@
+{{#each this}}
+<div>
+    {{nome}} {{cognome}}
+    <span><i class="fa fa-plus"></i></span>
+    <span><i class="fa fa-user-times"></i></span>
+</div>
+{{/each}}
+<div id="popupPostit{{id}}" class="popup" style="display:none">
+    {{#if bacheca}}
+    <ul>
+        {{#each bacheca}}
+        <li>{{bacheca.nome}}</li>
+        {{/bacheca}}
+    </ul>
+    {{/if}}
+</div>

@@ -1,0 +1,16 @@
+<header class="bar bar-nav">
+    <h1 class="title">SIWYT</h1>
+</header>
+<p>
+    <h3 class="subtitle centered">Welcome</h3>
+</p>
+<form class="margin-lr">
+	{{!--controllo degli errori, se presenti verranno stampati--}}
+	{{#if error_login}}
+    	<span>{{error_text}}</span>
+    {{/if}}
+    <input type="text" placeholder="EMAIL">
+    <input type="text" placeholder="PASSWORD">              
+    <button id="btn_login" class="btn btn-block">LOGIN</button>
+    <a class="centered" id="sign_up">Sign-up</a>
+</form>

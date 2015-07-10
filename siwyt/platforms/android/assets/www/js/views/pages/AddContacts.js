@@ -13,7 +13,11 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.addContacts;
+      this.template = Utils.templates.structureAddContacts;
+      this.utente = new Utente();
+      this.utente.on("nomeContatti",this.appendContacts, this);
+      //L'id dell'utente è statico ci andrebbe invece l'id dell'utente loggato
+      this.utente.listContacts("ad658365-3cf9-4515-a348-a7105bb3d48f");
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -32,6 +36,10 @@ define(function(require) {
     events: {
       "tap #submitAddContacts": "goToCreateNoticeboard",
       "tap #addRemoveMembers": "contactsManagement"
+    },
+
+    appendContacts: function(){
+
     },
 
     render: function() {
