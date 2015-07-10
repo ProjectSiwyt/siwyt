@@ -1,16 +1,15 @@
 <header id="header" class="bar bar-nav">
 		<a class="tab-item icon icon-back pull-left" id="back"></a>
     <a class="tab-item icon icon-gear pull-right" id="settings"></a>
-    <h1 class="title" id="title">Siwyt</h1>
+    {{!--ogni pagina ha il proprio titolo--}}
+    <h1 class="title" id="title">{{pagina}}</h1>
 </header>
 
 <!-- <nav id="navigation">
     <div id="nav1" class="i-4">nav 1</div>
     <div id="nav2" class="i-8">nav 2</div>
 </nav> -->
-<div id="content" class="content">
-</div>
-
+{{!--barra di navigazione--}}
 <nav class="bar bar-tab" id="navigation">
   <a class="tab-item active" id="home">
     <span class="icon icon-home"></span>
@@ -25,3 +24,6 @@
     <span class="tab-label">Profile</span>
   </a>
 </nav>
+{{!--container dati--}}
+<div id="content" class="content">
+</div>

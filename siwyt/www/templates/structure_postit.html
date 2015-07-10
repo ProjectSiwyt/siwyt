@@ -10,14 +10,7 @@
         <div class="author">by {{postit_author}}</div>
         <div class="posted">posted on {{postit_date}}</div>
     </div>
-    {{#each this}}        
-    <div class="row"></div>        
-    <div class="parag">
-        {{comment_text}} <span class="posted">{{comment_date}}</span>
-        <div class="author">by {{comment_author}}</div>
-    </div>
-    {{/each}}
-    <div class="row"></div>
+    <div id="postit-content"></div>    
 </div>
 
 <form>

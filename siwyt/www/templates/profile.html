@@ -1,18 +1,30 @@
-{{!--aggiungere controllo se la collezione non è vuota--}}
-<ul class="table-view">
-  <li class="table-view-cell">
-      Nome: {{nome}}
-  </li>
-  <li class="table-view-cell">
-      Cognome: {{cognome}}
-  </li>
-  <li class="table-view-cell">
-      EMail: {{mail}}
-  </li>
-  <li class="table-view-cell">
-      Username: {{username}}
-  </li>
-  <li class="table-view-cell">
-      Password: {{password}}
-  </li>
+{{#if this}}
+<img src="{{img}}" /><span id="changeImg"><i class="fa fa-pencil"></i></span>
+<ul>
+    <li>Signed on {{data_iscrizione}}</li>
+    <li>You are taking part to {{totale_bacheche}}:
+        <ul>
+            <li>{{num_projectManager}} as Project Manager</li>
+            <li>{{num_teammate}} as Teammate</li>
+        </ul>
+    </li>
+    <li>Name:
+        <input type="text" value="{{nome}}" disabled="disabled" />
+    </li>
+    <li>Surname:
+        <input type="text" value="{{cognome}}" disabled="disabled" />
+    </li>
+    <li>Password:
+        <ul>
+            <li>
+                <input type="password" name="oldPass" />
+            </li>
+            <li>
+                <input type="password" name="newPass" />
+            </li>
+            <input type="password" name="confPass" />
+        </ul>
+    </li>
+    <li>Delete Account <i class="fa fa-trash-o"></i></li>
 </ul>
+{{/if}}

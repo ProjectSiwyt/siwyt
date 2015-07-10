@@ -1,0 +1,28 @@
+{{#if this}}
+<ul class="table-view">
+    {{!-- ciclo la collezione di membri--}} 
+    {{#each this}} 
+	    {{#if amministratore}}
+	    <li class="table-view-cell">
+	        {{nome}} {{cognome}}
+	        <span>Board Owner</span>
+	    </li>
+	    {{/if}}
+    <li class="table-view-cell">
+        {{nome}} {{cognome}}
+        <i class="fa fa-angle-down"></i>
+        <ul>
+            <li>Licences:</li>
+            <li>
+            <<!--Definire bene come registrare i dati-->
+                <input type="radio" name="licence" value="admin" 
+                	{{#if ruolo=='admin'}} checked="checked" {{/if}}> Admin</li>
+            <li>
+                <input type="radio" name="licence" value="simple_user" 
+                	{{#if ruolo=='simple_user'}} checked="checked" {{/if}}> Simple User</li>
+            <li><i class="fa fa-user-times"></i></li>
+        </ul>
+    </li>
+    {{/each}}
+</ul>
+{{/if}}

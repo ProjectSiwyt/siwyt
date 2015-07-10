@@ -1,0 +1,12 @@
+{{#if this}}
+<ul class="table-view">
+    {{!-- ciclo la collezione di bacheche--}} 
+    {{#each this}}
+    <li class="table-view-cell rigabacheca" id="{{id}}">
+        <a class="navigate-right">
+            <span class="badge">5</span> {{nome}}
+        </a>
+    </li>
+    {{/each}}
+</ul>
+{{/if}}
