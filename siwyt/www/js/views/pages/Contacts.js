@@ -1,6 +1,7 @@
 define(function(require) {
 
   var Backbone = require("backbone");
+  var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
 
@@ -13,7 +14,15 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.structureContacts;
+      this.template = Utils.templates.contacts;
+      console.log("template contact");
+      /*document.getElementById("navigation").style.display="inlne-block";
+      document.getElementById("header").style.display="inherit";*/
+      $("#navigation").removeAttr("style");
+      $("#header").removeAttr("style");
+      document.getElementById("settings_menu").style.display="inline-block";
+      document.getElementById("back").style.display="none";
+
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -30,28 +39,39 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeLeft": "goToProfile",
-      "swipeRight": "goToHome"
+      "swipeLeft": "goToHome",
+      "tap .add_to_board": "add_to_board",
+      "tap .remove_contact": "remove_contact"
     },
 
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 
       return this;
     },
 
-    goToProfile: function(e) {
-      Backbone.history.navigate("profile", {
-        trigger: true
-      });
-
-    },
-
     goToHome: function(e) {
+      /*$(".active").attr("class","tab-item");
+      $("#home_menu").attr("class","tab-item active");*/
       Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });
+    },
+
+  add_to_board: function(e) {
+      ///////// aggiungi a bacheca 
+      var contact = $(e.currentTarget).attr("id")[0];
+      console.log(contact);
+      /// query per aggiungere contatto a bacheca
+
+    },
+    
+    remove_contact: function(e) {
+      ///////// rimuovi contatto dalla lista contatti
+      var contact = $(e.currentTarget).attr("id")[0];
+      console.log(contact);
+      ///////// query per rimozione contatto
     }
   });
 
