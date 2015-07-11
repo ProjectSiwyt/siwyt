@@ -5,19 +5,16 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
 
+
   var Settings = Utils.Page.extend({
 
     constructorName: "Settings",
 
-    model: Utente,
+    //model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.settings;
-      console.log("inzialize settings");
-      $("#navigation").attr("style","display:none");
-      $("#settings_menu").attr("style","display:none");
-      $("#back").attr("style","display:block");
+      this.template = Utils.templates.appSettings;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -34,26 +31,20 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goBack",
-      "tap #logout": "logOut"
+      "tap #logout":"logout"
+        //ad ogni tap su una delle impostazioni va cambiata l'impostazione e aggiornato il valore fra le cose locali.
     },
 
     render: function() {
       $(this.el).html(this.template());
-      //$(this.el).html(this.template(this.model.models));
+
       return this;
     },
-
-    logOut: function(e){
-      Backbone.history.navigate("login",{
-        trigger: true
-      });
-    },
-
-    goBack: function() {
-      window.history.back();
+    logout: function(e){
+        Backbone.history.navigate("homeSiwyt", {
+          trigger: true
+        });
     }
-
   });
 
   return Settings;
