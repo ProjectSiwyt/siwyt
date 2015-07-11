@@ -60,8 +60,7 @@ body {
     top: 0;
     bottom: 0;
     overflow-y: hidden;
-    overflow-x: hidden;
-    /*Si sposta la pagina del numero di px dell'header*/
+    overflow-x: hidden;    
 }
 
 .page {
@@ -86,13 +85,13 @@ body {
 /* END STRUCTURE */
 
 @media (max-width: 568px) {
-    #NoticeboardsList {
+    .scroll {
         width: 103%;
     }
 }
 
 @media (min-width: 569px) {
-    #NoticeboardsList {
+    .scroll {
         width: 101.08%;
     }
 }
@@ -114,8 +113,9 @@ body {
     border-bottom: 0;
 }
 
-#NoticeboardsList {
-    overflow: auto;
+.scroll {
+    overflow-y: auto;
+    overflow-x: hidden; 
     height: 58%;
 }
 
@@ -152,7 +152,9 @@ body {
 .border-nav {
     border-bottom: 3px solid #ddd;
 }
-
+.border-top{
+  border-top: 1px  solid #ddd;
+}
 .active {
     border-bottom: 3px solid #428bca;
 }
