@@ -59,8 +59,9 @@ body {
     left: 0;
     top: 0;
     bottom: 0;
-    /*overflow-y: scroll;*/
+    overflow-y: hidden;
     overflow-x: hidden;
+    /*Si sposta la pagina del numero di px dell'header*/
 }
 
 .page {
@@ -71,6 +72,7 @@ body {
     top: 0;
     bottom: 0;
     /*overflow-y: scroll;*/
+    
     overflow-x: hidden;
 }
 
@@ -83,9 +85,16 @@ body {
 }
 /* END STRUCTURE */
 
-#map {
-    height: 100%;
-    width: 100%;
+@media (max-width: 568px) {
+    #NoticeboardsList {
+        width: 103%;
+    }
+}
+
+@media (min-width: 569px) {
+    #NoticeboardsList {
+        width: 101.08%;
+    }
 }
 
 #loaderror,
@@ -100,9 +109,16 @@ body {
 #back {
     margin-top: -5px;
 }
-#header{
-  border-bottom: 0;
+
+#header {
+    border-bottom: 0;
 }
+
+#NoticeboardsList {
+    overflow: auto;
+    height: 58%;
+}
+
 .center {
     text-align: center;
 }
@@ -118,22 +134,29 @@ body {
 }
 
 .bar {
-    position: absolute;
+    position: static;
 }
 
 .bar-tab {
     top: 44px;
     border-top: 0;
     /*border-bottom: 1px solid #ddd;*/
+    
     height: 60px;
 }
 
-.icon-bar{
-  border-bottom: 1px solid #ddd;
+.table-view {
+    border-top: 0;
 }
-.active>.icon-bar{
-  border-bottom: 1px solid #428bca;
+
+.border-nav {
+    border-bottom: 3px solid #ddd;
 }
+
+.active {
+    border-bottom: 3px solid #428bca;
+}
+
 .icon-bar>div {
     margin-top: 2px;
 }
@@ -141,4 +164,10 @@ body {
 .icon-bar>div {
     font-size: 0.7em;
     margin-top: -2px;
+}
+
+.btn-new {
+    position: absolute;
+    bottom: 104px;
+    margin-bottom: 0;
 }

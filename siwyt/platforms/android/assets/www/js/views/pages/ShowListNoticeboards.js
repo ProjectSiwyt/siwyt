@@ -31,7 +31,6 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap .rigabacheca": "goToBacheca",
-      "swipeLeft": "goToContacts"
 
     },
 
@@ -43,11 +42,6 @@ define(function(require) {
     goToBacheca: function(e){
       console.log(this.model);
       Backbone.history.navigate("bacheca/"+e.currentTarget.id, {
-        trigger: true
-      });
-    },
-     goToContacts: function(e) {
-      Backbone.history.navigate("contacts", {
         trigger: true
       });
     }

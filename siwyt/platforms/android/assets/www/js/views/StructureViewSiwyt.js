@@ -12,11 +12,11 @@ define(function(require) {
     id: "main",
 
     events: {
-      "tap #settings": "settings",
-      "tap #profile": "goToProfile",
-      "tap #contacts": "goToContacts",
-      "tap #home": "goToHome",
-      "tap #back": "goBack",
+      "tap #settingsMenu": "settings",
+      "tap #profileMenu": "goToProfile",
+      "tap #contactsMenu": "goToContacts",
+      "tap #homeMenu": "goToHome",
+      "tap #back": "goBack"
     },
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java

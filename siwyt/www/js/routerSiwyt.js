@@ -61,7 +61,7 @@ define(function(require) {
 
     homeSiwyt: function() {
       // highlight the nav1 tab bar element as the current one
-      this.structureView.setActiveTabBarElement("home");
+      this.structureView.setActiveTabBarElement("homeMenu");
       var page= new HomeSiwyt();
       this.changePage(page);
 
@@ -73,7 +73,7 @@ define(function(require) {
     },
 
     contacts: function() {
-      this.structureView.setActiveTabBarElement("contacts");
+      this.structureView.setActiveTabBarElement("contactsMenu");
       /*
       var model= new Utente({
         id:"2",
@@ -126,7 +126,7 @@ define(function(require) {
     },
 
     profile: function(){
-      this.structureView.setActiveTabBarElement("profile");
+      this.structureView.setActiveTabBarElement("profileMenu");
       var model= new Utente({
         id:"1",
         nome: "Luca",
@@ -178,37 +178,8 @@ define(function(require) {
     },
 
     addContacts: function(){
-      var model= new Utente({
-        id:"2",
-        nome: "Luca",
-        cognome: "Di Chiro",
-        mail: "luca.dichiro@student.univaq.it",
-        username: "bosco",
-        password: "bosco"
-      });
-      var model2= new Utente({
-        id:"3",
-        nome: "Nicholas",
-        cognome: "Angelucci",
-        mail: "nicholas.angelucci@student.univaq.it",
-        username: "richolas",
-        password: "richolas"
-      });
-      var model3= new Utente({
-        id:"4",
-        nome: "Vincenzo",
-        cognome: "Lanzieri",
-        mail: "vincenzo.lanzieri@student.univaq.it",
-        username: "vinzenio",
-        password: "vinzenio"
-      });
-      var collection= new Utenti();
-      collection.add(model);
-      collection.add(model2);
-      collection.add(model3);
-      var page = new AddContacts({
-        model: collection
-      });
+      
+      var page = new AddContacts();
       this.changePage(page);
     },
     newBacheca: function(nome){

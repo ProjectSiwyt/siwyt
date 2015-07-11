@@ -64,7 +64,7 @@ define(function(require) {
 			       		}
 			       	}
 			       	console.log(a2);
-			       	THIS.trigger("nomeContatti", a2);
+			       	THIS.trigger("listContacts", a2);
 			    })
 		        
 		        .fail(function(error) {

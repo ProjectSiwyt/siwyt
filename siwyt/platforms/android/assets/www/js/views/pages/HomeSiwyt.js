@@ -25,7 +25,7 @@ define(function(require) {
       dati.fetch().done(function(){
         this.subView = (new ShowListNoticeboards({collection: dati})).render().el;
         //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
-        $('#NoticeboardsList').append(this.subView);
+        $('#noticeboardsList').append(this.subView);
       });
       
     },
