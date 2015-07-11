@@ -5,19 +5,16 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
 
-  var Settings = Utils.Page.extend({
 
-    constructorName: "Settings",
+  var Register = Utils.Page.extend({
+
+    constructorName: "Register",
 
     model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.settings;
-      console.log("inzialize settings");
-      $("#navigation").attr("style","display:none");
-      $("#settings_menu").attr("style","display:none");
-      $("#back").attr("style","display:block");
+      this.template = Utils.templates.register;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -29,33 +26,33 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "settings",
+    id: "register",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goBack",
-      "tap #logout": "logOut"
+      "tap .btn-block": "validateRegister",
     },
 
     render: function() {
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
+      document.getElementById("navigation").style.display="none";
+      document.getElementById("header").style.display="none";
+      
+
       return this;
     },
 
-    logOut: function(e){
-      Backbone.history.navigate("login",{
+
+    validateRegister: function(e) {
+      ////////////// controllo se i campi sono stati inseriti correttamente e rimando a login
+      Backbone.history.navigate("login", {
         trigger: true
       });
-    },
-
-    goBack: function() {
-      window.history.back();
     }
-
   });
 
-  return Settings;
+  return Register;
 
 });
