@@ -13,7 +13,7 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.settings;
+      this.template = Utils.templates.appSettings;
       console.log("inzialize settings");
       $("#navigation").attr("style","display:none");
       $("#settings_menu").attr("style","display:none");

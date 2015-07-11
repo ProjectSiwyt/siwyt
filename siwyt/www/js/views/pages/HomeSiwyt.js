@@ -37,7 +37,8 @@ define(function(require) {
     events: {
       //"tap": "goToContacts",
       "tap #new": "goToCreateBacheca",
-      "swipeLeft": "goToContacts"
+      "swipeLeft": "goToProfile",
+      "swipeRight": "goToContacts"
     },
 
     render: function() {
@@ -49,6 +50,11 @@ define(function(require) {
     },
     goToContacts: function(e) {
       Backbone.history.navigate("contacts", {
+        trigger: true
+      });
+    },
+    goToProfile: function(e) {
+      Backbone.history.navigate("profile", {
         trigger: true
       });
     },

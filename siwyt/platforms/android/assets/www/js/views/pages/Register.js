@@ -6,22 +6,15 @@ define(function(require) {
   var Utils = require("utils");
 
 
-  var Profile = Utils.Page.extend({
+  var Register = Utils.Page.extend({
 
-    constructorName: "Profile",
+    constructorName: "Register",
 
     model: Utente,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.profile;
-      /*document.getElementById("navigation").style.display="inline-block";
-      document.getElementById("header").style.display="inherit";*/
-      $("#navigation").removeAttr("style");
-      $("#header").removeAttr("style");
-      document.getElementById("settings_menu").style.display="block";
-      document.getElementById("back").style.display="none";
-
+      this.template = Utils.templates.register;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -33,31 +26,33 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "profile",
+    id: "register",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToHome"
+      "tap .btn-block": "validateRegister",
     },
 
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
+      document.getElementById("navigation").style.display="none";
+      document.getElementById("header").style.display="none";
+      
 
       return this;
     },
 
-    goToHome: function(e) {
-      /*$(".active").attr("class","tab-item");
-      $("#contacts_menu").attr("class","tab-item active");*/
-      Backbone.history.navigate("homeSiwyt", {
+
+    validateRegister: function(e) {
+      ////////////// controllo se i campi sono stati inseriti correttamente e rimando a login
+      Backbone.history.navigate("login", {
         trigger: true
       });
-
     }
   });
 
-  return Profile;
+  return Register;
 
 });

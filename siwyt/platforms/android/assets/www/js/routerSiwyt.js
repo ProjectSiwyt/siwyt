@@ -20,6 +20,8 @@ define(function(require) {
   var Postit = require("models/Postit");
   var Postits = require("collections/Postits");
   var ShowListNoticeboards = require("views/pages/ShowListNoticeboards");
+  var Login = require("views/pages/Login");
+  var Register = require("views/pages/Register");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -34,10 +36,12 @@ define(function(require) {
       "bacheca/:id": "showNoticeboard",
       "createBacheca": "create",
       "addContacts": "addContacts",
-      "newBacheca/:nome": "newBacheca"
+      "newBacheca/:nome": "newBacheca",
+      "login":"login",
+      "register":"register"
     },
 
-    firstView: "homeSiwyt",
+    firstView: "login",
     BAASBOX_URL : "http://localhost:9000",
     BAASBOX_APP_CODE : "1234567890",
 
@@ -71,7 +75,15 @@ define(function(require) {
       var page = new Settings();
       this.changePage(page);
     },
-
+    
+    login: function(){
+      var page= new Login();
+      this.changePage(page);
+    },
+    register: function(){
+      var page= new Register();
+      this.changePage(page);
+    },
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");
       /*
