@@ -220,3 +220,7 @@ i:active{
   top: -15px;
   right: 70px;
 }
+
+.errorReg{
+  display: none;
+}
