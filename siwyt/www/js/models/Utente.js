@@ -76,6 +76,19 @@ define(function(require) {
 			.fail(function(error) {
 	         	console.log("error ", error);
 			})
+		},
+
+		deleteAccount: function(e){
+			console.log("account deleted");
+		},
+
+		register: function(e){
+			console.log("account registred");
+		},
+
+		checkUsername: function(e){
+			console.log("username valid");
+			return true;
 		}
 
 	});
