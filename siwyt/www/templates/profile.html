@@ -8,21 +8,27 @@
             <li>{{num_teammate}} as Teammate</li>
         </ul>
     </li>
+    <li id="editData"><span ><i class="fa fa-pencil"></i></span></li>
+    <li id="saveData"><span ><i class="fa fa-save"></i></span></li>
     <li>Name:
-        <input type="text" value="{{nome}}" disabled="disabled" />
+        <span  class="errorReg" id="errName" >Invalid name</span>
+        <input class="edit"  type="text" id="profileName" value="{{nome}}" disabled="disabled" />
     </li>
     <li>Surname:
-        <input type="text" value="{{cognome}}" disabled="disabled" />
+        <span  class="errorReg" id="errSurname">Invalid surname</span>
+        <input class="edit"  type="text" id="profileSurname" value="{{cognome}}" disabled="disabled" />
     </li>
     <li>Password:
         <ul>
             <li>
-                <input type="password" name="oldPass" />
+                <span  class="errorReg" id="errPassword">Invalid Password</span>
+                <input class="edit"  type="password" id="profileOldPass" name="oldPass" disabled="disabled" placeholder="Old Password"/>
             </li>
             <li>
-                <input type="password" name="newPass" />
+                <span  class="errorReg" id="errConfirm">New password invalid. Remenber Must be least 5 characters</span>
+                <input class="edit" type="password" id="profileNewPass" name="newPass" disabled="disabled" placeholder="New Password" />
             </li>
-            <input type="password" name="confPass" />
+            <input  class="edit" type="password" id="profileConfirm" name="confPass" disabled="disabled" placeholder="Confirm new Password"/>
         </ul>
     </li>
     <li  id="deleteAccount">Delete Account <i class="fa fa-trash-o"></i></li>

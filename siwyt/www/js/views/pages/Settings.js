@@ -17,6 +17,7 @@ define(function(require) {
       console.log("inzialize settings");
       $("#navigation").attr("style","display:none");
       $("#settings_menu").attr("style","display:none");
+      document.getElementById("title").innerHTML="Settins";
       $("#back").attr("style","display:block");
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {

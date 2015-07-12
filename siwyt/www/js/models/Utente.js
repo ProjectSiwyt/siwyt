@@ -89,6 +89,24 @@ define(function(require) {
 		checkUsername: function(e){
 			console.log("username valid");
 			return true;
+		},
+
+		login: function(email , password){
+			console.log("utente.login");
+			return true
+		},
+
+		logout: function(e){
+			console.log("logout");
+		},
+
+		saveData: function(e){
+			console.log("saving data");
+		},
+
+		checkPassword: function(e){
+			console.log("checking password");
+			return true;
 		}
 
 	});

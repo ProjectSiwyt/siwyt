@@ -21,6 +21,7 @@ define(function(require) {
       $("#navigation").removeAttr("style");
       $("#header").removeAttr("style");
       $("#settingsMenu").removeAttr("style");
+      document.getElementById("title").innerHTML="Contacts";
       document.getElementById("back").style.display="none";
 
       // here we can register to inTheDOM or removing events

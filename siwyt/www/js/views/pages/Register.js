@@ -19,7 +19,9 @@ define(function(require) {
       this.template = Utils.templates.register;
       console.log("initialize register");
       document.getElementById("navigation").style.display="none";
-      document.getElementById("header").style.display="none";
+      document.getElementById("title").innerHTML="Sign-Up";
+      $("#header").removeAttr("style");
+      document.getElementById("settingsMenu").style.display="none";
       /*var err =  $("span.errorReg");
       console.log(err);*/
       
