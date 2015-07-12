@@ -20,6 +20,7 @@ define(function(require) {
     	},
 
     	//restituisce i dati della bacheca con id uguale a quello passato come parametro
+    	/*
     	noticeboardData: function(id){
     		console.log(id);
     		var THIS = this;	
@@ -41,6 +42,19 @@ define(function(require) {
 	          		THIS.trigger("error")
 				})
     	},
+  		*/
+    	noticeboardData: function(idb){
+    		var THIS=this;
+			BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+idb+"'" })
+			 .done(function(res) {
+			 	console.log("res ", res);
+			 	THIS.trigger("evento", res);
+			 })
+			 .fail(function(error) {
+			 	console.log("error ", error);
+			 	THIS.trigger("error");
+			 })
+		}
 
     	//modifytitle: function(id, titolo){} 
     	

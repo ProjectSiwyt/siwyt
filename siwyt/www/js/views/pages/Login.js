@@ -59,40 +59,26 @@ define(function(require) {
 
     },*/
     login:function(result){
-      //if(result>0){
-          Backbone.history.navigate("homeSiwyt", {
-            trigger: true
-              });
+        if(result==null){
+          alert("aggiungere messaggio di errore");
+        }
+        else{
+            Backbone.history.navigate("homeSiwyt", {
+              trigger: true
+            });
+        }
+            
       },
     
 
     validateLogin: function(e) {
       //debugger;
       //e.preventDefault();
-      var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
+      //CAMBIARE EMAIL CON USERNAME SIA QUI CHE NEI TEMPLATE E CAMBIARE NOME FUNZIONE PERCHE NON VALIDA NIENTE
       var email = document.formLogin.logEmail.value;
       var password = document.formLogin.logPassword.value;
-      var valid =true;
 
-      if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
-             console.log("err email");
-             /*$("#errEmail").removeAttr("style");*/
-             $("#loginerror").attr("style","display:block");
-             document.formRegister.regEmail.select();
-              valid =false;
-          }else
-              $("loginerror").removeAttr("style");
-
-      if ((password == "") || (password.length < 5)) {
-             console.log("err password");
-             $("#loginerror").attr("style","display:block");
-             document.formRegister.regPassword.select();
-             valid = false;
-          }else 
-              $("#loginerror").removeAttr("style");
-
-      if(valid) this.utente.login(email,password);
-
+      this.utente.login(email,password);
     },
   
   goToRegister: function(e) {

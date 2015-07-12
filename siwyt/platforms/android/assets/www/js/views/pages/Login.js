@@ -19,7 +19,8 @@ define(function(require) {
       console.log("inizalize login");
       document.getElementById("navigation").style.display="none";
       document.getElementById("header").style.display="none";
-      
+      this.utente = new Utente();
+      this.utente.on("resultLogin",this.login, this);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -48,36 +49,36 @@ define(function(require) {
       return this;
     },
 
+    /*doLogin: function(e){
+        if(this.validateLogin()){ 
+            Backbone.history.navigate("homeSiwyt", {
+            trigger: true
+              });
+
+        }
+
+    },*/
+    login:function(result){
+        if(result==null){
+          alert("aggiungere messaggio di errore");
+        }
+        else{
+            Backbone.history.navigate("homeSiwyt", {
+              trigger: true
+            });
+        }
+            
+      },
+    
 
     validateLogin: function(e) {
-      // ***************   con baasBox fare la parte di validazione dati e stampare errore o andare alla home   *****************************
       //debugger;
       //e.preventDefault();
-    /*  var formValues = {
-            email: $('#email').val(),
-            password: $('#password').val()
-        };*/
+      //CAMBIARE EMAIL CON USERNAME SIA QUI CHE NEI TEMPLATE E CAMBIARE NOME FUNZIONE PERCHE NON VALIDA NIENTE
+      var email = document.formLogin.logEmail.value;
+      var password = document.formLogin.logPassword.value;
 
-  /*      $.ajax({
-            url:url,
-            type:'POST',
-            dataType:"json",
-            data: formValues,
-            success:function (data) {
-                console.log(["Login request details: ", data]);
-               
-                if(data.error) {  // If there is an error, show the error messages
-                    $('.loginerror').attr("style","display:block");
-                }
-                else { // If not, send them back to the home page
-                    window.location.replace('#');
-                }
-            }
-        });*/
-    
-      Backbone.history.navigate("homeSiwyt", {
-        trigger: true
-      });
+      this.utente.login(email,password);
     },
   
   goToRegister: function(e) {

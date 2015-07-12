@@ -17,6 +17,7 @@ define(function(require) {
       console.log("inzialize settings");
       $("#navigation").attr("style","display:none");
       $("#settings_menu").attr("style","display:none");
+      document.getElementById("title").innerHTML="Settins";
       $("#back").attr("style","display:block");
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -35,7 +36,8 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "swipeRight": "goBack",
-      "tap #logout": "logOut"
+      "tap #logout": "logOut",
+      
     },
 
     render: function() {
@@ -45,10 +47,12 @@ define(function(require) {
     },
 
     logOut: function(e){
+      localStorage.removeItem("idu");
       Backbone.history.navigate("login",{
         trigger: true
       });
     },
+
 
     goBack: function() {
       window.history.back();

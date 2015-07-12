@@ -77,11 +77,10 @@ define(function(require) {
 
         $("#editData").removeAttr("style");
         $("#saveData").attr("style","display:none");
-      }
-    },
+      },
 
     validateEditedData: function(e){
-      valid= true
+       var valid= true
        var name = document.getElementById("profileName").value;
        var surname = document.getElementById("profileSurname").value;
        var oldPass = document.getElementById("profileOldPass").value;

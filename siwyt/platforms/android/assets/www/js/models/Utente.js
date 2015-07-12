@@ -76,6 +76,60 @@ define(function(require) {
 			.fail(function(error) {
 	         	console.log("error ", error);
 			})
+		},
+
+		deleteAccount: function(e){
+			console.log("account deleted");
+		},
+
+		register: function(name, surname, username, email, password){
+			//console.log(email);
+			console.log("account registred");
+		},
+
+		checkUsername: function(username){
+			console.log("username valid: "+ username);
+			return true;
+		},
+			
+		//controllo se esiste un utente che ha come username e password quelli passati come parametro
+		//in caso positivo vengono restituiti i dati dell'utente altrimenti null
+		login: function(username, password){
+		var THIS = this;	
+		BaasBox.loadCollection("Utente")
+		 	.done(function(res) {
+		 		var trovato=false;
+		   		console.log("res ", res);
+		   		for (var i=0; i<res.length; i++){
+		           	if( res[i].username == username && res[i].password == password ){
+		            localStorage.setItem('idu',res[i].id);  //salvare nel localstorage -> res[i].id
+		            THIS.trigger("resultLogin",res[i]);
+		           	trovato = true;
+		           	break;
+		        	}
+		        }
+		        if(trovato==false){
+		        	THIS.trigger("resultLogin",null);	
+		        }	           
+		 	})
+			 .fail(function(error) {
+			   console.log("error", error);
+			 })
+		},
+
+		logout: function(idUtente){
+			console.log("logout");
+		},
+
+		saveData: function(idUtente, name, surname, newPass){
+			console.log(surname);
+			console.log("saving data");
+		},
+
+		checkPassword: function(idUtente , password){
+			idUtente = this.id;
+			console.log("check password "+idUtente +" , password: "+password);
+			return true;
 		}
 
 	});

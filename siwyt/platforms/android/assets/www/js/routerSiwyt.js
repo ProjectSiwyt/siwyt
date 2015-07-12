@@ -41,12 +41,18 @@ define(function(require) {
       "register":"register"
     },
 
-    firstView: "login",
     BAASBOX_URL : "http://localhost:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
       this.currentView = undefined;
+
+      if(localStorage.getItem("idu")==null){
+          this.firstView="login";
+      }
+      else{
+        this.firstView="homeSiwyt";
+      }
         //initialize BaasBox
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
@@ -61,6 +67,7 @@ define(function(require) {
           .fail(function (err) {
             console.log("error ", err);
       });
+
     },
 
     homeSiwyt: function() {

@@ -47,6 +47,7 @@ define(function(require) {
     },
 
     logOut: function(e){
+      localStorage.removeItem("idu");
       Backbone.history.navigate("login",{
         trigger: true
       });

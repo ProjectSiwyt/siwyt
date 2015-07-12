@@ -358,9 +358,11 @@ define(function(require) {
       this.postits.elencoPostit(idb);
     },
     appendTitle: function(result){
-      document.getElementById("titleBacheca").innerHTML=result.nome;
+      console.log(result[0].nome);
+      document.getElementById("titleBacheca").innerHTML=result[0].nome;
+      
       //chiamo la funzione per prendere i postit
-      this.getPostits(result.id);
+      this.getPostits(result[0].id);
     },
     appendItems: function(result){
       console.log(result);
