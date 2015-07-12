@@ -5,22 +5,23 @@
         </header>
     </div>
     <div class="i-12">
-        <form>
-            <span>Error</span>
-            <input type="text" placeholder="NAME">
-            <span>Error</span>
-            <input type="text" placeholder="SURNAME">
-            <span>Error</span>
-            <input type="text" placeholder="EMAIL">
-            <span>Error</span>
-            <input type="text" placeholder="USERNAME">
-            <span>Error</span>
-            <input type="text" placeholder="PASSWORD">
-            <span>Error</span>
-            <input type="text" placeholder="CONFIRM PASSWORD">
-            <div class="btn-center">
-                <button class="btn btn-block">REGISTER</button>
-            </div>
+        <form id="formReg" name="formRegister">
+            <span class="errorReg" id="errName">Invalid name</span>
+            <input type="text" id="regName" placeholder="NAME">
+            <span class="errorReg" id="errSurname">Invalid surname</span>
+            <input type="text" id="regSurname" placeholder="SURNAME">
+            <span class="errorReg" id="errEmail">Invalid Email</span>
+            <input type="text" id="regEmail" placeholder="EMAIL">
+            <span class="errorReg" id="errUsername">Invalid Username</span>
+            <input type="text" id="regUsername" placeholder="USERNAME">
+            <span class="errorReg" id="errPassword">Password must be 5 characters at least</span>
+            <input type="text" id="regPassword" placeholder="PASSWORD">
+            <span class="errorReg" id="errConfirm">The inserted passwords are not the same</span>
+            <input type="text" id="regConfirm" placeholder="CONFIRM PASSWORD">
+        </form>
+        <div class="btn-center">
+            <button class="btn btn-block">REGISTER</button>
+        </div>
         </form>
     </div>
 </div>
