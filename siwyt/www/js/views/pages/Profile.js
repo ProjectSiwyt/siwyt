@@ -34,6 +34,7 @@ define(function(require) {
 
       // by convention, all the inner views of a view must be stored in this.subViews
       this.utente = new Utente();
+      //console.log(this.utente);
     },
 
     id: "profile",
@@ -58,7 +59,7 @@ define(function(require) {
       var del = window.confirm("Sei sicuro di voler eliminare il tuo account?");
       console.log(del);
       if(del){
-        this.utente.deleteAccount();
+        this.utente.deleteAccount(idUtente);
       }
     },
 
@@ -72,7 +73,13 @@ define(function(require) {
 
     saveData: function(e){
       if(this.validateEditedData()){
-        this.utente.saveData();
+
+        var name = document.getElementById("profileName").value;
+        var surname = document.getElementById("profileSurname").value;
+        var newPass = document.getElementById("profileNewPass").value;
+        this.utente.saveData(idUtente, name, surname, newPass);
+        $("#editData").removeAttr("style");
+        $("#saveData").attr("style","display:none");
       }
     },
 
@@ -85,24 +92,29 @@ define(function(require) {
        var confirm = document.getElementById("profileConfirm").value;
        console.log(newPass);
 
+      // controlla che il nuovo nome non sia vuoto
        if(name=="" || name=="undefined") {
             $("#errName").attr("style","display:inline-block");
             valid=false;
           }else
               $("#errName").removeAttr("style");
 
+      // controlla che il nuovo surname non sia vuoto
        if(surname=="" || surname=="undefined"){
             $("#errSurname").attr("style","display:inline-block");
             valid = false;
        } else
             $("#errSurname").removeAttr("style");
 
-       if(!this.utente.checkPassword()) {
-        $("#errPassword").attr("style","display:inline-block");
+       /// controlla che la password inserita sia uguale a quella vecchia     
+       if(!this.utente.checkPassword(this.utente.id, oldPass)) {
+            $("#errPassword").attr("style","display:inline-block");
         valid = false;
        } else
           $("#errPassword").removeAttr("style");
 
+       // controlla che la nuova password inserita sia uguale a quella nel campo
+       // conferma e che sia almeno di 5 caratteri     
        if( newPass!=confirm || newPass.length < 5  ){
         $("#errConfirm").attr("style","display:inline-block");
         valid=false;

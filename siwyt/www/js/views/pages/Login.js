@@ -20,6 +20,7 @@ define(function(require) {
       document.getElementById("navigation").style.display="none";
       document.getElementById("header").style.display="none";
       this.utente = new Utente;
+      this.utente.on("loginResult",this.login, this);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -36,7 +37,7 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #btn_login": "doLogin",
+      "tap #btn_login": "validateLogin",
       "tap #sign_up": "goToRegister"
     },
 
@@ -48,7 +49,7 @@ define(function(require) {
       return this;
     },
 
-    doLogin: function(e){
+    /*doLogin: function(e){
         if(this.validateLogin()){ 
             Backbone.history.navigate("homeSiwyt", {
             trigger: true
@@ -56,7 +57,14 @@ define(function(require) {
 
         }
 
-    },
+    },*/
+    login:function(result){
+      if(result>0){
+          Backbone.history.navigate("homeSiwyt", {
+            trigger: true
+              });
+      }
+    }
 
     validateLogin: function(e) {
       //debugger;
@@ -83,7 +91,7 @@ define(function(require) {
           }else 
               $("#loginerror").removeAttr("style");
 
-      return this.utente.login();
+      this.utente.login(email,password);
 
     },
   

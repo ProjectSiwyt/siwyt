@@ -82,30 +82,33 @@ define(function(require) {
 			console.log("account deleted");
 		},
 
-		register: function(e){
+		register: function(name, surname, username, email, password){
+			//console.log(email);
 			console.log("account registred");
 		},
 
-		checkUsername: function(e){
-			console.log("username valid");
+		checkUsername: function(username){
+			console.log("username valid: "+ username);
 			return true;
 		},
 
 		login: function(email , password){
-			console.log("utente.login");
+			console.log(email);
 			return true
 		},
 
-		logout: function(e){
+		logout: function(idUtente){
 			console.log("logout");
 		},
 
-		saveData: function(e){
+		saveData: function(idUtente, name, surname, newPass){
+			console.log(surname);
 			console.log("saving data");
 		},
 
-		checkPassword: function(e){
-			console.log("checking password");
+		checkPassword: function(idUtente , password){
+			idUtente = this.id;
+			console.log("check password "+idUtente +" , password: "+password);
 			return true;
 		}
 

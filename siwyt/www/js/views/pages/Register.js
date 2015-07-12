@@ -67,7 +67,13 @@ define(function(require) {
 
     doRegistration: function(e) {
       if (this.validateRegister()){
-        this.utente.register();
+          var name = document.formRegister.regName.value;
+          var surname = document.formRegister.regSurname.value;
+          var username = document.formRegister.regUsername.value;
+          var email = document.formRegister.regEmail.value;
+          var password = document.formRegister.regPassword.value;
+          var confirm = document.formRegister.regConfirm.value;
+          this.utente.register(name, surname, username, email, password);
       }
     },
 
@@ -117,7 +123,7 @@ define(function(require) {
           }else
                 $("#errSurname").removeAttr("style");
 
-      if ((username == "") || (surname == "undefined") || !this.utente.checkUsername()) {
+      if ((username == "") || (surname == "undefined") || !this.utente.checkUsername(username)) {
              console.log("err username");
              $("#errUsername").attr("style","display:block");
              document.formRegister.regUsername.select();
