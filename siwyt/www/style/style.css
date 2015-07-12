@@ -96,8 +96,8 @@ body {
     }
 }
 
-#loaderror,
-#loginerror {
+#loaderror,#loginerror,
+#saveData, #deleteData {
     display: none;
 }
 
@@ -111,6 +111,11 @@ body {
 
 #header {
     border-bottom: 0;
+}
+#changeImg{
+    position: absolute;
+  left: 125px;
+  top: 118px;
 }
 
 .scroll {
@@ -220,7 +225,36 @@ i:active{
   top: -15px;
   right: 70px;
 }
-
 .errorReg{
   display: none;
+}
+.profile-img{
+  height: 150px;
+  width: 150px;
+}
+.list-information{
+  list-style-type: none;
+}
+.no-nav{
+  margin-top: 50px;
+}
+.search-delete{
+  top: 10px;
+  right: 20px;
+}
+.send{
+    top: 23px;
+  right: 5px;
+}
+.first-icon{
+  top: 5px;
+  right: 70px;
+}
+.second-icon{
+  top: 5px;
+  right: 5px;
+}
+.popup{
+  display: none;
+  position: absolute;
 }
