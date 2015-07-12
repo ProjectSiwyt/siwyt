@@ -19,8 +19,8 @@ define(function(require) {
       console.log("inizalize login");
       document.getElementById("navigation").style.display="none";
       document.getElementById("header").style.display="none";
-      this.utente = new Utente;
-      this.utente.on("loginResult",this.login, this);
+      this.utente = new Utente();
+      this.utente.on("resultLogin",this.login, this);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -59,12 +59,12 @@ define(function(require) {
 
     },*/
     login:function(result){
-      if(result>0){
+      //if(result>0){
           Backbone.history.navigate("homeSiwyt", {
             trigger: true
               });
-      }
-    }
+      },
+    
 
     validateLogin: function(e) {
       //debugger;
@@ -72,14 +72,14 @@ define(function(require) {
       var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       var email = document.formLogin.logEmail.value;
       var password = document.formLogin.logPassword.value;
-      valid =true;
+      var valid =true;
 
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
              console.log("err email");
              /*$("#errEmail").removeAttr("style");*/
              $("#loginerror").attr("style","display:block");
              document.formRegister.regEmail.select();
-             return false;
+              valid =false;
           }else
               $("loginerror").removeAttr("style");
 
@@ -87,11 +87,11 @@ define(function(require) {
              console.log("err password");
              $("#loginerror").attr("style","display:block");
              document.formRegister.regPassword.select();
-             return false;
+             valid = false;
           }else 
               $("#loginerror").removeAttr("style");
 
-      this.utente.login(email,password);
+      if(valid) this.utente.login(email,password);
 
     },
   

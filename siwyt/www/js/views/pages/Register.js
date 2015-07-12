@@ -22,6 +22,9 @@ define(function(require) {
       document.getElementById("title").innerHTML="Sign-Up";
       $("#header").removeAttr("style");
       document.getElementById("settingsMenu").style.display="none";
+
+      this.utente= new Utente();
+      this.utente.on("resultRegister", this.doRegistration, this);
       /*var err =  $("span.errorReg");
       console.log(err);*/
       
@@ -32,7 +35,7 @@ define(function(require) {
         document.getElementsByClassName("errorReg")[i].style.display="none";
         console.log(i);
       }*/
-      this.utente= new Utente();
+      
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -49,7 +52,7 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap .btn-block": "doRegistration"
+      "tap .btn-block": "validateRegister"
     },
 
     render: function() {
@@ -59,22 +62,24 @@ define(function(require) {
       /*var err = $(".errorReg")//.attr("style","display:none");
       console.log(err);*/
       
-      
-
       return this;
     },
 
 
     doRegistration: function(e) {
-      if (this.validateRegister()){
+      /*if (this.validateRegister()){
           var name = document.formRegister.regName.value;
           var surname = document.formRegister.regSurname.value;
           var username = document.formRegister.regUsername.value;
           var email = document.formRegister.regEmail.value;
           var password = document.formRegister.regPassword.value;
           var confirm = document.formRegister.regConfirm.value;
-          this.utente.register(name, surname, username, email, password);
-      }
+          this.utente.register(name, surname, username, email, password);*/
+
+      Backbone.history.navigate("register", {
+        trigger: true
+      });
+
     },
 
     validateRegister: function(e){
@@ -89,12 +94,12 @@ define(function(require) {
       var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       if (password != confirm) {
           console.log("err confirm");
-          $("#errConfirm").removeAttr("style");
+          $("#errConfirm").attr("style","display:block");
           /*document.formRegister.regPassword.value = "";
           document.formRegister.regConfirm.value = "";*/
           document.formRegister.regPassword.focus();
           valid= false;
-      }
+      }else  $("#errConfirm").removeAttr("style");
 
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
              console.log("err email");
@@ -138,7 +143,8 @@ define(function(require) {
              valid = false;
           }else 
               $("#errPassword").removeAttr("style");
-      return valid;  
+
+      if(valid) this.utente.register(name, surname, username, email, password);  
     }
 
   });

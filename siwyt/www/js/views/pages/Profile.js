@@ -34,6 +34,8 @@ define(function(require) {
 
       // by convention, all the inner views of a view must be stored in this.subViews
       this.utente = new Utente();
+      this.utente.on("resultSaveDate",this.saveData, this);
+      this.utente.on("resultCheckPassword", this);
       //console.log(this.utente);
     },
 
@@ -71,13 +73,8 @@ define(function(require) {
 
     },
 
-    saveData: function(e){
-      if(this.validateEditedData()){
+    saveData: function(result){
 
-        var name = document.getElementById("profileName").value;
-        var surname = document.getElementById("profileSurname").value;
-        var newPass = document.getElementById("profileNewPass").value;
-        this.utente.saveData(idUtente, name, surname, newPass);
         $("#editData").removeAttr("style");
         $("#saveData").attr("style","display:none");
       }
@@ -121,7 +118,7 @@ define(function(require) {
       } else
           $("#errConfirm").removeAttr("style");
 
-      return valid;
+      if (valid) this.utente.saveData(idUtente, name, surname, newPass);
     },
 
     goToHome: function(e) {
