@@ -15,11 +15,12 @@ define(function(require) {
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.profile;
+      console.log("initialize template profile");
       /*document.getElementById("navigation").style.display="inline-block";
       document.getElementById("header").style.display="inherit";*/
       $("#navigation").removeAttr("style");
       $("#header").removeAttr("style");
-      document.getElementById("settings_menu").style.display="block";
+      $("#settingsMenu").removeAttr("style");
       document.getElementById("back").style.display="none";
 
       // here we can register to inTheDOM or removing events
@@ -38,7 +39,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goToHome"
+      "swipeRight": "goToHome",
+      "tap #deleteAccount": "deleteAccount"
     },
 
     render: function() {
@@ -46,6 +48,10 @@ define(function(require) {
       //$(this.el).html(this.template(this.model.models));
 
       return this;
+    },
+
+    deleteAccount: function(e){
+      var del = window.confirm("Sei sicuro di voler eliminare il tuo account?");
     },
 
     goToHome: function(e) {

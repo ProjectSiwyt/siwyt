@@ -14,13 +14,13 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.contacts;
-      console.log("template contact");
+      this.template = Utils.templates.structureContacts;
+      console.log("initialize template contacts");
       /*document.getElementById("navigation").style.display="inlne-block";
       document.getElementById("header").style.display="inherit";*/
       $("#navigation").removeAttr("style");
       $("#header").removeAttr("style");
-      document.getElementById("settings_menu").style.display="inline-block";
+      $("#settingsMenu").removeAttr("style");
       document.getElementById("back").style.display="none";
 
       // here we can register to inTheDOM or removing events
@@ -46,14 +46,11 @@ define(function(require) {
 
     render: function() {
       $(this.el).html(this.template());
-      //$(this.el).html(this.template(this.model.models));
 
       return this;
     },
 
     goToHome: function(e) {
-      /*$(".active").attr("class","tab-item");
-      $("#home_menu").attr("class","tab-item active");*/
       Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });

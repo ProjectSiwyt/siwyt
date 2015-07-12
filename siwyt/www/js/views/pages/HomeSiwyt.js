@@ -17,8 +17,9 @@ define(function(require) {
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureHomeSiwyt;
-      document.getElementById("navigation").style.display="block";
-      document.getElementById("header").style.display="block";
+      $("#navigation").removeAttr("style");
+      $("#header").removeAttr("style");
+      $("#back").attr("style","display:none");
       spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"
       var dati = new Bacheche();

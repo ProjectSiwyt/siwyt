@@ -35,7 +35,8 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "swipeRight": "goBack",
-      "tap #logout": "logOut"
+      "tap #logout": "logOut",
+      
     },
 
     render: function() {
@@ -49,6 +50,7 @@ define(function(require) {
         trigger: true
       });
     },
+
 
     goBack: function() {
       window.history.back();
