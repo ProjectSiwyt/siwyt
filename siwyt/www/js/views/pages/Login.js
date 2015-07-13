@@ -59,26 +59,23 @@ define(function(require) {
 
     },*/
     login:function(result){
-        if(result==null){
-          alert("aggiungere messaggio di errore");
-        }
-        else{
-            Backbone.history.navigate("homeSiwyt", {
+      console.log(result);
+        if(result!=null){
+          Backbone.history.navigate("homeSiwyt", {
               trigger: true
             });
         }
+        else{
+          $("#loginerror").attr("style","display:inline-block");}
             
       },
     
 
     validateLogin: function(e) {
-      //debugger;
-      //e.preventDefault();
-      //CAMBIARE EMAIL CON USERNAME SIA QUI CHE NEI TEMPLATE E CAMBIARE NOME FUNZIONE PERCHE NON VALIDA NIENTE
-      var email = document.formLogin.logEmail.value;
+      var username = document.formLogin.logUsername.value;
       var password = document.formLogin.logPassword.value;
 
-      this.utente.login(email,password);
+      this.utente.login(username,password);
     },
   
   goToRegister: function(e) {

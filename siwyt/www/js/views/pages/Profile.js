@@ -16,13 +16,14 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.profile;
       console.log("initialize template profile");
-      /*document.getElementById("navigation").style.display="inline-block";
-      document.getElementById("header").style.display="inherit";*/
+
+      //nascondo o visualizzo elementi 
       $("#navigation").removeAttr("style");
       $("#header").removeAttr("style");
       $("#settingsMenu").removeAttr("style");
       document.getElementById("title").innerHTML="Profile";
       document.getElementById("back").style.display="none";
+      
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -33,9 +34,16 @@ define(function(require) {
       // this.listenTo(this, "removing", functionName);
 
       // by convention, all the inner views of a view must be stored in this.subViews
+      var idUtente = localStorage.getItem('idu');
       this.utente = new Utente();
-      this.utente.on("resultSaveDate",this.saveData, this);
-      this.utente.on("resultCheckPassword", this);
+      
+      //this.utente.on("resultData", this.showData, this);
+      // carico i dati dell utente 
+      //this.utente.requestData(idUtente);
+
+      //this.utente.on("resultSaveDate",this.saveData, this);
+      //this.utente.on("resultDeleteAccount", this.goOut, this);
+      //this.utente.on("resultCheckPassword", this);
       //console.log(this.utente);
     },
 
@@ -47,7 +55,8 @@ define(function(require) {
       "swipeRight": "goToHome",
       "tap #deleteAccount": "deleteAccount",
       "tap #editData":"editData",
-      "tap #saveData": "saveData"
+      "tap #saveData": "validateEditedData",
+      "tap #deleteData": "cancellChanges"
     },
 
     render: function() {
@@ -57,30 +66,54 @@ define(function(require) {
       return this;
     },
 
-    deleteAccount: function(e){
-      var del = window.confirm("Sei sicuro di voler eliminare il tuo account?");
-      console.log(del);
-      if(del){
-        this.utente.deleteAccount(idUtente);
+    goOut: function(result){
+        localStorage.setItem('idu',null);
+        Backbone.history.navigate("login", {
+        trigger: true
+      });
+    },
+
+    showData: function(result){
+      if(result!=null){
+          console.log(result);
+
       }
+    },
+
+    deleteAccount: function(e){
+      var del = window.confirm("Are you sure you want to delete your account?");
+      console.log(del);
+      if(del)  this.utente.deleteAccount(idUtente);
+    
     },
 
     editData: function(e){
       console.log("editing");
+      this._name = document.getElementById("profileName").value;
+      this._surname = document.getElementById("profileSurname").value;
       $(".edit").removeAttr("disabled");
       $("#editData").attr("style","display:none");
-      $("#saveData").attr("style","display:inline-block")
+      $("#deleteData").attr("style","display:inline-block");
+      $("#saveData").attr("style","display:inline-block");
 
     },
 
-    saveData: function(result){
-
+    cancellChanges: function(e){
         $("#editData").removeAttr("style");
-        $("#saveData").attr("style","display:none");
-      },
+        $("#saveData").removeAttr("style");
+        $("#deleteData").removeAttr("style");
+        document.getElementById("profileName").value =this._name;
+        document.getElementById("profileSurname").value = this._surname;
+        document.getElementById("profileOldPass").value ="";
+        document.getElementById("profileNewPass").value ="";
+        document.getElementById("profileConfirm").value ="";
+        $(".edit").attr("disabled","disabled");
+        $(".errorReg").removeAttr("style");
+
+    },
 
     validateEditedData: function(e){
-       var valid= true
+       var valid= true;
        var name = document.getElementById("profileName").value;
        var surname = document.getElementById("profileSurname").value;
        var oldPass = document.getElementById("profileOldPass").value;
@@ -103,11 +136,11 @@ define(function(require) {
             $("#errSurname").removeAttr("style");
 
        /// controlla che la password inserita sia uguale a quella vecchia     
-       if(!this.utente.checkPassword(this.utente.id, oldPass)) {
+       /*if(!this.utente.checkPassword(idUtente, oldPass)) {
             $("#errPassword").attr("style","display:inline-block");
-        valid = false;
+            valid = false;
        } else
-          $("#errPassword").removeAttr("style");
+          $("#errPassword").removeAttr("style");*/
 
        // controlla che la nuova password inserita sia uguale a quella nel campo
        // conferma e che sia almeno di 5 caratteri     
@@ -117,7 +150,7 @@ define(function(require) {
       } else
           $("#errConfirm").removeAttr("style");
 
-      if (valid) this.utente.saveData(idUtente, name, surname, newPass);
+      if (valid) this.utente.saveData(idUtente, oldPass, newPass, name, surname);
     },
 
     goToHome: function(e) {
@@ -125,7 +158,18 @@ define(function(require) {
         trigger: true
       });
 
-    }
+    },
+
+     saveData: function(result){
+      if(result==null){
+          console.log("save data error");
+        }else{
+            $("#editData").removeAttr("style");
+            $("#saveData").attr("style","display:none");
+        }
+      }
+
+
   });
 
   return Profile;

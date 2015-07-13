@@ -19,6 +19,8 @@ define(function(require) {
         	if (response.data) return response.data;
         	return response;
     	},
+
+    	
     		//BaasBox.loadCollectionWithParams("Contatto", {where:"id1==idu"})
     	//restituisce array contenente i nomi dei contatti dell'utente passatogli come parametro
 		listContacts: function(idu){
@@ -82,53 +84,117 @@ define(function(require) {
 			console.log("account deleted");
 		},
 
-		register: function(name, surname, username, email, password){
-			//console.log(email);
-			console.log("account registred");
-		},
-
-		checkUsername: function(username){
-			console.log("username valid: "+ username);
-			return true;
-		},
-			
-		//controllo se esiste un utente che ha come username e password quelli passati come parametro
-		//in caso positivo vengono restituiti i dati dell'utente altrimenti null
+		//passando username e password come parametro devo controllare che compaino nella collezione Utente
 		login: function(username, password){
-		var THIS = this;	
-		BaasBox.loadCollection("Utente")
-		 	.done(function(res) {
-		 		var trovato=false;
-		   		console.log("res ", res);
-		   		for (var i=0; i<res.length; i++){
-		           	if( res[i].username == username && res[i].password == password ){
-		            localStorage.setItem('idu',res[i].id);  //salvare nel localstorage -> res[i].id
-		            THIS.trigger("resultLogin",res[i]);
-		           	trovato = true;
-		           	break;
-		        	}
-		        }
-		        if(trovato==false){
-		        	THIS.trigger("resultLogin",null);	
-		        }	           
-		 	})
-			 .fail(function(error) {
-			   console.log("error", error);
-			 })
+			var THIS = this;	
+			var trovato = false;
+			BaasBox.loadCollection("Utente")
+				.done(function(res) {
+				    console.log("res ", res);
+				    for (var i=0; i<res.length; i++){
+				    	//vedere se true deve essere una stringa o va bene booleano -> se si, cambiare nel database
+	            		if( res[i].username == username && res[i].password == password ){//&& res[i].confermato == true){
+	            			localStorage.setItem('idu',res[i].id);  //salvare nel localstorage -> res[i].id
+	            			THIS.trigger("resultLogin",res[i]);
+	            			trovato=true;
+	            			break;
+	              		}
+		            }
+		            if(trovato==false){
+        				THIS.trigger("resultLogin",null);	
+       				}	  
+				})
+				.fail(function(error) {
+			    	console.log("error ", error);
+				})
 		},
 
-		logout: function(idUtente){
-			console.log("logout");
+
+		checkUsername: function(name, surname, username, email, password ){
+			var post = new Object();
+
+			post.name = name;
+			post.surname = surname;
+			post.username = username;
+			post.email = email;
+			post.password = password;
+			var exist = false;
+			var THIS = this;
+    		BaasBox.loadCollection("Utente")	             
+				.done(function(res) {
+					for(var i=0; i<res.length; i++){
+						if(res[i].username == username){
+							exist = true;
+							THIS.trigger("resultUsername", true);
+							break;
+						}
+					}
+
+					if(exist==false){
+						THIS.trigger("resultUsername", post);
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
 		},
 
+
+		//aggiunge una nuova riga alla collezione "Utente"
+		register: function(nome, cognome, username, mail, password){
+						
+			var post = new Object();
+
+			post.nome = nome;
+			post.cognome = cognome;
+			post.username = username;
+			post.mail = mail;
+			post.password = password;
+			var exist = false;
+			var THIS=this
+			
+			BaasBox.save(post, "Utente")
+						.done(function(res) {
+							console.log("res ", res);
+							THIS.trigger("eventoRegister ", res); //se la registrazione è andata bene torna res con i dati
+						})
+						.fail(function(error) {
+							console.log("inserimentoError ", error);
+							THIS.trigger("inserimentoError ", 0); //in caso la registrazione non è andata bene ritorna 0
+						})			
+				
+		},
+		//chiamare quando la funzione di sopra torna true
+		inviaMail: function(nome, cognome, username, mail, password){
+
+			var jqXHR = $.ajax({
+
+				url: "http://siwyt.altervista.org/sendMail.php", //percorso script php che invia
+				data: {
+					nome : nome,
+					cognome : cognome,
+					email : mail,
+					username : username,
+					pass : password
+					
+				},
+				type: 'POST',
+				dataType: 'json',
+				async: false
+			});
+			console.log(jqXHR.responseText);
+		},
+
+
+		//funzione per la modifica della password?!
 		saveData: function(idUtente, name, surname, newPass){
-			console.log(surname);
 			console.log("saving data");
 		},
 
+
+		//che è?!?!
 		checkPassword: function(idUtente , password){
-			idUtente = this.id;
-			console.log("check password "+idUtente +" , password: "+password);
+			console.log("check password ");
 			return true;
 		}
 
