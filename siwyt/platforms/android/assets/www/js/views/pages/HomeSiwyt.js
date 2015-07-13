@@ -22,13 +22,10 @@ define(function(require) {
       $("#back").attr("style","display:none");
       spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"
-      var dati = new Bacheche();
-      dati.fetch().done(function(){
-        this.subView = (new ShowListNoticeboards({collection: dati})).render().el;
-        //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
-        $('#noticeboardsList').append(this.subView);
-      });
-      
+      this.bacheca=new Bacheca();
+      this.bacheca.on("eventoidbacheche", this.calcola,this);
+      this.bacheca.on("eventolistabacheche", this.appendNoticeboards,this);
+      this.bacheca.listaIdBacheche();
     },
 
     id: "homeSiwyt",
@@ -41,7 +38,18 @@ define(function(require) {
       "swipeLeft": "goToProfile",
       "swipeRight": "goToContacts"
     },
-
+    calcola: function(result){
+      this.bacheca.listaDatiBacheche(result);
+    },
+    appendNoticeboards: function(result){
+    //console.log(result);
+      var b= new Bacheche();
+      b.add(result);
+      console.log(b);
+      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      console.log(this.subView);
+      document.getElementById("noticeboardsList").appendChild(this.subView);
+    },
     render: function() {
       spinner.stop();
       $(this.el).html(this.template());

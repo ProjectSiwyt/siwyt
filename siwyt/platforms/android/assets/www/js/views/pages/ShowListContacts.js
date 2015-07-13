@@ -13,7 +13,7 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.contentListAddContacts;
+      this.template = Utils.templates.contentListContacts;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){

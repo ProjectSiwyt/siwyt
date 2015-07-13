@@ -5,15 +5,15 @@ define(function(require) {
   var Bacheche = require("collections/Utenti");
   var Utils = require("utils");
 
-  var showListContacts = Utils.Page.extend({
+  var showListAddContacts = Utils.Page.extend({
 
-    constructorName: "showListContacts",
+    constructorName: "showListAddContacts",
 
     model: Bacheca,
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.contentListContacts;
+      this.template = Utils.templates.contentListAddContacts;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -25,7 +25,7 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "showlistcontacts",
+    id: "showlistaddcontacts",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
@@ -53,6 +53,6 @@ define(function(require) {
     }
   });
 
-  return showListContacts;
+  return showListAddContacts;
 
 });

@@ -252,7 +252,8 @@ define(function(require) {
 
     model: Bacheca,
 
-    initialize: function() {
+    initialize: function(idb) {
+      this.idb=idb;
       // load the precompiled template
       this.template = Utils.templates.structureBoard;
       moverno=1;
@@ -341,6 +342,7 @@ define(function(require) {
       "tap #aprimenu": "gestionemenu",
       "tap #addPostit": "aggiungi2",
       "tap #goToHome": "goToHome",
+      "tap #boardManagement": "goToBoardManagement", 
       "tap #newPostit": "aggiungi2",
       "tap .postit": "goToComments",
       "longTap .postit": "gestionePopup",
@@ -449,6 +451,12 @@ define(function(require) {
     },
     goToComments: function(e){
         alert("goToComments");
+    },
+    goToBoardManagement: function(e){
+        console.log(this.idb);
+        Backbone.history.navigate("boardManagement/"+this.idb, {
+            trigger: true
+        });
     },
     gestionePopup: function(e){
       var popup= document.getElementById("popupPostit"+e.currentTarget.id);

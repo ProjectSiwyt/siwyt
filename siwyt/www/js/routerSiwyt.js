@@ -22,6 +22,7 @@ define(function(require) {
   var ShowListNoticeboards = require("views/pages/ShowListNoticeboards");
   var Login = require("views/pages/Login");
   var Register = require("views/pages/Register");
+  var NoticeboardManagement = require("views/pages/NoticeboardManagement");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -38,7 +39,8 @@ define(function(require) {
       "addContacts": "addContacts",
       "newBacheca/:nome": "newBacheca",
       "login":"login",
-      "register":"register"
+      "register":"register",
+      "boardManagement/:idb":"boardManagement"
     },
 
     BAASBOX_URL : "http://localhost:9000",
@@ -89,6 +91,11 @@ define(function(require) {
     },
     register: function(){
       var page= new Register();
+      this.changePage(page);
+    },
+    boardManagement: function(idb){
+      console.log("ciao2");
+      var page= new NoticeboardManagement(idb);
       this.changePage(page);
     },
     contacts: function() {
@@ -186,7 +193,7 @@ define(function(require) {
         alert("mangif "+idb);
         
 
-        var page = new BachecaHome();
+        var page = new BachecaHome(idb);
 
         page.showNoticeboard(idb);
 

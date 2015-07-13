@@ -5,7 +5,7 @@ define(function(require) {
   var Utenti = require("collections/Utenti");
   var Utils = require("utils");
   var ShowPostitsNoticeboard= require("views/pages/ShowPostitsNoticeboard");
-  var ShowListContacts= require("views/pages/ShowListContacts");
+  var ShowListAddContacts= require("views/pages/ShowListAddContacts");
 
   var AddContacts = Utils.Page.extend({
 
@@ -14,6 +14,7 @@ define(function(require) {
     model: Utente,
 
     initialize: function() {
+      document.getElementById("back").removeAttribute("style");
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureAddContacts;
       this.utente = new Utente();
@@ -43,11 +44,9 @@ define(function(require) {
     appendContacts: function(result){
       console.log(result);
       var b= new Utenti();
-      for (var i=0; i<result.length; i++){
-          b.add(result[i]);
-          console.log(result[i]);
-      }
-      this.subView = (new ShowListContacts({collection: b})).render().el;
+      b.add(result)
+      console.log(b);
+      this.subView = (new ShowListAddContacts({collection: b})).render().el;
       console.log(this.subView);
         //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
       //$('#boardContent').append(this.subView);
