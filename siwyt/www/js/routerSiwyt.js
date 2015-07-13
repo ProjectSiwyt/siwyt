@@ -154,12 +154,11 @@ define(function(require) {
     profile: function(){
       this.structureView.setActiveTabBarElement("profileMenu");
       var model= new Utente({
-        id:"1",
-        nome: "Luca",
-        cognome: "Mangifesta",
-        mail: "luca.mangifesta@student.univaq.it",
-        username: "luca__91",
-        password: "luca__91"
+        nome: localStorage.getItem("nameLogged"),
+        cognome:localStorage.getItem("surnameLogged"),
+        mail: localStorage.getItem("email"),
+        username: localStorage.getItem("usernameLogged"),
+        password: localStorage.getItem("passwordLogged")
         //confermato non lo inserisco tanto è false di defaulta
       });
       console.log(model);

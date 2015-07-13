@@ -95,6 +95,11 @@ define(function(require) {
 				    	//vedere se true deve essere una stringa o va bene booleano -> se si, cambiare nel database
 	            		if( res[i].username == username && res[i].password == password ){//&& res[i].confermato == true){
 	            			localStorage.setItem('idu',res[i].id);  //salvare nel localstorage -> res[i].id
+	            			localStorage.setItem('nameLogged',res[i].nome);
+	            			localStorage.setItem('surnameLogged',res[i].cognome);
+	            			localStorage.setItem('usernameLogged',res[i].username);
+	            			localStorage.setItem('passwordLogged',res[i].password);
+	            			localStorage.setItem("emailLogged", res[i].mail);
 	            			THIS.trigger("resultLogin",res[i]);
 	            			trovato=true;
 	            			break;
