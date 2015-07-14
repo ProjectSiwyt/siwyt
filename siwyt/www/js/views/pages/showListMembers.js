@@ -1,13 +1,14 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var Bacheca = require("models/Utente");
-  var Bacheche = require("collections/Utenti");
+  var Utente = require("models/Utente");
+  var Utenti = require("collections/Utenti");
   var Utils = require("utils");
+
 
   var showlistmembers = Utils.Page.extend({
 
-    constructorName: "showListContacts",
+    constructorName: "showListMembers",
 
     model: Utente,
 
