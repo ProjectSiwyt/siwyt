@@ -4,12 +4,13 @@ define(function(require) {
   var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
+  var Utenti = require("collections/Utenti");
+  var ShowListContacts = require("views/pages/ShowListContacts");
 
 
   var Contacts = Utils.Page.extend({
 
     constructorName: "Contacts",
-
     model: Utente,
 
     initialize: function() {
@@ -18,11 +19,13 @@ define(function(require) {
       console.log("initialize template contacts");
       /*document.getElementById("navigation").style.display="inlne-block";
       document.getElementById("header").style.display="inherit";*/
-      $("#navigation").removeAttr("style");
-      $("#header").removeAttr("style");
-      $("#settingsMenu").removeAttr("style");
+      $("#navigation , #header  , #settingsMenu").removeAttr("style");
+ 
       document.getElementById("title").innerHTML="Contacts";
       document.getElementById("back").style.display="none";
+      this.utente = new Utente();
+      this.utente.on("listContacts", this.showListContact, this);
+      this.utente.listContacts(localStorage.getItem("idu"));
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -49,6 +52,17 @@ define(function(require) {
       $(this.el).html(this.template());
 
       return this;
+    },
+
+    showListContact: function(result){
+      var contacts = new Utenti();
+      contacts.add(result);
+      console.log(contacts);
+      console.log("contattiiiii: "+contacts);
+      this.subView = (new ShowListContacts({collection: contacts})).render().el;
+      console.log("subview " +this.subView);
+        
+      document.getElementById("contactsContent").appendChild(this.subView);
     },
 
     goToHome: function(e) {
