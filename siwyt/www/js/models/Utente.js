@@ -191,17 +191,16 @@ define(function(require) {
 		},
 
 
-		//funzione per la modifica della password?!
-		saveData: function(idUtente, name, surname, newPass){
+		//funzione che cambia nome cognome e email dell utente con id idu
+		saveData: function(idu, name, surname, email){
 			console.log("saving data");
 		},
 
-
-		//che è?!?!
-		checkPassword: function(idUtente , password){
-			console.log("check password ");
-			return true;
+		// funzione che cambia la password dell utente con id idu
+		changePassword: function(idu, password){
+				console.log("password changed");
 		}
+		
 
 	});
 

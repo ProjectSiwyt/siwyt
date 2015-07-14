@@ -156,7 +156,7 @@ define(function(require) {
       var model= new Utente({
         nome: localStorage.getItem("nameLogged"),
         cognome:localStorage.getItem("surnameLogged"),
-        mail: localStorage.getItem("email"),
+        mail: localStorage.getItem("emailLogged"),
         username: localStorage.getItem("usernameLogged"),
         password: localStorage.getItem("passwordLogged")
         //confermato non lo inserisco tanto è false di defaulta

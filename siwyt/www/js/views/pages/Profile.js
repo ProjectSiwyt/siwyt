@@ -16,7 +16,6 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.profile;
       console.log("initialize template profile");
-
       //nascondo o visualizzo elementi 
       $("#navigation").removeAttr("style");
       $("#header").removeAttr("style");
@@ -55,8 +54,11 @@ define(function(require) {
       "swipeRight": "goToHome",
       "tap #deleteAccount": "deleteAccount",
       "tap #editData":"editData",
+      "tap #editPassword": "editPassword",
       "tap #saveData": "validateEditedData",
-      "tap #deleteData": "cancellChanges"
+      "tap #deleteData": "cancellChanges",
+      "tap #savePassword": "validateChangePassword",
+      "tap #cancellChangePass": "cancellChangePass"
     },
 
     render: function() {
@@ -88,9 +90,10 @@ define(function(require) {
     },
 
     editData: function(e){
-      console.log("editing");
+      console.log("editing profile");
       this._name = document.getElementById("profileName").value;
       this._surname = document.getElementById("profileSurname").value;
+      this._email = document.getElementById("profileEmail").value;
       $(".edit").removeAttr("disabled");
       $("#editData").attr("style","display:none");
       $("#deleteData").attr("style","display:inline-block");
@@ -104,53 +107,98 @@ define(function(require) {
         $("#deleteData").removeAttr("style");
         document.getElementById("profileName").value =this._name;
         document.getElementById("profileSurname").value = this._surname;
-        document.getElementById("profileOldPass").value ="";
-        document.getElementById("profileNewPass").value ="";
-        document.getElementById("profileConfirm").value ="";
+        document.getElementById("profileEmail").value = this._email;
         $(".edit").attr("disabled","disabled");
-        $(".errorReg").removeAttr("style");
+        $(".errorReg.data").removeAttr("style");
 
     },
 
+    editPassword: function(e){
+      console.log("editing");
+      $(".editPass").removeAttr("disabled");
+      $("#editPassword").attr("style","display:none");
+      $("#cancellChangePass").attr("style","display:inline-block");
+      $("#savePassword").attr("style","display:inline-block");
+
+    },
+
+    cancellChangePass: function(e){
+        $("#editPassword").removeAttr("style");
+        $("#savePassword").removeAttr("style");
+        $("#cancellChangePass").removeAttr("style");
+        document.getElementById("profileOldPass").value ="";
+        document.getElementById("profileNewPass").value ="";
+        document.getElementById("profileConfirm").value ="";
+        $(".editPass").attr("disabled","disabled");
+        $(".errorReg.pass").removeAttr("style");
+    },
+
     validateEditedData: function(e){
+       $(".errorReg.data").removeAttr("style");
        var valid= true;
        var name = document.getElementById("profileName").value;
        var surname = document.getElementById("profileSurname").value;
-       var oldPass = document.getElementById("profileOldPass").value;
-       var newPass = document.getElementById("profileNewPass").value;
-       var confirm = document.getElementById("profileConfirm").value;
-       console.log(newPass);
-
+       var email = document.getElementById("profileEmail").value;
+       var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
+       
       // controlla che il nuovo nome non sia vuoto
        if(name=="" || name=="undefined") {
             $("#errName").attr("style","display:inline-block");
             valid=false;
-          }else
-              $("#errName").removeAttr("style");
+          }
 
       // controlla che il nuovo surname non sia vuoto
        if(surname=="" || surname=="undefined"){
             $("#errSurname").attr("style","display:inline-block");
             valid = false;
-       } else
-            $("#errSurname").removeAttr("style");
+       } 
 
-       /// controlla che la password inserita sia uguale a quella vecchia     
-       /*if(!this.utente.checkPassword(idUtente, oldPass)) {
+        if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
+             console.log("err email");
+             /*$("#errEmail").removeAttr("style");*/
+             $("#errEmail").attr("style","display:block");
+             document.formRegister.regEmail.select();
+             valid = false;
+          }  
+       
+
+      if (valid){
+          $("#editData").removeAttr("style");
+          $("#saveData").removeAttr("style");
+          $("#deleteData").removeAttr("style");
+           this.utente.saveData(localStorage.getItem("idu"), name, surname, email);
+           
+         }
+    },
+
+    validateChangePassword: function(e){
+        $(".errorReg.pass").removeAttr("style");
+        var valid=true;
+        var oldPass = document.getElementById("profileOldPass").value;
+        var newPass = document.getElementById("profileNewPass").value;
+        var confirm = document.getElementById("profileConfirm").value;
+        
+        if(oldPass!=localStorage.getItem("passwordLogged")){
             $("#errPassword").attr("style","display:inline-block");
-            valid = false;
-       } else
-          $("#errPassword").removeAttr("style");*/
+              valid=false;
+        } 
 
-       // controlla che la nuova password inserita sia uguale a quella nel campo
-       // conferma e che sia almeno di 5 caratteri     
-       if( newPass!=confirm || newPass.length < 5  ){
-        $("#errConfirm").attr("style","display:inline-block");
-        valid=false;
-      } else
-          $("#errConfirm").removeAttr("style");
+        if( newPass!=confirm || newPass.length < 5 ){
+              $("#errConfirm").attr("style","display:inline-block");
+              valid=false;
+        } 
+        if(valid){
+             this.utente.changePassword(localStorage.getItem("idu"), newPass);
+            $("#editPassword").removeAttr("style");
+            $("#savePassword").removeAttr("style");
+            $("#cancellChangePass").removeAttr("style");
+            document.getElementById("profileOldPass").value ="";
+            document.getElementById("profileNewPass").value ="";
+            document.getElementById("profileConfirm").value ="";
+            $(".editPass").attr("disabled","disabled");
+            $(".errorReg.pass").removeAttr("style");
+           }
 
-      if (valid) this.utente.saveData(idUtente, oldPass, newPass, name, surname);
     },
 
     goToHome: function(e) {
