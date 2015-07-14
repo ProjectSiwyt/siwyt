@@ -98,7 +98,8 @@ body {
 
 #loaderror,#loginerror,
 #saveData, #deleteData, 
-#savePassword, #cancellChangePass {
+#savePassword, #cancellChangePass,
+#emailSent {
     display: none;
 }
 

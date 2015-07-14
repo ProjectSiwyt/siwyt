@@ -171,7 +171,7 @@ define(function(require) {
 		},
 		//chiamare quando la funzione di sopra torna true
 		inviaMail: function(nome, cognome, username, mail, password){
-
+			var THIS = this;
 			var jqXHR = $.ajax({
 
 				url: "http://siwyt.altervista.org/sendMail.php", //percorso script php che invia
@@ -188,19 +188,72 @@ define(function(require) {
 				async: false
 			});
 			console.log(jqXHR.responseText);
+			THIS.trigger("mailSent ", true);
+
 		},
 
 
-		//funzione che cambia nome cognome e email dell utente con id idu
-		saveData: function(idu, name, surname, email){
-			console.log("saving data");
+		//funzione che cambia il nome dell'utente con id idu
+		saveName: function(idu, name){
+		var THIS = this;
+			BaasBox.updateField(idu, "Utente", "nome", name)
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.trigger("eventoSaveNome", true);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errorSaveNome", false);
+				})
+		},
+
+		//funzione che cambia cognome dell'utente con id idu
+		saveSurname: function(idu, surname){
+			var THIS = this;
+			BaasBox.updateField(idu, "Utente", "cognome", surname)
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.trigger("eventoSaveCognome", true);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errorSaveCognome", false);
+				})
+		},
+
+
+		//funzione che cambia email dell'utente con id idu
+		saveEmail: function(idu, email){
+			var THIS = this;
+			BaasBox.updateField(idu, "Utente", "mail", email)
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.trigger("eventoSaveEmail", true);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errorSaveEmail", false);
+				})
 		},
 
 		// funzione che cambia la password dell utente con id idu
 		changePassword: function(idu, password){
-				console.log("password changed");
+			var THIS = this;
+			console.log(idu);
+			console.log(name);
+			var c=0;
+			BaasBox.updateField(idu, "Utente", "password", password)
+				.done(function(res) {
+					console.log("res ", res);
+					console.log("password changed");
+					THIS.trigger("passwordChanged", true);
+									})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errormodificaTitolo", false);
+				})
 		}
-		
+						
 
 	});
 

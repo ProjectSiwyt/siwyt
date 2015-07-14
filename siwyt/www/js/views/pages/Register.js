@@ -67,7 +67,8 @@ define(function(require) {
     },
 
     sendMail: function(result){
-      console.log("send mail");
+      console.log(result);
+      this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
       Backbone.history.navigate("login",{
         trigger: true
       });
@@ -77,10 +78,10 @@ define(function(require) {
       console.log(result);
       if(result==true)
          $("#errUsernameExist").attr("style","display:block");
-      else
+      else{
         $("#errUsernameExist").removeAttr("style");
         this.utente.register(result.name, result.surname, result.username, result.email, result.password);
-
+      }
 
 
     },

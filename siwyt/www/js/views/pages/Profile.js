@@ -166,7 +166,9 @@ define(function(require) {
           $("#editData").removeAttr("style");
           $("#saveData").removeAttr("style");
           $("#deleteData").removeAttr("style");
-           this.utente.saveData(localStorage.getItem("idu"), name, surname, email);
+           this.utente.saveName(localStorage.getItem("idu"), name);
+           this.utente.saveSurname(localStorage.getItem("idu"), surname);
+           this.utente.saveEmail(localStorage.getItem("idu"), email);
            
          }
     },
