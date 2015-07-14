@@ -21,9 +21,9 @@ define(function(require) {
       document.getElementById("title").innerHTML="Create Noticeboard"
       this.bacheca=new Bacheca();
       this.bacheca.on("salvataggiobacheca", this.salvaAmministatore, this);
-      this.bacheca.on("salvataggioamministratore", this.salvaResponsabili, this);
-      this.bacheca.on("salvataggioresponsabili", this.salvaMembri, this);
-      this.bacheca.on("salvataggiomembri", this.goToBacheca, this);
+      this.bacheca.on("salvataggioAmministratore", this.salvaResponsabili, this);
+      this.bacheca.on("salvataggioResponsabili", this.salvaMembri, this);
+      this.bacheca.on("salvataggioUtenti", this.goToBacheca, this);
       
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -60,17 +60,25 @@ define(function(require) {
       this.idu=localStorage.getItem("idu");
       this.bacheca.salvaAmministratore(this.idu, this.idb);
       //per provare ho salvato anche in utenti
-      this.bacheca.salvaUtente(this.idu, this.idb);
+      var a = new Array();
+      var o1 = new Object();
+      o1.idu=this.idu
+      a[0]= o1;
+      var o2 = new Object();
+      o2.idu="d430c8b0-e0e7-4f9b-ba9b-9a94173fb613";
+      a[1]=o2;
+      this.bacheca.salvaUtenti(a, this.idb);
     },
     salvaResponsabili: function(res){
       //responsabili è la lista dei responsabili
-      //this.bacheca.salvaResponsabile(responsabili, this.idb);
+      //this.bacheca.salvaResponsabili(responsabili, this.idb);
     },
     salvaMembri: function(res){
       //utenti è la lista degli utenti non responsabili
-      this.bacheca.salvaUtente(utenti, this.idb);
+      this.bacheca.salvaUtenti(utenti, this.idb);
     },
     goToBacheca: function(res) {
+      console.log("entra");
       Backbone.history.navigate("bacheca/"+this.idb, {
         trigger: true
       });

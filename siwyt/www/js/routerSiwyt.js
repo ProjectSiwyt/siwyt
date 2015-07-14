@@ -189,15 +189,7 @@ define(function(require) {
     },
 
     showNoticeboard: function(idb){
-        alert("mangif "+idb);
-        
-
         var page = new BachecaHome(idb);
-
-        page.showNoticeboard(idb);
-
-
-        console.log(page);
         this.changePage(page);
 
     },
@@ -206,7 +198,8 @@ define(function(require) {
       
       var page = new AddContacts();
       this.changePage(page);
-    },
+    }
+    /*
     newBacheca: function(nome){
       //aggiunge una nuova riga alla collezione "Bacheca"
       var post = new Object();
@@ -223,7 +216,8 @@ define(function(require) {
         .fail(function(error) {
           console.log("error ", error);
         })
-     } 
+     }
+     */ 
   });
 
   return AppRouter;

@@ -154,12 +154,11 @@ define(function(require) {
     profile: function(){
       this.structureView.setActiveTabBarElement("profileMenu");
       var model= new Utente({
-        id:"1",
-        nome: "Luca",
-        cognome: "Mangifesta",
-        mail: "luca.mangifesta@student.univaq.it",
-        username: "luca__91",
-        password: "luca__91"
+        nome: localStorage.getItem("nameLogged"),
+        cognome:localStorage.getItem("surnameLogged"),
+        mail: localStorage.getItem("emailLogged"),
+        username: localStorage.getItem("usernameLogged"),
+        password: localStorage.getItem("passwordLogged")
         //confermato non lo inserisco tanto è false di defaulta
       });
       console.log(model);
@@ -190,15 +189,7 @@ define(function(require) {
     },
 
     showNoticeboard: function(idb){
-        alert("mangif "+idb);
-        
-
         var page = new BachecaHome(idb);
-
-        page.showNoticeboard(idb);
-
-
-        console.log(page);
         this.changePage(page);
 
     },
@@ -207,7 +198,8 @@ define(function(require) {
       
       var page = new AddContacts();
       this.changePage(page);
-    },
+    }
+    /*
     newBacheca: function(nome){
       //aggiunge una nuova riga alla collezione "Bacheca"
       var post = new Object();
@@ -224,7 +216,8 @@ define(function(require) {
         .fail(function(error) {
           console.log("error ", error);
         })
-     } 
+     }
+     */ 
   });
 
   return AppRouter;

@@ -71,8 +71,8 @@ define(function(require) {
     },
     setActiveTabBarElement: function(elementId) {
       // here we assume that at any time at least one tab bar element is active
-      document.getElementsByClassName("active")[0].classList.remove("active");
-      document.getElementById(elementId).classList.add("active");
+     document.getElementsByClassName("active")[0].classList.remove("active");
+     document.getElementById(elementId).classList.add("active");
     },
 
     settings: function(event){

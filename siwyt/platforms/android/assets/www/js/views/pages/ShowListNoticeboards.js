@@ -31,7 +31,6 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap .rigabacheca": "goToBacheca",
-
     },
 
     render: function() {

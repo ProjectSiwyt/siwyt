@@ -24,7 +24,8 @@ define(function(require) {
       document.getElementById("settingsMenu").style.display="none";
 
       this.utente= new Utente();
-      this.utente.on("resultRegister", this.doRegistration, this);
+      this.utente.on("eventoRegister", this.sendMail, this);
+      this.utente.on("resultUsername",this.doRegistration, this);
       /*var err =  $("span.errorReg");
       console.log(err);*/
       
@@ -65,24 +66,28 @@ define(function(require) {
       return this;
     },
 
-
-    doRegistration: function(e) {
-      /*if (this.validateRegister()){
-          var name = document.formRegister.regName.value;
-          var surname = document.formRegister.regSurname.value;
-          var username = document.formRegister.regUsername.value;
-          var email = document.formRegister.regEmail.value;
-          var password = document.formRegister.regPassword.value;
-          var confirm = document.formRegister.regConfirm.value;
-          this.utente.register(name, surname, username, email, password);*/
-
-      Backbone.history.navigate("register", {
+    sendMail: function(result){
+      console.log(result);
+      this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
+      Backbone.history.navigate("login",{
         trigger: true
       });
+    },
+
+    doRegistration: function(result) {
+      console.log(result);
+      if(result==true)
+         $("#errUsernameExist").attr("style","display:block");
+      else{
+        $("#errUsernameExist").removeAttr("style");
+        this.utente.register(result.name, result.surname, result.username, result.email, result.password);
+      }
+
 
     },
 
     validateRegister: function(e){
+      $(".errorReg").removeAttr("style");
       var name = document.formRegister.regName.value;
       var surname = document.formRegister.regSurname.value;
       var username = document.formRegister.regUsername.value;
@@ -99,7 +104,7 @@ define(function(require) {
           document.formRegister.regConfirm.value = "";*/
           document.formRegister.regPassword.focus();
           valid= false;
-      }else  $("#errConfirm").removeAttr("style");
+      }
 
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
              console.log("err email");
@@ -107,17 +112,15 @@ define(function(require) {
              $("#errEmail").attr("style","display:block");
              document.formRegister.regEmail.select();
              valid = false;
-          }else
-              $("#errEmail").removeAttr("style");
-              
+          }
 
       if ((name == "") || (name == "undefined")) {
              console.log("err name");
              $("#errName").attr("style","display:block");
              document.formRegister.regName.select();
              valid = false;
-          }else 
-              $("#errName").removeAttr("style");
+          }/*else 
+              $("#errName").removeAttr("style");*/
               
 
       if ((surname == "") || (surname == "undefined")) {
@@ -125,26 +128,22 @@ define(function(require) {
              $("#errSurname").attr("style","display:block");
              document.formRegister.regSurname.select();
              valid = false;
-          }else
-                $("#errSurname").removeAttr("style");
+          }
 
-      if ((username == "") || (surname == "undefined") || !this.utente.checkUsername(username)) {
+      if ((username == "") || (surname == "undefined")) {
              console.log("err username");
              $("#errUsername").attr("style","display:block");
              document.formRegister.regUsername.select();
              valid = false;
-          }else
-                $("#errUsername").removeAttr("style");
-
+          }
       if ((password == "") || (password.length < 5)) {
              console.log("err password");
              $("#errPassword").attr("style","display:block");
              document.formRegister.regPassword.select();
              valid = false;
-          }else 
-              $("#errPassword").removeAttr("style");
+          }
 
-      if(valid) this.utente.register(name, surname, username, email, password);  
+      if(valid) this.utente.checkUsername(name, surname, username, email, password); //this.utente.register(name, surname, username, email, password);  
     }
 
   });

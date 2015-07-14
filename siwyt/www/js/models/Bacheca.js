@@ -44,7 +44,25 @@ define(function(require) {
 					console.log("error ", error2);
 				})
     	},
-		
+		    listaDatiBacheche2: function(r){
+				var THIS = this;
+				var a = new Array();
+				var c=0;
+				for(var i=0; i<r.length; i++){
+					BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[i].idb+"'" })
+						.done(function(res) {
+							console.log("res ", res);
+							a[c] = res;
+							c++;
+							if(c == r.length){
+								THIS.trigger("eventolistabacheche", a);	
+							}
+						})
+						.fail(function(error) {
+							THIS.trigger("error", error);
+						})
+				}
+			},
 
     	//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK
@@ -107,21 +125,26 @@ define(function(require) {
 
 		//si può provae come abbiamo fatto per salvaUtenti
 		//PROVARE PER NICHOLAS
-		  listaDatiMembriDiUnaBacheca2: function(r){
+		listaDatiMembriDiUnaBacheca2:  function(r){
 		var THIS = this;
-		var a = new Array();
-		for(var i=0; i<r.length; i++){
-		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[i].idu+"'" })
-		.done(function(res) {
-		console.log("res ", res);
-		a[i] = res[i];
-		})
-		.fail(function(error) {
-		//console.log("erroridmembri", error);
-		THIS.trigger("errorEventolistamembri", error);
-		})
-		}
-		THIS.trigger("eventolistamembri ", a);	
+			var a = new Array();
+			var c=0;
+			for(var i=0; i<r.length; i++){
+				BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[i].idu+"'" })
+				.done(function(res) {
+					console.log("res ", res);
+					a[c] = res;
+					c++;
+					if(c == r.length){
+						console.log(a);
+						THIS.trigger("eventolistamembri ", a);	
+					}
+				})
+				.fail(function(error) {
+				//console.log("erroridmembri", error);
+					THIS.trigger("errorEventolistamembri", error);
+				})
+			}
 		},
 
 		//FUNZIONA MA HO SCRITTO IO PER PROVARE PER NICHOLAS
@@ -171,7 +194,7 @@ define(function(require) {
 			BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+idb+"'" })
 			 .done(function(res) {
 			 	console.log("res ", res);
-			 	THIS.trigger("evento", res);
+			 	THIS.trigger("datiBacheca", res);
 			 })
 			 .fail(function(error) {
 			 	console.log("error ", error);

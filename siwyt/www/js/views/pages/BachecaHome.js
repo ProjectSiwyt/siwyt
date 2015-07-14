@@ -256,80 +256,26 @@ define(function(require) {
       this.idb=idb;
       // load the precompiled template
       this.template = Utils.templates.structureBoard;
-      moverno=1;
       document.getElementById("header").style.display="none";
       document.getElementById("navigation").style.display="none";
+      //document.getElementById("queryError").classList.add("hide");
       spinner.stop();
 
-
       this.bacheca = new Bacheca();
-      
-      this.bacheca.on("evento", this.appendTitle, this);
+      this.postits = new Postit();
+
+      //Mi metto in ascolto dell'evento che mi ritorna i dati di una bacheca
+      this.bacheca.on("datiBacheca", this.appendTitle, this);
+      //Mi metto in ascolto di eventuali errori nel caricamento/salvataggio dei dati
       this.bacheca.on("error", this.error);
       
-
-      this.postits = new Postit();
+      //Mi metto in ascolto dell'evento che mi ritorna i postits di una bacheca
       this.postits.on("elencopostits", this.appendItems, this);
-      //this.bacheca.setbacheca(idasd);
+      //Mi metto in ascolto di eventuali errori nel caricamento/salvataggio dei dati
+      this.postits.on("error", this.error);
 
-      //console.log(b.setbacheca(idasd));
-
-
-      /*
-      console.log(this.model);
-      //var id= this.model;
-      BaasBox.loadCollection("Bacheca")
-        .done(function(res) {
-          console.log("res ", res);
-
-          for (var i=0; i<res.length; i++){
-            if( res[i].id == idasd){
-              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);
-              var model= new Bacheca({
-                id: res[i].id, 
-                nome: res[i].nome
-              });
-            }
-          }
-        })
-        .fail(function(error) {
-          console.log("error ", error);
-        })
-        */
-  /*
-      var dati = new Bacheche();
-      var id= this.model;
-      dati.fetch()
-        .done(function(res){
-          for (var i=0; i<res.length; i++){
-            if( res[i].id == id){
-              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);
-            }
-          }
-        });
-        .fail(function(error) {
-          console.log("error ", error);
-        })
-*/
-
-          /*
-          for (var i=0; i<res.length; i++){
-            if( res[i].id == id){
-              console.log(res[i]);
-              alert("id bacheca: " + res[i].id + "\nnome: " + res[i].nome);  //res[i].
-              var model= new Bacheca({
-                id: res[i].id, 
-                nome: res[i].nome
-              });
-              console.log(model);
-              var page = new BachecaHome({
-                model: model
-              });
-              THIS.changePage(page);
-            }
-          }
-          */
-        
+      //chiama la funzion che calcola i dati che restituisce i dati della bacheca con id idb
+      this.bacheca.noticeboardData(idb);
 
     },
 
@@ -338,27 +284,24 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #goToMap": "goToMap",
       "tap #aprimenu": "gestionemenu",
       "tap #addPostit": "aggiungi2",
       "tap #goToHome": "goToHome",
       "tap #boardManagement": "goToBoardManagement", 
       "tap #newPostit": "aggiungi2",
       "tap .postit": "goToComments",
-      "longTap .postit": "gestionePopup",
+      "longTap .postit": "moveManagement",
     },
 
     error: function(){
-      alert("aggiungere errore in un elemento del dom con id errrore")
+      //document.getElementById("queryError").classList.remove('hide');
     },
-
-    showNoticeboard: function(idb){
-      this.bacheca.noticeboardData(idb);
-    },
-    //CHIAMO NEL MODEL FUNZIONE CHE MI PRENDE I POSTITS
+    
+    //chiama la funzione che calcola i dati dei postits della bacheca
     getPostits: function(idb){
       this.postits.elencoPostit(idb);
     },
+    //inserisce il titolo della bacheca nella pagina
     appendTitle: function(result){
       console.log(result[0].nome);
       document.getElementById("titleBacheca").innerHTML=result[0].nome;
@@ -457,17 +400,6 @@ define(function(require) {
         Backbone.history.navigate("boardManagement/"+this.idb, {
             trigger: true
         });
-    },
-    gestionePopup: function(e){
-      var popup= document.getElementById("popupPostit"+e.currentTarget.id);
-      console.log(popup);
-      if(popup.style.display=="none"){
-          popup.style.display="block";
-      }
-      else{
-        popup.style.display="none";
-      }
-      console.log(e.currentTarget.id);
     }
   });
 

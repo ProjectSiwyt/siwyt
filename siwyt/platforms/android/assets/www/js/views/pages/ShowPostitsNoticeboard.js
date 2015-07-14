@@ -31,7 +31,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #goToMap": "goToMap"
+      "tap #popupPostit": "popupManagement",
+
     },
 
     render: function() {
@@ -39,12 +40,18 @@ define(function(require) {
       $(this.el).html(this.template(this.collection.toJSON()));
       return this;
     },
-
-    goToMap: function(e) {
-      Backbone.history.navigate("map", {
-        trigger: true
-      });
+    popupManagement: function(e){
+      var popup= document.getElementById("popupPostit"+e.currentTarget.id);
+      console.log(popup);
+      if(popup.style.display=="none"){
+          popup.style.display="block";
+      }
+      else{
+        popup.style.display="none";
+      }
+      console.log(e.currentTarget.id);
     }
+
   });
 
   return ShowPostitsNoticeboard;

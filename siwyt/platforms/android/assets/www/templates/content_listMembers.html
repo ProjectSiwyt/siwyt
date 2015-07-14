@@ -1,11 +1,10 @@
 {{#if this}}
 <ul class="table-view">
-    {{!-- ciclo la collezione di membri--}} {{#each this}} {{#if amministratore}}
+    {{!-- ciclo la collezione di membri--}} {{#each this}} 
     <li class="table-view-cell">
         {{nome}} {{cognome}}
         <span class="pull-right">Project Manager</span>
     </li>
-    {{/if}}
     <li class="table-view-cell body-member">
         <a class="navigate-right">
         {{nome}} {{cognome}}
@@ -13,9 +12,9 @@
         <div class="relative margin-t">Licences:
             <div class="margin-l">
                 <<!--Definire bene come registrare i dati-->
-                    <input type="radio" name="licence" value="admin" {{#if ruolo=='admin' }} checked="checked" {{/if}}> Admin</div>
+                    <input type="radio" name="licence" value="admin"> Admin</div>
             <div>
-                <input type="radio" name="licence" value="simple_user" {{#if ruolo=='simple_user' }} checked="checked" {{/if}}> Simple User</div>
+                <input type="radio" name="licence" value="simple_user"> Simple User</div>
             <div class="absolute right center"><i class="fa fa-user-times fa-2x"></i>
                 <div class="caption">Remove</div>
             </div>

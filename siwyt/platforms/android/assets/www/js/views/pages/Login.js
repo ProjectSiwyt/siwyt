@@ -17,10 +17,13 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.login;
       console.log("inizalize login");
+      console.log(this.sendemail);
+      $(".errorReg").removeAttr("style");
       document.getElementById("navigation").style.display="none";
       document.getElementById("header").style.display="none";
       this.utente = new Utente();
       this.utente.on("resultLogin",this.login, this);
+      this.utente.on("mailSent", this.showMessageMail, this );
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -59,26 +62,31 @@ define(function(require) {
 
     },*/
     login:function(result){
-        if(result==null){
-          alert("aggiungere messaggio di errore");
-        }
-        else{
-            Backbone.history.navigate("homeSiwyt", {
+      console.log(result);
+        if(result!=null){
+          Backbone.history.navigate("homeSiwyt", {
               trigger: true
             });
         }
+        else{
+          $("#loginerror").attr("style","display:inline-block");}
             
       },
-    
+
+
+     showMessageMail: function(result){
+      if(result){
+        console.log("hfhvfVHFVHòFEHfhvò");
+        $("#emailSent").attr("style", " display:block");
+      }
+
+     } ,
 
     validateLogin: function(e) {
-      //debugger;
-      //e.preventDefault();
-      //CAMBIARE EMAIL CON USERNAME SIA QUI CHE NEI TEMPLATE E CAMBIARE NOME FUNZIONE PERCHE NON VALIDA NIENTE
-      var email = document.formLogin.logEmail.value;
+      var username = document.formLogin.logUsername.value;
       var password = document.formLogin.logPassword.value;
 
-      this.utente.login(email,password);
+      this.utente.login(username,password);
     },
   
   goToRegister: function(e) {

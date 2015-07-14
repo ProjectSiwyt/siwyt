@@ -3,6 +3,8 @@ define(function(require) {
   var Backbone = require("backbone");
   var Bacheca = require("models/Bacheca");
   var Utils = require("utils");
+  var Utenti = require("collections/Utenti");
+  var ShowListMembers = require("views/pages/ShowListMembers");
 
   var NoticeboardManagement = Utils.Page.extend({
 
@@ -20,9 +22,9 @@ define(function(require) {
       this.template = Utils.templates.structureBoardManagement;
       this.bacheca=new Bacheca();
       this.bacheca.on("eventomodificaTitolo", this.salvaTitolo, this); 
-      this.bacheca.on("eventoidbacheche", this.calcola, this);
-      this.bacheca.on("eventolistabacheche", this.appendMembers, this);
-      this.bacheca.listaIdMembriDiUnaBacheca();
+      this.bacheca.on("eventoidmembri", this.calcola, this);
+      this.bacheca.on("eventolistamembri", this.appendMembers, this);
+      this.bacheca.listaIdMembriDiUnaBacheca(this.idb);
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -45,10 +47,11 @@ define(function(require) {
     },
     //ricevuti gli id degli utenti della bacheca corrente richiamo una query per ottenere tutti i dati degli utenti
     calcola: function (res){
-        this.bacheca.listaDatiMembriDiUnaBacheca();
+        console.log(res);
+        this.bacheca.listaDatiMembriDiUnaBacheca(res);
     },
     appendMembers: function(result){
-    //console.log(result);
+    console.log(result);
       var b= new Utenti();
       b.add(result);
       console.log(b);

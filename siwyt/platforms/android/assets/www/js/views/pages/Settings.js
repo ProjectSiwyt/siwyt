@@ -35,8 +35,9 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goBack",
+      //"swipeRight": "goBack",
       "tap #logout": "logOut",
+      "tap #notification": "notification"
       
     },
 
@@ -44,6 +45,10 @@ define(function(require) {
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
       return this;
+    },
+
+    notification: function(e){
+      alert("hjvkjhv");
     },
 
     logOut: function(e){
