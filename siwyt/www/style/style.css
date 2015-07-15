@@ -143,6 +143,17 @@ body {
 #noticeboardsList{
     font-size: 1.5em;
 }
+#register, #login{
+    background-color: #004a93;
+    color: #f4f4f4;
+}
+#sign_up{
+    font-size: 1.5em;
+}
+#btn_login, #btn_register{
+    background-color: #ED7800;
+color: #F4F4F4;
+}
 .title {
     font-size: 2.5em;
     color: #f4f4f4;
@@ -295,6 +306,7 @@ body {
 
 .errorReg {
     display: none;
+    color: #ed7800;
 }
 
 .profile-img {
@@ -429,4 +441,25 @@ body {
 }
 .scroll-popup{
     height: 40%;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #bdb8b6;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #bdb8b6;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #bdb8b6;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #bdb8b6;
+}
+input, select, textarea{
+    color: #000000;
+}
+
+textarea:focus, input:focus {
+    color: #000000;
 }
