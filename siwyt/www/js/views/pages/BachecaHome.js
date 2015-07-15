@@ -333,14 +333,15 @@ define(function(require) {
       });
     },
     gestionemenu: function(e) {
-      var elemento= document.getElementById("menu");
-      if (elemento.style.display=='none'){
-          elemento.style.display='block';
-          elemento.style.color='blue';
-          elemento.style.transform='translate3d(40px, 40px, 40px)';
+      var menu= document.getElementById("contenutoBacheca");
+
+      if (menu.classList.contains('open')){
+          menu.classList.remove('open');
+          menu.classList.add('close');
       }
       else{
-          elemento.style.display='none';  
+          menu.classList.remove('close');
+          menu.classList.add('open');  
       }
     },
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
