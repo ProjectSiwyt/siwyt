@@ -1,31 +1,30 @@
 {{#each this}}
-<div id="{{id}}" class="postit moveable block">
-    <span>{{nome}}</span>
-    <span>{{autore}}</span>
-    <span>{{data}} {{ora}}</span>
-    <i class="fa fa-pencil"></i>
-    <!--Da collegare con popup-->
+<div id="{{id}}" class="postit moveable block absolute center">
+    <h3 class="postit-title">{{nome}}</h3>
+    <div class="pull-left caption">{{autore}}</div>
+    <div class="pull-right caption">{{data}}</div>
+    <div id="{{id}}Link"><i class="fa fa-pencil"></i></div>
 </div>
+<div class="popup-screen overlay in hide" id="{{id}}Screen"></div>
 <!--Popup menu to manage postit-->
-<div id="popupPostit{{id}}" class="popup" style="display:none">
-    <!--Da definire-->
-    <ul>
-        <li>New relation</li>
-        <li>Rename</li>
-        <li>Change Color:
+<div id="{{id}}Popup" class="postit-popup popup-container hide">
+    <ul class="table-view border-table-view">
+        <li class="table-view-cell border-top media">New relation</li>
+        <li class="table-view-cell media">Rename</li>
+        <li class="table-view-cell media">Change Color:
             <input type="color" id="html5colorpicker" value="#ff0000">
         </li>
-        <li>Font:
+        <li class="table-view-cell media">Font:
             <select>
                 <option>Font 1</option>
                 <option>Font 2</option>
                 <option>Font 3</option>
             </select>
         </li>
-        <li>Size:
+        <li class="table-view-cell media">Size:
             <input type="text" value="12" />
         </li>
-        <li>Delete</li>
+        <li class="table-view-cell media">Delete</li>
     </ul>
 </div>
 {{/each}}

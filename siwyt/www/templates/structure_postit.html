@@ -1,19 +1,17 @@
-<header class="bar bar-nav no-border">
-    <a class="icon pull-left"><i class="fa fa-angle-left"></i></a>
-    <h1 class="title">Post-it</h1>
-    <a class="icon pull-right"><i class="fa fa-cog"></i></a>
-</header>
-
-<div class="div">
-    <div class="parag">
-        <h1 class="centered">{{postit_name}}</h1>
-        <div class="author">by {{postit_author}}</div>
-        <div class="posted">posted on {{postit_date}}</div>
+<div class="i-g scroll no-nav">
+    <div class="div i-12">
+        <h1 class="center">{{postit_name}}</h1>
+        <div class="pull-left caption">by {{postit_author}}</div>
+        <div class="pull-right caption">posted on {{postit_date}}</div>
     </div>
-    <div id="postit-content"></div>    
+    <div id="postitContent" class="i-12">
+    </div>
+    <div class="i-12 btn-block btn-new center">
+        <form>
+            <input type="text" placeholder="ADD COMMENT" />
+            <div class="absolute send">
+                <i class="fa fa-share-square-o"></i>
+            </div>
+        </form>
+    </div>
 </div>
-
-<form>
-    <input type="text" placeholder="ADD COMMENT"/>
-    <input type="submit" value="SUBMIT"\>
-</form>
