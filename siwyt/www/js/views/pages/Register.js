@@ -19,23 +19,14 @@ define(function(require) {
       this.template = Utils.templates.register;
       console.log("initialize register");
       document.getElementById("navigation").style.display="none";
-      document.getElementById("title").innerHTML="Sign-Up";
+      document.getElementById("title").innerHTML="";
       $("#header").removeAttr("style");
       document.getElementById("settingsMenu").style.display="none";
 
       this.utente= new Utente();
       this.utente.on("eventoRegister", this.sendMail, this);
       this.utente.on("resultUsername",this.doRegistration, this);
-      /*var err =  $("span.errorReg");
-      console.log(err);*/
-      
-      /*var err = document.getElementsByClassName("errorReg");//.getElementsByClassName("errorReg");
-      console.log(err);
-      console.log(err.length);
-      for( i=0 ; i<err.length; i++){
-        document.getElementsByClassName("errorReg")[i].style.display="none";
-        console.log(i);
-      }*/
+  
       
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -59,13 +50,11 @@ define(function(require) {
     render: function() {
 
       $(this.el).html(this.template());
-      //$(this.el).html(this.template(this.model.models));
-      /*var err = $(".errorReg")//.attr("style","display:none");
-      console.log(err);*/
       
       return this;
     },
 
+    // quando la registrazione va a buon fine viene inviata una mail di conferma all email specificata
     sendMail: function(result){
       console.log(result);
       this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
@@ -74,6 +63,7 @@ define(function(require) {
       });
     },
 
+    // se lo username scelto è disponibile e valido viene effettuata la registrazinoe
     doRegistration: function(result) {
       console.log(result);
       if(result==true)
@@ -86,6 +76,7 @@ define(function(require) {
 
     },
 
+    // viene verificata la validità dei dati immessi nella form di registrazione
     validateRegister: function(e){
       $(".errorReg").removeAttr("style");
       var name = document.formRegister.regName.value;
@@ -143,6 +134,7 @@ define(function(require) {
              valid = false;
           }
 
+          // se i dati sono validi controllo che lo username scelto sia disponibile
       if(valid) this.utente.checkUsername(name, surname, username, email, password); //this.utente.register(name, surname, username, email, password);  
     }
 

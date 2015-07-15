@@ -1,15 +1,16 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var Bacheca = require("models/Utente");
-  var Bacheche = require("collections/Utenti");
+  var Utente = require("models/Utente");
+  var Utenti = require("collections/Utenti");
   var Utils = require("utils");
 
-  var showListContacts = Utils.Page.extend({
+  var ShowListContacts = Utils.Page.extend({
 
-    constructorName: "showListContacts",
+    constructorName: "ShowListContacts",
 
-    model: Bacheca,
+    //model: Bacheca,
+    model: Utente,
 
     initialize: function() {
       // load the precompiled template
@@ -31,28 +32,25 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       //"tap .rigabacheca": "goToBacheca",
-      //"swipeLeft": "goToContacts"
+      "swipeLeft": "goToHome"
 
     },
 
     render: function() {
+      //debugger;
+      console.log(this.collection);
       $(this.el).html(this.template(this.collection.toJSON()));
       return this;
     },
 
-    goToBacheca: function(e){
-      console.log(this.model);
-      Backbone.history.navigate("bacheca/"+e.currentTarget.id, {
-        trigger: true
-      });
-    },
-     goToContacts: function(e) {
-      Backbone.history.navigate("contacts", {
+  
+     goToHome: function(e) {
+      Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });
     }
   });
 
-  return showListContacts;
+  return ShowListContacts;
 
 });

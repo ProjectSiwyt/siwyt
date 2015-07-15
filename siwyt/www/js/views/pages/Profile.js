@@ -38,6 +38,7 @@ define(function(require) {
       this.utente.contaBacheche();
 
       this.utente.on("eventoContaBacheche", this.showNumBacheche, this);
+      this.utente.on("accountDeleted", this.goOut, this);
       
       //this.utente.on("resultData", this.showData, this);
       // carico i dati dell utente 
@@ -72,10 +73,13 @@ define(function(require) {
     },
 
     goOut: function(result){
+      console.log(result);
+      if(result){
         localStorage.setItem('idu',null);
         Backbone.history.navigate("login", {
         trigger: true
       });
+      }
     },
 
     showData: function(result){
@@ -96,7 +100,10 @@ define(function(require) {
     deleteAccount: function(e){
       var del = window.confirm("Are you sure you want to delete your account?");
       console.log(del);
-      if(del)  this.utente.deleteAccount(idUtente);
+      if(del) {
+          this.utente.deleteAccount(localStorage.getItem("idu"));
+
+      } 
     
     },
 
@@ -174,6 +181,7 @@ define(function(require) {
           localStorage.setItem('nameLogged',name);
           localStorage.setItem('surnameLogged',surname);
           localStorage.setItem("emailLogged", email);
+          $(".edit").attr("disabled", "disabled");
            this.utente.saveName(localStorage.getItem("idu"), name);
            this.utente.saveSurname(localStorage.getItem("idu"), surname);
            this.utente.saveEmail(localStorage.getItem("idu"), email);

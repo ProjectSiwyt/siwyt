@@ -1,7 +1,6 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
   var Utenti = require("collections/Utenti");
@@ -24,7 +23,7 @@ define(function(require) {
       document.getElementById("title").innerHTML="Contacts";
       document.getElementById("back").style.display="none";
       this.utente = new Utente();
-      this.utente.on("listContacts", this.showListContact, this);
+      this.utente.on("listContacts", this.showContacts, this);
       this.utente.listContacts(localStorage.getItem("idu"));
 
       // here we can register to inTheDOM or removing events
@@ -43,9 +42,21 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeLeft": "goToHome",
-      "tap .add_to_board": "add_to_board",
-      "tap .remove_contact": "remove_contact"
+      "swipeLeft": "goToHome"
+      /*"tap .add_to_board": "add_to_board",
+      "tap .remove_contact": "remove_contact"*/
+    },
+
+    showContacts: function(result){
+      console.log( result);
+      var c = new Utenti();
+      c.add(result);
+      console.log(c);
+      console.log("contattiiiii: "+c);
+      this.subView = (new ShowListContacts({collection: c})).render().el;
+      console.log("subview " +this.subView);
+        
+      document.getElementById("contactsContentList").appendChild(this.subView);
     },
 
     render: function() {
@@ -54,37 +65,14 @@ define(function(require) {
       return this;
     },
 
-    showListContact: function(result){
-      var contacts = new Utenti();
-      contacts.add(result);
-      console.log(contacts);
-      console.log("contattiiiii: "+contacts);
-      this.subView = (new ShowListContacts({collection: contacts})).render().el;
-      console.log("subview " +this.subView);
-        
-      document.getElementById("contactsContent").appendChild(this.subView);
-    },
+    
 
     goToHome: function(e) {
       Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });
-    },
-
-  add_to_board: function(e) {
-      ///////// aggiungi a bacheca 
-      var contact = $(e.currentTarget).attr("id")[0];
-      console.log(contact);
-      /// query per aggiungere contatto a bacheca
-
-    },
-    
-    remove_contact: function(e) {
-      ///////// rimuovi contatto dalla lista contatti
-      var contact = $(e.currentTarget).attr("id")[0];
-      console.log(contact);
-      ///////// query per rimozione contatto
     }
+
   });
 
   return Contacts;
