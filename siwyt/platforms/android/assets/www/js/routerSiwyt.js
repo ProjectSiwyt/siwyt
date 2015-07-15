@@ -100,55 +100,8 @@ define(function(require) {
     },
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");
-      /*
-      var model= new Utente({
-        id:"2",
-        nome: "Luca",
-        cognome: "Di Chiro",
-        mail: "luca.dichiro@student.univaq.it",
-        username: "bosco",
-        password: "bosco"
-      });
-      var model2= new Utente({
-        id:"3",
-        nome: "Nicholas",
-        cognome: "Angelucci",
-        mail: "nicholas.angelucci@student.univaq.it",
-        username: "richolas",
-        password: "richolas"
-      });
-      var model3= new Utente({
-        id:"4",
-        nome: "Vincenzo",
-        cognome: "Lanzieri",
-        mail: "vincenzo.lanzieri@student.univaq.it",
-        username: "vinzenio",
-        password: "vinzenio"
-      });
-      var collection= new Utenti();
-      collection.add(model);
-      collection.add(model2);
-      collection.add(model3);
-      console.log(collection);
-      var page = new Contacts({
-        model: collection
-      });
-      console.log(page);
+      var page = new Contacts();
       this.changePage(page);
-      */
-      
-      //this.collection.each(this.renderOne, this);
-      var ccc = new Utenti({model: Utente}); //= var contacts = new ContactManager.Collections.Contacts();
-      var contactsDefer= ccc.fetch();
-      console.log(ccc);
-      var THIS=this;
-      contactsDefer.done(function(res){
-        console.log(res);
-        var page = new Contacts({
-            model: ccc
-        });
-        THIS.changePage(page);
-      });
     },
 
     profile: function(){
@@ -171,8 +124,7 @@ define(function(require) {
     create: function(){
       var page = new CreateBacheca();
       this.changePage(page);
-    }
-    ,
+    },
 
     // load the structure view
     showStructure: function() {

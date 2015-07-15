@@ -161,7 +161,7 @@ color: #F4F4F4;
 .scroll {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 70%;
+    height: 60%;
     width: 100%;
 }
 

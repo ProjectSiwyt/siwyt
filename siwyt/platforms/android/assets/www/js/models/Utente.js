@@ -24,13 +24,13 @@ define(function(require) {
     		//BaasBox.loadCollectionWithParams("Contatto", {where:"id1==idu"})
     	//restituisce array contenente i nomi dei contatti dell'utente passatogli come parametro
 		listContacts: function(idu){
-			console.log(idu);
+			//console.log(idu);
 
 			var THIS = this;	
 	    	BaasBox.loadCollection("Contatto")
 	       	
 	       	.done(function(res) {
-	         	console.log("res ", res);
+	         	//console.log("res ", res);
 
 	         	var a= new Array();
 	            var c=0;
@@ -45,7 +45,7 @@ define(function(require) {
 		               	c++;
 		             }
 	           	}
-	           	console.log(a);
+	           	//console.log(a);
 	           	//debugger;
 	           	
 			   	BaasBox.loadCollection("Utente")	             
@@ -56,16 +56,16 @@ define(function(require) {
 			   		//var ca=0;
 			   		var c2=0;
 			       	for(var i=0; i<a.length; i++){
-			       		console.log("asddddfasdf");
+			       		//console.log("asddddfasdf");
 			       		for(var j=0; j<res2.length; j++){
 
 			       			if(res2[j].id == a[i]){
-			       				console.log(res2[j].nome);
+			       				//console.log(res2[j].nome);
 			       				a2[c2++] = res2[j];	
 			       			}
 			       		}
 			       	}
-			       	console.log(a2);
+			       	//console.log(a2);
 			       	THIS.trigger("listContacts", a2);
 			    })
 		        
@@ -113,6 +113,21 @@ define(function(require) {
 			    	console.log("error ", error);
 				})
 		},
+
+		//conta le bacheche di cui l'utente con id=idu fa parte
+    	//CONTROLLARE
+    	contaBacheche: function(){
+			var THIS=this;
+			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.trigger("eventoContaBacheche", res.length);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+					THIS.trigger("errorContaBacheche", false);
+				})
+    	},
 
 
 		checkUsername: function(name, surname, username, email, password ){
