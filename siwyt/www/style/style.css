@@ -143,9 +143,12 @@ body {
 #noticeboardsList{
     font-size: 1.5em;
 }
-#register, #login{
+#login>.header, #register>.header{
     background-color: #004a93;
     color: #f4f4f4;
+    margin: 0;
+    width: 100%;
+    margin-bottom: 5em;
 }
 #sign_up{
     font-size: 1.5em;
