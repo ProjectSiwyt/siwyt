@@ -39,15 +39,15 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #submitAddContacts": "goToPage",
-      "tap #addRemoveMembers": "contactsManagement"
+      "tap #submitAddContacts": "goToPage"
     },
 
     appendContacts: function(result){
       console.log(result);
       var b= new Utenti();
-      b.add(result)
+      b.add(result);
       console.log(b);
+      this.addMembers=result;
       this.subView = (new ShowListAddContacts({collection: b})).render().el;
       console.log(this.subView);
         //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
@@ -63,6 +63,14 @@ define(function(require) {
     },
     //torna alla pagina da cui si proviene
     goToPage: function(e) {
+      var c=new Utenti();
+      for (var i=0; i<this.addMembers.length;i++){
+        if (document.getElementById(""+this.addMembers[i].id).classList.contains("fa-user-times")){
+            c.add(this.addMembers[i]);
+        }
+      }
+      console.log(c);
+      localStorage.setItem("utenti", JSON.stringify(c));
       alert("aggiornare membri Bacheca");
       if (this.returnpage=="noticeboardManagement"){
           Backbone.history.navigate("boardManagement/"+this.idb, {
@@ -73,15 +81,6 @@ define(function(require) {
         Backbone.history.navigate("createBacheca", {
           trigger: true
         });
-      }
-    },
-
-    contactsManagement: function(e){
-      if(e.target.innerHTML=='+'){
-        e.target.innerHTML='-';
-      }
-      else{
-        e.target.innerHTML='+';
       }
     }
   });

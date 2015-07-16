@@ -124,6 +124,7 @@ define(function(require) {
     create: function(){
       var page = new CreateBacheca();
       this.changePage(page);
+      page.caricaMembri();
     },
 
     // load the structure view

@@ -6,6 +6,9 @@ define(function(require) {
   var Bacheca= require("models/Bacheca");
   var Bacheche = require("collections/Bacheche");
   var Utenti = require("collections/Utenti");
+  var ShowListMembers= require("views/pages/ShowListMembers");
+  var ShowListUsers= require("views/pages/ShowListUsers");
+  var ShowListAdmins= require("views/pages/ShowListAdmins");
 
 
   var CreateBacheca = Utils.Page.extend({
@@ -32,7 +35,6 @@ define(function(require) {
       this.bacheca.on("salvataggioAmministratore", this.salvaResponsabili, this);
       this.bacheca.on("salvataggioResponsabili", this.salvaMembri, this);
       this.bacheca.on("salvataggioUtenti", this.goToBacheca, this);
-      
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -58,6 +60,35 @@ define(function(require) {
       //$(this.el).html(this.template(this.model.models));
 
       return this;
+    },
+    caricaMembri: function(){
+      console.log("caricaMembri");
+        var o1=new Object();
+        o1.nome=localStorage.getItem('nameLogged');
+        o1.cognome=localStorage.getItem('surnameLogged');
+        var a = new Array();
+        a[0]=o1;
+        var b=new Utenti();
+        b.add(a);
+
+        console.log(b);
+        this.subview1=(new ShowListMembers({collection: b})).render().el;
+        document.getElementById("membri").appendChild(this.subview1);
+        var responsabili = localStorage.getItem('responsabili');
+        if (responsabili!=null){
+          var r= new Utenti();
+          r.add(responsabili);
+          this.subview2=(new ShowListAdmins({collection: b})).render().el;
+        document.getElementById("membri").appendChild(this.subview2);
+        }
+        var users = localStorage.getItem('utenti');
+        if (users!=null){
+          var u =new Utenti();
+          u.add(JSON.parse(users));
+          console.log(u);
+          this.subview2=(new ShowListUsers({collection: u})).render().el;
+        document.getElementById("membri").appendChild(this.subview2);
+        }
     },
     salva: function(){
       this.bacheca.salvaBacheca(document.getElementById("nomeBacheca").value);
@@ -87,6 +118,7 @@ define(function(require) {
     },
     goToBacheca: function(res) {
       console.log("entra");
+      localStorage.removeItem("utenti");
       Backbone.history.navigate("bacheca/"+this.idb, {
         trigger: true
       });

@@ -43,8 +43,9 @@ define(function(require) {
     //gestione apertura/chiusura sottomenu relativo ai membri di una bacheca
     gestioneOpenClose: function (e){
       console.log("OPENCLOSE");
-        document.getElementById("toggle"+e.currentTarget.id).classList.toggle('close-member');
-        document.getElementById("toggle"+e.currentTarget.id).classList.toggle('open-member');
+      var el =document.getElementById("toggle"+e.currentTarget.id);
+      el.classList.toggle('close-member');
+      el.classList.toggle('open-member');
     },
     goToBacheca: function(e){
       console.log(this.model);

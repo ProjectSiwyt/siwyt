@@ -232,7 +232,8 @@ define(function(require) {
 
    		datiAmministratore: function(r){
 			console.log("CCCC");
-			var THIS = this;		    	
+			var THIS = this;
+			if(r.length!=0){		    	
 			BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[0].idu+"'" })
 				.done(function(res) {
 				 	console.log("res ", res);
@@ -241,7 +242,8 @@ define(function(require) {
 				.fail(function(error) {
 				 	console.log("error ", error);
 				 	//THIS.trigger("error");
-				})       	
+				})
+			}       	
 		},
 
    		//Per la funzione rimuoviAmministratore devo fare prima una query che mi ritorna l'id della riga

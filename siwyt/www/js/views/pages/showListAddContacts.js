@@ -30,9 +30,15 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      //"tap .rigabacheca": "goToBacheca",
+      "tap .aggiungimembro": "gestioneMembri"
       //"swipeLeft": "goToContacts"
 
+    },
+    //gestione icona aggiungi/rimuovi membro
+    gestioneMembri: function(e){
+      var el=document.getElementById(""+e.currentTarget.id);
+      el.classList.toggle('fa-user-plus');
+      el.classList.toggle('fa-user-times');
     },
 
     render: function() {
