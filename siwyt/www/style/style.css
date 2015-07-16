@@ -271,8 +271,8 @@ color: #F4F4F4;
 }
 
 .right {
-    top: 5px;
-    right: 1px;
+    top: -.3em;
+    right: 2.5em;
 }
 
 .margin-t {
@@ -281,22 +281,12 @@ color: #F4F4F4;
 
 .close-member {
     height: 3.5em;
-    
-    -webkit-transition: height 1s;
-    /* Safari */
-    
-    transition: height 1s;
 }
 .close-member>.navigate-right:after{
     content: '\e820';
 }
 .open-member{
     height: 100%;
-    
-    -webkit-transition: height 1s;
-    /* Safari */
-    
-    transition: height 1s;
 }
 .open-member>.navigate-right:after{
     content: '\e820';
@@ -312,8 +302,8 @@ color: #F4F4F4;
 }
 
 .trash {
-    top: -15px;
-    right: 70px;
+    top: -.3em;
+    right: 2.5em;
 }
 
 .errorReg {
