@@ -80,8 +80,18 @@ define(function(require) {
 			})
 		},
 
-		deleteAccount: function(e){
-			console.log("account deleted");
+		//rimuove un 'Utente' con id=idu dalla tabella utente
+		deleteAccount: function(idu){
+			var THIS = this;   	
+   			BaasBox.deleteObject(idu, "Utente")
+			.done(function(res) {
+				console.log("res ", res);
+				THIS.trigger("accountDeleted", true);
+			})
+			.fail(function(error) {
+				console.log("error ", error);
+				THIS.trigger("accountDeleted",false);
+			})
 		},
 
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente

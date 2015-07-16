@@ -42,7 +42,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeLeft": "goToHome"
+      "swipeLeft": "goToHome",
+      "tap .removeContact": "removeContact"
       /*"tap .add_to_board": "add_to_board",
       "tap .remove_contact": "remove_contact"*/
     },
@@ -51,18 +52,23 @@ define(function(require) {
       console.log( result);
       var c = new Utenti();
       c.add(result);
-      console.log(c);
-      console.log("contattiiiii: "+c);
+      /*console.log(c);
+      console.log("contattiiiii: "+c);*/
       this.subView = (new ShowListContacts({collection: c})).render().el;
-      console.log("subview " +this.subView);
+      /*console.log("subview " +this.subView);*/
         
-      document.getElementById("contactsContentList").appendChild(this.subView);
+      document.getElementById("contactsContent").appendChild(this.subView);
     },
 
     render: function() {
       $(this.el).html(this.template());
 
       return this;
+    },
+
+    removeContact: function(e){
+      console.log(e.currentTarget.parentNode.id);
+      this.utente.removeContact(e.currentTarget.id);
     },
 
     
