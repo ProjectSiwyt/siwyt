@@ -2,7 +2,7 @@ define(function(require) {
 
 	var Backbone = require("backbone");
 
-	var Conatatto = Backbone.Model.extend({
+	var Contatto = Backbone.Model.extend({
 		defaults: {
 			id: "Not specified",
 			id1: "Not specified",
@@ -20,7 +20,7 @@ define(function(require) {
     	// funzione che cancella il contatto tra id1 e id2
     	removeContact: function(id1, 1d2){
 			console.log("contatto cancelato");
-		},
+		}
 	});
 
 	return Amministratore;

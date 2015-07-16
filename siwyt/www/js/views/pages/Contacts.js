@@ -4,6 +4,7 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
   var Utenti = require("collections/Utenti");
+  var Contatto = require("models/Contatto");
   var ShowListContacts = require("views/pages/ShowListContacts");
 
 
@@ -11,6 +12,7 @@ define(function(require) {
 
     constructorName: "Contacts",
     model: Utente,
+    model: Contatto,
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
@@ -22,6 +24,7 @@ define(function(require) {
  
       document.getElementById("title").innerHTML="Contacts";
       document.getElementById("back").style.display="none";
+      this.contatto = new Contatto();
       this.utente = new Utente();
       this.utente.on("listContacts", this.showContacts, this);
       this.utente.listContacts(localStorage.getItem("idu"));
@@ -67,8 +70,11 @@ define(function(require) {
     },
 
     removeContact: function(e){
+      var name = e.currentTarget.parentNode.id
       console.log(e.currentTarget.parentNode.id);
-      this.utente.removeContact(e.currentTarget.id);
+      var r = confirm("Are you sure you want to remove this contact");
+      if (r)
+        this.contatto.removeContact(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
     },
 
     
