@@ -143,9 +143,12 @@ body {
 #noticeboardsList{
     font-size: 1.5em;
 }
-#register, #login{
+#login>.header, #register>.header{
     background-color: #004a93;
     color: #f4f4f4;
+    margin: 0;
+    width: 100%;
+    margin-bottom: 5em;
 }
 #sign_up{
     font-size: 1.5em;
@@ -162,7 +165,7 @@ color: #F4F4F4;
     overflow-y: auto;
     overflow-x: hidden;
     height: 60%;
-    width: 100%;
+    width: 98%;
 }
 
 .center {
@@ -205,19 +208,23 @@ color: #F4F4F4;
     border-color: #bdb8b6;
 }
 .table-view-cell:active,.table-view-cell>a:not(.btn):active{
-    background-color: #bdb8b6;
-    color: #f4f4f4;
+    background-color: #f4f4f4;
+    color: #000000;
 }
-.table-view-cell:active>.navigate-right:after{
+.activable:active,.activable>a:not(.btn):active{
+    background-color: #bdb8b6 !important;
+    color: #f4f4f4 !important;
+}
+.activable:active>.navigate-right:after{
     color: #f4f4f4;
 }
 
 .border-nav {
-    border-bottom: 3px solid #ddd;
+    border-bottom: 3px solid #bdb8b6;
 }
 
 .border-top {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #bdb8b6;
 }
 
 .active {
@@ -267,30 +274,28 @@ color: #F4F4F4;
 }
 
 .right {
-    top: 5px;
-    right: 1px;
+    top: -.3em;
+    right: 2.5em;
 }
 
 .margin-t {
     margin-top: 11px;
 }
 
-.body-member {
-    height: 128px;
-    /*43px;*/
-    
-    -webkit-transition: height 1s;
-    /* Safari */
-    
-    transition: height 1s;
+.close-member {
+    height: 3.5em;
 }
-/* Cambia il verso del puntantore dei membri della bacheca
-.body-member>.navigate-right:after {
-    right: 15px;
+.close-member>.navigate-right:after{
     content: '\e820';
 }
-*/
-
+.open-member{
+    height: 100%;
+}
+.open-member>.navigate-right:after{
+    content: '\e820';
+    transform:rotateZ(180deg);
+    margin-top: -6px;
+}
 .caption {
     font-size: 0.7em;
 }
@@ -300,8 +305,8 @@ color: #F4F4F4;
 }
 
 .trash {
-    top: -15px;
-    right: 70px;
+    top: -.3em;
+    right: 2.5em;
 }
 
 .errorReg {

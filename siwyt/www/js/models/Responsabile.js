@@ -5,8 +5,8 @@ define(function(require) {
 	var Responsabile = Backbone.Model.extend({
 		defaults: {
 			id: "Not specified",
-			idUtente: "Not specified",
-			idBacheca: "Not specified",
+			idu: "Not specified",
+			idb: "Not specified"
 		},
 		
 		constructorName: "Responsabile",

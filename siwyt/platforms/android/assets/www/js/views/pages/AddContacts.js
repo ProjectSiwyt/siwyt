@@ -13,14 +13,16 @@ define(function(require) {
 
     model: Utente,
 
-    initialize: function() {
-      document.getElementById("back").removeAttribute("style");
+    initialize: function(idpage,idb) {
+      this.returnpage=idpage;
+      this.idb=idb;
+       document.getElementById("back").removeAttribute("style");
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureAddContacts;
       this.utente = new Utente();
       this.utente.on("listContacts",this.appendContacts, this);
       //L'id dell'utente è statico ci andrebbe invece l'id dell'utente loggato
-      this.utente.listContacts("ad658365-3cf9-4515-a348-a7105bb3d48f");
+      this.utente.listContacts(localStorage.getItem("idu"));
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -37,7 +39,7 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #submitAddContacts": "goToCreateNoticeboard",
+      "tap #submitAddContacts": "goToPage",
       "tap #addRemoveMembers": "contactsManagement"
     },
 
@@ -59,12 +61,19 @@ define(function(require) {
 
       return this;
     },
-
-    goToCreateNoticeboard: function(e) {
+    //torna alla pagina da cui si proviene
+    goToPage: function(e) {
       alert("aggiornare membri Bacheca");
-      Backbone.history.navigate("createBacheca", {
-        trigger: true
-      });
+      if (this.returnpage=="noticeboardManagement"){
+          Backbone.history.navigate("boardManagement/"+this.idb, {
+          trigger: true
+        });
+      }
+      else{
+        Backbone.history.navigate("createBacheca", {
+          trigger: true
+        });
+      }
     },
 
     contactsManagement: function(e){

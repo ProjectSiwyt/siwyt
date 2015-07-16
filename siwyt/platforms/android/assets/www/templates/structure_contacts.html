@@ -1,9 +1,16 @@
-<form>
-	<input type="search" name="contactsearch">
-  	<input type="submit">
-</form>
-<div id="contacts-content"></div>
-<form>
-	<input type="text" placeholder="Insert email to invite to Siwyt">
-	<input type="submit">
-</form>
+<div class="i-12">
+    <input type="search" name="contactSearch" placeholder="Search">
+    <div class="absolute search-delete"><i class="fa fa-times-circle-o fa-2x"></i></div>
+</div>
+<div class="i-12">
+    Your contacts:
+</div>
+<div id="contactsContent" class="i-12 scroll"></div>
+<div class="i-12 btn-block btn-new center">
+    <form>
+        <input type="text" placeholder="Insert email to invite to Siwyt">
+        <div class="absolute send">
+            <i class="fa fa-share-square-o fa-2x"></i>
+        </div>
+    </form>
+</div>

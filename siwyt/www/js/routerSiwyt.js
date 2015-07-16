@@ -36,7 +36,7 @@ define(function(require) {
       "settings": "settings",
       "bacheca/:id": "showNoticeboard",
       "createBacheca": "create",
-      "addContacts": "addContacts",
+      "addContacts/:idpage/:idb": "addContacts",
       "newBacheca/:nome": "newBacheca",
       "login":"login",
       "register":"register",
@@ -146,9 +146,9 @@ define(function(require) {
 
     },
 
-    addContacts: function(){
+    addContacts: function(idpage,idb){
       
-      var page = new AddContacts();
+      var page = new AddContacts(idpage, idb);
       this.changePage(page);
     }
     /*

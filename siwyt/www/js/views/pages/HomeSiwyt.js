@@ -17,13 +17,18 @@ define(function(require) {
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureHomeSiwyt;
-      $("#navigation").removeAttr("style");
-      $("#header").removeAttr("style");
-      $("#back").attr("style","display:none");
+      var navigation= document.getElementById("navigation");
+      var header= document.getElementById("header");
+      if (header.classList.contains('hide')){
+        header.classList.remove('hide');
+      }
+      if (navigation.classList.contains('hide')){
+        navigation.classList.remove('hide');
+      };
+      document.getElementById("back").classList.add('hide');
       spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"
       this.bacheca=new Bacheca();
-      this.bacheca.on("eventoidbacheche", this.calcola,this);
       this.bacheca.on("eventolistabacheche", this.appendNoticeboards,this);
       this.bacheca.listaIdBacheche();
     },
@@ -37,9 +42,6 @@ define(function(require) {
       "tap #new": "goToCreateBacheca",
       "swipeLeft": "goToProfile",
       "swipeRight": "goToContacts"
-    },
-    calcola: function(result){
-      this.bacheca.listaDatiBacheche(result);
     },
     appendNoticeboards: function(result){
     //console.log(result);

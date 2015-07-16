@@ -1,7 +1,10 @@
-{{#each this}}
-<div>
-    {{nome}} {{cognome}}
-    <span id="addRemoveMembers"><i class="fa fa-user-times"></i></span>
-    <span id="addMembers"><i class="fa fa-user-plus"></i></span>
-</div>
-{{/each}}
+
+<ul class="table-view">
+    {{#each this}}
+    <li class="table-view-cell">
+        {{nome}} {{cognome}}
+        <span id="{{id}}" class="absolute second-icon"><i class="pull-right fa fa-user-times fa-2x"></i></span>
+        <!--fa-user-plus-->
+    </li>
+    {{/each}}
+</ul>

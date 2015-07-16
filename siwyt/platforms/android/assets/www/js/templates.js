@@ -23,6 +23,8 @@ define({
     contentListComments: "templates/content_listComments.html",
     contentListAddContacts: "templates/content_listAddContacts.html",
     contentListBoards: "templates/content_listBoards.html",
+    contentListUsers: "templates/content_listUsers.html",
+    contentListAdmins: "templates/content_listAdmins.html",
     register: "templates/register.html",
     login: "templates/login.html",
     profile: "templates/profile.html",

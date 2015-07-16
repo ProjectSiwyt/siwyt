@@ -73,7 +73,7 @@ define(function(require) {
     },
 
     goOut: function(result){
-      console.log(result);
+      console.log("result "+result);
       if(result){
         localStorage.setItem('idu',null);
         Backbone.history.navigate("login", {
@@ -100,10 +100,8 @@ define(function(require) {
     deleteAccount: function(e){
       var del = window.confirm("Are you sure you want to delete your account?");
       console.log(del);
-      if(del) {
+      if(del) 
           this.utente.deleteAccount(localStorage.getItem("idu"));
-
-      } 
     
     },
 

@@ -6,15 +6,15 @@ define(function(require) {
   var Utils = require("utils");
 
 
-  var showlistmembers = Utils.Page.extend({
+  var showlistadmins = Utils.Page.extend({
 
-    constructorName: "showListMembers",
+    constructorName: "showListAdmins",
 
     model: Utente,
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.contentListMembers;
+      this.template = Utils.templates.contentListAdmins;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -26,12 +26,12 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    id: "showlistmembers",
+    id: "showlistadmins",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      //"tap .rigamembro": "gestioneOpenClose"
+      "tap .rigamembro": "gestioneOpenClose"
       //"swipeLeft": "goToContacts"
 
     },
@@ -39,6 +39,12 @@ define(function(require) {
     render: function() {
       $(this.el).html(this.template(this.collection.toJSON()));
       return this;
+    },
+    //gestione apertura/chiusura sottomenu relativo ai membri di una bacheca
+    gestioneOpenClose: function (e){
+      console.log("OPENCLOSE");
+        document.getElementById("toggle"+e.currentTarget.id).classList.toggle('close-member');
+        document.getElementById("toggle"+e.currentTarget.id).classList.toggle('open-member');
     },
     goToBacheca: function(e){
       console.log(this.model);
@@ -53,6 +59,6 @@ define(function(require) {
     }
   });
 
-  return showlistmembers;
+  return showlistadmins;
 
 });

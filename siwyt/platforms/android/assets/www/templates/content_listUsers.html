@@ -1,6 +1,6 @@
-{{#each}}
-<li class="table-view-cell close-member">
-    <a class="navigate-right">
+{{#each this}}
+<li class="table-view-cell close-member" id="toggle{{id}}">
+    <a class="navigate-right rigamembro" id="{{id}}">
         {{nome}} {{cognome}}
         </a>
     <div class="relative margin-t">Licences:

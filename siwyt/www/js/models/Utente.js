@@ -4,13 +4,13 @@ define(function(require) {
 
 	var Utente = Backbone.Model.extend({
 		defaults: {
-			id: "Not specified",
-			nome: "Not specified",
-			cognome: "Not specified",
-			mail: "Not specified",
-			username: "Not specified",
-			password: "Not specified",
-			confermato: "false"
+			id: "",
+			nome: "",
+			cognome: "",
+			mail: "",
+			username: "",
+			password: "",
+			confermato: ""
 		},
 		constructorName: "Utente",
 		
@@ -80,18 +80,8 @@ define(function(require) {
 			})
 		},
 
-		//rimuove un 'Utente' con id=idu dalla tabella utente
-		deleteAccount: function(idu){
-			var THIS = this;   	
-   			BaasBox.deleteObject(idu, "Utente")
-			.done(function(res) {
-				console.log("res ", res);
-				THIS.trigger("accountDeleted", true);
-			})
-			.fail(function(error) {
-				console.log("error ", error);
-				THIS.trigger("accountDeleted",false);
-			})
+		deleteAccount: function(e){
+			console.log("account deleted");
 		},
 
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente
@@ -277,7 +267,19 @@ define(function(require) {
 				   	console.log("error ", error);
 				    THIS.trigger("errormodificaTitolo", false);
 				})
-		}
+		},
+
+
+		//rimuove un 'Utente' con id=idu dalla tabella utente
+   		rimuoviUtente: function(idu){
+   			BaasBox.deleteObject(idu, "Utente")
+				.done(function(res) {
+					console.log("res ", res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		}
 						
 
 	});

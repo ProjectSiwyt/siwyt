@@ -19,16 +19,30 @@ define(function(require) {
 		constructorName: "Postit",
 
 
-		//restituisci i postits della bacheca con id uguale a quello passato come parametro
-		//OK
-		elencoPostit: function(idb){
+		//restituisci i postit della bacheca con id uguale a quello passato come parametro
+		elencoPostitBacheca: function(idb){
 		var THIS = this;
 		
 			BaasBox.loadCollectionWithParams("Postit", {where: "idb='"+idb+"'" })
 				.done(function(res) {
 					console.log("res ", res);
 
-					THIS.trigger("eventoElencopostits ", res);
+					//THIS.trigger("eventoElencopostits ", res);
+				})
+				.fail(function(error) {
+					console.log("errorElencopostits ", error);
+				})
+		},
+
+		//restituisci i postit della bacheca con id uguale a quello passato come parametro
+		elencoPostitUtente: function(idu){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Postit", {where: "idu='"+idu+"'" })
+				.done(function(res) {
+					console.log("res ", res);
+
+					//THIS.trigger("eventoElencopostits ", res);
 				})
 				.fail(function(error) {
 					console.log("errorElencopostits ", error);
@@ -36,7 +50,10 @@ define(function(require) {
 		},
 
 
+		//aggiunge una nuova riga alla collezione Postit
 		aggiungiPostit: function(idb, contenuto, idu, altezza, larghezza, x, y){
+
+			var THIS = this;
 
 			var d = new Date();
 			var data = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
@@ -61,7 +78,6 @@ define(function(require) {
 					THIS.trigger("errorAggiungiPostit", false);
 				})
 		},
-
 
 		//funzione che cambia il contenuto del postit con id idp
 		saveContenuto: function(idp, contenuto){
@@ -104,28 +120,19 @@ define(function(require) {
 				    THIS.trigger("errorSaveOra", false);
 				})
 		},
-		/*
-		setbacheca: function(id){
-    		console.log(id);
-    		var THIS = this;	
-    		BaasBox.loadCollection("Bacheca")
-        		
-        		.done(function(res) {
-	          		console.log("res ", res);
 
-	          		for (var i=0; i<res.length; i++){
-	            		if( res[i].id == id){
-	            			console.log(res[i]);
-	            			THIS.trigger("evento",res[i]);
-	            			//return res[i];
-	              		}
-	            	}
-          		})
-				.fail(function(error) {
-	          		console.log("error ", error);
+		//rimuove dalla tabella 'Postit' la riga con id idp
+   		rimuoviPostit: function(idp){
+   			BaasBox.deleteObject(idp, "Postit")
+				.done(function(res) {
+					console.log("res ", res);
 				})
-    	},
-    	*/
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		}
+		
+
 	});
 
 	return Postit;

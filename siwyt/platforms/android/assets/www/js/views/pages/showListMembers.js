@@ -31,7 +31,7 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      //"tap .rigabacheca": "goToBacheca",
+      //"tap .rigamembro": "gestioneOpenClose"
       //"swipeLeft": "goToContacts"
 
     },
@@ -40,7 +40,6 @@ define(function(require) {
       $(this.el).html(this.template(this.collection.toJSON()));
       return this;
     },
-
     goToBacheca: function(e){
       console.log(this.model);
       Backbone.history.navigate("bacheca/"+e.currentTarget.id, {

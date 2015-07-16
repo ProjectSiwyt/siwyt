@@ -17,7 +17,15 @@ define(function(require) {
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureCreateBoard;
-      document.getElementById("navigation").style.display="none";      
+      document.getElementById("navigation").classList.add('hide');
+      var header= document.getElementById("header");
+      var back= document.getElementById("back");
+      if (header.classList.contains('hide')){
+        header.classList.remove('hide');
+      } 
+      if (back.classList.contains('hide')){
+        back.classList.remove('hide');
+      } 
       document.getElementById("title").innerHTML="Create Noticeboard"
       this.bacheca=new Bacheca();
       this.bacheca.on("salvataggiobacheca", this.salvaAmministatore, this);
@@ -84,7 +92,7 @@ define(function(require) {
       });
     },
     goToAddContacts: function(e) {
-      Backbone.history.navigate("addContacts", {
+      Backbone.history.navigate("addContacts/"+this.id+"/new", {
         trigger: true
       });
     }

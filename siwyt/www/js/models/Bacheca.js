@@ -37,32 +37,32 @@ define(function(require) {
 							}
 						}
 					}
-					THIS.trigger("eventolistabacheche", a);					
-
+					THIS.trigger("eventolistabacheche", a);	
 				})
 				.fail(function(error2) {
 					console.log("error ", error2);
 				})
     	},
-		    listaDatiBacheche2: function(r){
-				var THIS = this;
-				var a = new Array();
-				var c=0;
-				for(var i=0; i<r.length; i++){
-					BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[i].idb+"'" })
-						.done(function(res) {
-							console.log("res ", res);
-							a[c] = res;
-							c++;
-							if(c == r.length){
-								THIS.trigger("eventolistabacheche", a);	
-							}
-						})
-						.fail(function(error) {
-							THIS.trigger("error", error);
-						})
-				}
-			},
+
+	    listaDatiBacheche2: function(r){
+			var THIS = this;
+			var a = new Array();
+			var c=0;
+			for(var i=0; i<r.length; i++){
+				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[i].idb+"'" })
+					.done(function(res) {
+						console.log("res ", res);
+						a[c] = res;
+						c++;
+						if(c == r.length){
+							THIS.trigger("eventolistabacheche", a);	
+						}
+					})
+					.fail(function(error) {
+						THIS.trigger("error", error);
+					})
+			}
+		},
 
     	//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK
@@ -72,8 +72,7 @@ define(function(require) {
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
 					console.log("res ", res);
-
-					THIS.trigger("eventoidbacheche" , res);
+					THIS.listaDatiBacheche(res);
 				})
 				.fail(function(error) {
 					console.log("errorlistabacheche ", error);
@@ -89,7 +88,7 @@ define(function(require) {
 				.done(function(res) {
 					console.log("res ", res);
 
-					THIS.trigger("eventoidmembri" , res);
+					THIS.listaDatiMembriDiUnaBacheca(res);
 				})
 				.fail(function(error) {
 					console.log("erroridmembri", error);
@@ -114,7 +113,7 @@ define(function(require) {
 						}
 					}
 					console.log(a);
-					THIS.trigger("eventolistamembri ", a);					
+					THIS.trigger("datiMembri ", a);					
 
 				})
 				.fail(function(error2) {
@@ -148,7 +147,7 @@ define(function(require) {
 		},
 
 		//FUNZIONA MA HO SCRITTO IO PER PROVARE PER NICHOLAS
-		salvaBacheca:function(nome){
+		salvaBacheca: function(nome){
 			var THIS=this;
 			var post = new Object();
 			post.nome = nome;   
@@ -161,34 +160,8 @@ define(function(require) {
 				})
 		},
 
-    	//restituisce i dati della bacheca con id uguale a quello passato come parametro
-    	/*
-    	noticeboardData: function(id){
-    		console.log(id);
-    		var THIS = this;	
-    		BaasBox.loadCollection("Bacheca")
-        		
-        		.done(function(res) {
-	          		console.log("res ", res);
-
-	          		for (var i=0; i<res.length; i++){
-	            		if( res[i].id == id){
-	            			console.log(res[i]);
-	            			THIS.trigger("evento",res[i]);
-	            			//return res[i];
-	              		}
-	            	}
-          		})
-				.fail(function(error) {
-	          		console.log("error ", error);
-	          		THIS.trigger("error")
-				})
-    	},
-  		*/
-
 
   		//restituisce i dati relativi alla bacheca con id uguale a quello passato come parametro
-  		//FUNZIONA PER NICHOLAS QUESTA SERVE PER QUANDO CLICCO SU UNA BACHECA NELLA HOME SIWYT QUINDI LASCIALA
     	noticeboardData: function(idb){
     		var THIS=this;
 			BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+idb+"'" })
@@ -203,8 +176,7 @@ define(function(require) {
 		},
 
 
-		//Questa funzione sostituisce il titolo della bacheca con 'nuovo'
-		//FUNZIONA ORA PER NICHOLAS
+		//Questa funzione sostituisce il nome della bacheca con 'nuovo'
    		modificaTitolo: function(idb, nuovo){
 			var THIS = this;
 			BaasBox.updateField(idb, "Bacheca", "nome", nuovo)
@@ -220,53 +192,86 @@ define(function(require) {
 
 
    		//aggiungi gli 'Utenti' con id idu alla bacheca con id 'idb'
-   		//FUNZIONA ORA PER NICHOLAS SPOSTATO INCREMENTO C
-   		 salvaUtenti: function(r, idb){
-		 		 var THIS=this;
-		  		var c=0;
-		  		for(var i=0; i<r.length; i++){
-					var post = new Object();
-					post.idu = r[i].idu;
-					post.idb = idb;     
-					BaasBox.save(post, "Bacheca_Utente")
-						.done(function(res) {
-							c++;
-							if(c == r.length-1){
-								THIS.trigger("salvataggioUtenti", true);
-							}
-						})
-						.fail(function(error) {
-							THIS.trigger("errorAggiungiUtenti", true);
-						})
-				}
-		  },
+   		salvaUtenti: function(r, idb){
+	 		var THIS=this;
+	  		var c=0;
+	  		for(var i=0; i<r.length; i++){
+				var post = new Object();
+				post.idu = r[i].idu;
+				post.idb = idb;     
+				BaasBox.save(post, "Bacheca_Utente")
+					.done(function(res) {
+						c++;
+						if(c == r.length-1){
+							THIS.trigger("salvataggioUtenti", true);
+						}
+					})
+					.fail(function(error) {
+						THIS.trigger("errorAggiungiUtenti", true);
+					})
+			}
+		},
 
-		//rimuove un 'Utente' con id idu alla bacheca con id 'idb'
-   		//CONTROLLARE -> funziona con l'id della riga!!!!! VEDERE BENE
-   		//PER NICHOLAS COME FA A RIMUOVERE UN UTENTE SE NON SI COLLEGA ALLA TABELLA GIUSTA
-   		rimuoviUtente: function(idu, idb){
-   			BaasBox.delete("090dd688-2e9a-4dee-9afa-aad72a1efa93", "posts")
-			.done(function(res) {
-				console.log("res ", res);
-			})
-			.fail(function(error) {
-				console.log("error ", error);
-			})
+
+   		//PER NICHOLAS fare rimuovi responsabili che prende un idu dell'amministratore -> cosa vuol dire?!??!
+
+   		//dato un id bacheca, restituire i dati del 'Amministratore'
+   		//OK 
+   		idAmministratore: function(idb){
+   			var THIS = this;
+   			console.log("idb='"+idb+"'")
+   			BaasBox.loadCollectionWithParams("Amministratore", {where: "idb='"+idb+"'" })
+   				.done(function(res){
+   					console.log("amministratore"+res)
+   					THIS.datiAmministratore(res);
+   				})
+   				.fail(function(error) {
+		            console.log(error);
+		 		})
    		},
-   		//PER NICHOLAS fare rimuovi responsabili che prende una lista di idu di utenti
-   		rimuoviUtenti: function(idu, idb){
-   			
+
+   		datiAmministratore: function(r){
+			console.log("CCCC");
+			var THIS = this;		    	
+			BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[0].idu+"'" })
+				.done(function(res) {
+				 	console.log("res ", res);
+				 	THIS.trigger("datiAmministratore", res);
+				})
+				.fail(function(error) {
+				 	console.log("error ", error);
+				 	//THIS.trigger("error");
+				})       	
+		},
+
+   		//Per la funzione rimuoviAmministratore devo fare prima una query che mi ritorna l'id della riga
+   		idRigaAmministratore: function(idu, idb){
+			BaasBox.loadCollection("Amministratore")
+
+				.done(function(res) {
+					console.log("res ", res);
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							console.log(res[i].id);
+						}
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
    		},
-   		//PER NICHOLAS fare rimuovi responsabili che prende una lista di idu di responsabili
-   		rimuoviResponsabili: function(idu, idb){
-   			
+   		//rimuove dalla tabella 'Amministratore' la riga con id idu
+   		rimuoviAmministratore: function(idRiga){
+   			BaasBox.deleteObject(idRiga, "Amministratore")
+				.done(function(res) {
+					console.log("res ", res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
    		},
-   		//PER NICHOLAS fare rimuovi responsabili che prende un idu dell'amministratore
-   		rimuoviAmministratore: function(idu, idb){
-   			
-   		},
+
    		//aggiunge un 'amministratore' con id idu alla bacheca con id 'idb'
-   		//FUNZIONA ORA PER NICHOLAS
    		salvaAmministratore: function(idu, idb){
    			var THIS=this;
    			var post = new Object();
@@ -281,10 +286,8 @@ define(function(require) {
 				})
    		},
 
-
-   		//aggiunge i 'responsabili' con id idu alla bacheca con id 'idb'
-   		//MODIFICARE PER NICHOLAS COME PEr salvaUtenti
-   		salvaResponsabili: function(idu, idb){
+   		//aggiunge un responsabile con id idu alla bacheca con id 'idb'
+   		salvaResponsabile: function(idu, idb){
    			var THIS=this;
    			var post = new Object();
 			post.idu = idu;
@@ -298,22 +301,97 @@ define(function(require) {
 				})
    		},
 
-    	
-    	//conta le bacheche di cui l'utente con id=idu fa parte
-    	//Far controllare a LUCZEN
-    	contaBacheche: function(){
-			var THIS=this;
-			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
+   		//aggiunge un array di 'responsabili' con id idu alla bacheca con id 'idb'
+   		salvaResponsabili: function(r, idb){
+		 	var THIS=this;
+	  		var c=0;
+	  		for(var i=0; i<r.length; i++){
+				var post = new Object();
+				post.idu = r[i];
+				post.idb = idb;     
+				BaasBox.save(post, "Responsabile")
+					.done(function(res) {
+						c++;
+						if(c == r.length-1){
+							console.log(r);
+							//THIS.trigger("salvataggioResponsabili", true);
+						}
+					})
+					.fail(function(error) {
+						console.log("errore"); 
+						//THIS.trigger("errorSalvataggioResponsabili", true);
+					})
+			}
+		},
+
+		//restituisce un array contenente gli id dei responsabili della bacheca co id idb
+		listaIdResponsabiliDiUnaBacheca: function(idb){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Responsabile", {where: "idb='"+idb+"'" })
 				.done(function(res) {
 					console.log("res ", res);
-					THIS.trigger("eventoContaBacheche", res.length);
+					THIS.listaDatiResponsabiliDiUnaBacheca(res);
+
+				})
+				.fail(function(error) {
+					console.log("erroridmembri", error);
+				})
+		},
+
+		// restituisce un'array contenente tutti i dati dei responsabili con id idu 
+		listaDatiResponsabiliDiUnaBacheca: function(r){
+			var THIS=this
+			var a = new Array()
+			
+			BaasBox.loadCollection("Responsabile")
+				.done(function(res) {
+					for(var i=0; i<r.length; i++){
+						for(var j=0; j<res.length; j++){
+							console.log(r[i].idu+" "+res[j].id);
+							if(r[i].idu == res[j].id){
+								a[i] = res[j];
+								break;
+							}
+						}
+					}
+					console.log(a);
+					THIS.trigger("datiResponsabili", a);					
+
+				})
+				.fail(function(error2) {
+					console.log("error ", error2);
+					THIS.trigger("errorEventolistamembri", error);
+				})
+		},
+
+   		//Per la funzione rimuoviResponsabile devo fare prima una query che mi ritorna l'id della riga
+   		idRigaResponsabile: function(idu, idb){
+			BaasBox.loadCollection("Responsabile")
+
+				.done(function(res) {
+					console.log("res ", res);
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							console.log(res[i].id);
+						}
+					}
 				})
 				.fail(function(error) {
 					console.log("error ", error);
-					THIS.trigger("errorContaBacheche");
 				})
-    	},
-    	
+   		},
+
+   		//rimuove dalla tabella 'Responsabile' la riga con id idu
+   		rimuoviResponsabile: function(idRiga){
+   			BaasBox.deleteObject(idRiga, "Responsabile")
+				.done(function(res) {
+					console.log("res ", res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		}
 
 	});
 

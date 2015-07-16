@@ -256,8 +256,9 @@ define(function(require) {
       this.idb=idb;
       // load the precompiled template
       this.template = Utils.templates.structureBoard;
-      document.getElementById("header").style.display="none";
-      document.getElementById("navigation").style.display="none";
+
+      document.getElementById("header").classList.add('hide');
+      document.getElementById("navigation").classList.add('hide');
       //document.getElementById("queryError").classList.add("hide");
       spinner.stop();
 
@@ -291,8 +292,11 @@ define(function(require) {
       "tap #newPostit": "aggiungi2",
       "tap .postit": "goToComments",
       "longTap .postit": "moveManagement",
+      "tap #backBoard": "goBack"
     },
-
+    goBack: function() {
+      window.history.back();
+    },
     error: function(){
       //document.getElementById("queryError").classList.remove('hide');
     },
