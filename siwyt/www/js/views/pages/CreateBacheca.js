@@ -31,9 +31,13 @@ define(function(require) {
       } 
       document.getElementById("title").innerHTML="Create Noticeboard"
       this.bacheca=new Bacheca();
-      this.bacheca.on("salvataggiobacheca", this.salvaAmministatore, this);
+      //mi metto in ascolto dell'evento che mi ritorna l'esito del salvataggio dei dati della bacheca
+      this.bacheca.on("salvataggiobacheca", this.salvaAmministratore, this);
+      //mi metto in ascolto dell'evento che mi ritorna l'esito del salvataggio dei dati del project manager
       this.bacheca.on("salvataggioAmministratore", this.salvaResponsabili, this);
+      //mi metto in ascolto dell'evento che mi ritorna l'esito del salvataggio dei dati dei responsabili
       this.bacheca.on("salvataggioResponsabili", this.salvaMembri, this);
+      //mi metto in ascolto dell'evento che mi ritorna l'esito del salavataggio dei dati degli users
       this.bacheca.on("salvataggioUtenti", this.goToBacheca, this);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -61,7 +65,13 @@ define(function(require) {
 
       return this;
     },
-    caricaMembri: function(){
+    // si occupa di caricare i membri aggiunti dalla pagina AddContacts nel caso
+    // sono stati aggiunti membri (lo si fa controllando nel localStorage);
+    caricaDati: function(){
+      var titolo=localStorage.getItem("titolo");
+      if (titolo!= null){
+          document.getElementById("nomeBacheca").value=titolo;
+      }
       console.log("caricaMembri");
         var o1=new Object();
         o1.nome=localStorage.getItem('nameLogged');
@@ -74,56 +84,154 @@ define(function(require) {
         console.log(b);
         this.subview1=(new ShowListMembers({collection: b})).render().el;
         document.getElementById("membri").appendChild(this.subview1);
-        var responsabili = localStorage.getItem('responsabili');
-        if (responsabili!=null){
-          var r= new Utenti();
-          r.add(responsabili);
-          this.subview2=(new ShowListAdmins({collection: b})).render().el;
-        document.getElementById("membri").appendChild(this.subview2);
-        }
-        var users = localStorage.getItem('utenti');
-        if (users!=null){
-          var u =new Utenti();
-          u.add(JSON.parse(users));
-          console.log(u);
-          this.subview2=(new ShowListUsers({collection: u})).render().el;
-        document.getElementById("membri").appendChild(this.subview2);
-        }
+        var us = localStorage.getItem('utenti');
+        var re= localStorage.getItem('responsabili');
+        if (us!=null){
+            var u =new Utenti();
+            var users = JSON.parse(localStorage.getItem('utenti'));
+            if(re!=null){ 
+              var r = new Utenti();
+              var admins = JSON.parse(localStorage.getItem('responsabili'));
+              for (var i=0; i<users.length;i++){
+                  var tr= false;
+                  for (var j=0; j<admins.length; j++){
+                    console.log(users[i].id);
+                    console.log(admins[j].id);
+
+                    if (users[i].id==admins[j].idu){
+                      tr =true;
+                    }
+                  }
+                  if (tr){
+                    r.add(users[i]);
+                  }
+                  else{
+                    u.add(users[i]);
+                  }
+              }
+              console.log(r);
+              console.log(u);
+              this.subview2=(new ShowListAdmins({collection: r})).render().el;  
+              document.getElementById("membri").appendChild(this.subview2);
+              this.subview3=(new ShowListUsers({collection: u})).render().el;  
+              document.getElementById("membri").appendChild(this.subview3); 
+            }
+            else{
+              u.add(users);
+              this.subview2=(new ShowListUsers({collection: u})).render().el;  
+              document.getElementById("membri").appendChild(this.subview2); 
+            }
+      }
     },
+    //chiama la query che si occupa del salvataggio dei dati della bacheca
+    //se nella form non è stato inserito un titolo ne viene dato uno di default
     salva: function(){
-      this.bacheca.salvaBacheca(document.getElementById("nomeBacheca").value);
+      var title=document.getElementById("nomeBacheca").value;
+      console.log(title);
+      if (title==""){
+        if (localStorage.getItem("numBacheca")!=null){
+          var num=JSON.parse(localStorage.getItem("numBacheca"));
+          console.log(num);
+          num=num+1;
+          console.log(num);
+          title="Bacheca"+num;
+          localStorage.setItem("numBacheca", num);
+        }
+        else{
+          localStorage.setItem("numBacheca", 1);
+          title="Bacheca1";
+        }
+
+      }
+      console.log(title);
+      this.bacheca.salvaBacheca(title);
     },
-    salvaAmministatore: function(res){
+    //chiama la query che si occupa di salvare i dati dell'amministratore
+    salvaAmministratore: function(res){
       console.log(res);
       this.idb=res.id;
       this.idu=localStorage.getItem("idu");
       this.bacheca.salvaAmministratore(this.idu, this.idb);
-      //per provare ho salvato anche in utenti
-      var a = new Array();
-      var o1 = new Object();
-      o1.idu=this.idu
-      a[0]= o1;
-      var o2 = new Object();
-      o2.idu="d430c8b0-e0e7-4f9b-ba9b-9a94173fb613";
-      a[1]=o2;
-      this.bacheca.salvaUtenti(a, this.idb);
     },
     salvaResponsabili: function(res){
+
       //responsabili è la lista dei responsabili
-      //this.bacheca.salvaResponsabili(responsabili, this.idb);
+      var a1 = new Array();
+      var a2 = new Array()
+      var o;
+      var c1=0;
+      var c2=0;
+      var input= document.getElementsByName('licence');
+      for (var i=0; i<input.length;i++){
+        if(input[i].checked){
+            o=new Object({idu: input[i].value});
+            console.log(o);
+            if (input[i].classList.contains('admin')){
+              a1[c1++]=o;
+            }
+            else if(input[i].classList.contains('simple-user')){
+              a2[c2++]=o;
+            }
+        }
+      }
+      this.responsabili=a1;
+      this.utenti=a2;
+      console.log("salvaResponsabili"+this.responsabili);
+      if(this.responsabili.length!=0){
+          console.log("query");
+          this.bacheca.salvaResponsabili(this.responsabili, this.idb);
+      }
+      else {
+        console.log("vai a salvaMembri");
+        this.salvaMembri();
+      }
     },
     salvaMembri: function(res){
+      console.log("entrato");
       //utenti è la lista degli utenti non responsabili
-      this.bacheca.salvaUtenti(utenti, this.idb);
+      if (this.utenti.length!=0){
+        console.log("salvautenti");
+        this.bacheca.salvaUtenti(this.utenti, this.idb);  
+      }
+      else{
+        this.goToBacheca();
+      }
     },
+    //rimuovo dal localStorage i dati della bacheca che ho creato
     goToBacheca: function(res) {
       console.log("entra");
       localStorage.removeItem("utenti");
+      localStorage.removeItem("responsabili");
+      localStorage.removeItem("titolo");
       Backbone.history.navigate("bacheca/"+this.idb, {
         trigger: true
       });
     },
+    //salvo il contenuto dell'input di testo in cui c'è il titolo della bacheca
+    //e vado alla pagina AddContacts
     goToAddContacts: function(e) {
+      var a=new Array();
+      var input= document.getElementsByName('licence');
+      var c=0;
+      for (var i=0; i<input.length;i++){
+        if(input[i].checked){
+            var o=new Object({idu: input[i].value});
+            console.log(o);
+            if (input[i].classList.contains('admin')){
+              a[c++]=o;
+            }
+        }
+      }
+
+      console.log(a);
+      if(a[0]!=undefined){
+        localStorage.setItem("responsabili", JSON.stringify(a));
+      }
+      else{
+        localStorage.removeItem("responsabili");
+      }
+
+      localStorage.setItem("titolo", document.getElementById("nomeBacheca").value);
       Backbone.history.navigate("addContacts/"+this.id+"/new", {
         trigger: true
       });

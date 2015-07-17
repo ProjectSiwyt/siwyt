@@ -21,8 +21,6 @@ define(function(require) {
       this.template = Utils.templates.structureAddContacts;
       this.utente = new Utente();
       this.utente.on("listContacts",this.appendContacts, this);
-      //L'id dell'utente è statico ci andrebbe invece l'id dell'utente loggato
-      this.utente.listContacts(localStorage.getItem("idu"));
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -41,13 +39,39 @@ define(function(require) {
     events: {
       "tap #submitAddContacts": "goToPage"
     },
-
+    loadData: function(){
+        this.utente.listContacts(localStorage.getItem("idu"));
+    },
     appendContacts: function(result){
       console.log(result);
-      var b= new Utenti();
-      b.add(result);
+      var b = new Utenti();
+      var users= localStorage.getItem("utenti");
+      
+      if (users!= null){
+          var array=new Array();
+          var c=0;
+          var a=JSON.parse(users);
+        
+          var tr=false;
+          for (var i=0; i<result.length;i++){
+            tr=false
+            for (var j=0; j<a.length;j++){
+                if (result[i]==a[j]){
+                  tr=true;
+                }
+            }
+            if (!tr){
+              b.add(a[j]);
+              array[c++]=a[j];
+            }
+          }
+          this.addMembers=array;
+      }
+      else{
+        b.add(result);
+        this.addMembers=result;
+      } 
       console.log(b);
-      this.addMembers=result;
       this.subView = (new ShowListAddContacts({collection: b})).render().el;
       console.log(this.subView);
         //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
@@ -64,14 +88,18 @@ define(function(require) {
     //torna alla pagina da cui si proviene
     goToPage: function(e) {
       var c=new Utenti();
-      for (var i=0; i<this.addMembers.length;i++){
-        if (document.getElementById(""+this.addMembers[i].id).classList.contains("fa-user-times")){
-            c.add(this.addMembers[i]);
+      console.log(this.addMembers);
+      if (this.addMembers[0]!=undefined){
+        for (var i=0; i<this.addMembers.length;i++){
+          if (document.getElementById(""+this.addMembers[i].id).classList.contains("fa-user-times")){
+              c.add(this.addMembers[i]);
+          }
         }
       }
       console.log(c);
-      localStorage.setItem("utenti", JSON.stringify(c));
-      alert("aggiornare membri Bacheca");
+      if(c.length!=0){
+        localStorage.setItem("utenti", JSON.stringify(c));
+      }
       if (this.returnpage=="noticeboardManagement"){
           Backbone.history.navigate("boardManagement/"+this.idb, {
           trigger: true

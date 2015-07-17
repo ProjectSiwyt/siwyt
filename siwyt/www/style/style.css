@@ -134,8 +134,10 @@ body {
     top: -.1em;
     border: 1px solid #bdb8b6;
     border-left-color: #f4f4f4;
+    background-color: #f4f4f4;
     border-top: 0; 
     color: #ed7800;
+    z-index: 1;
 }
 #menu{
     margin-bottom: -1px;
@@ -306,7 +308,7 @@ color: #F4F4F4;
 
 .trash {
     top: -.3em;
-    right: 2.5em;
+    right: -7em;
 }
 
 .errorReg {
@@ -348,12 +350,12 @@ color: #F4F4F4;
     top: 5px;
     right: 5px;
 }
-
+/*
 .popup {
     display: none;
     position: absolute;
 }
-
+*/
 .div {
     border-bottom: 1px solid #ddd;
     padding-bottom: 11px;
@@ -446,6 +448,9 @@ color: #F4F4F4;
 }
 .scroll-popup{
     height: 40%;
+}
+.on-btn{
+    bottom: 14em;
 }
 ::-webkit-input-placeholder { /* WebKit browsers */
     color:    #bdb8b6;

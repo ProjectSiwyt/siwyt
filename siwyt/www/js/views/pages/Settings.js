@@ -15,10 +15,13 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.appSettings;
       console.log("inzialize settings");
-      $("#navigation").attr("style","display:none");
-      $("#settings_menu").attr("style","display:none");
-      document.getElementById("title").innerHTML="Settins";
-      $("#back").attr("style","display:block");
+      document.getElementById("navigation").classList.add('hide');
+      document.getElementById("settingsMenu").classList.add('hide');
+      document.getElementById("title").innerHTML="Settings";
+      var back=document.getElementById("back");
+      if (back.classList.contains('hide')){
+        back.classList.remove('hide');
+      }
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -52,7 +55,8 @@ define(function(require) {
     },
 
     logOut: function(e){
-      localStorage.removeItem("idu");
+      //localStorage.removeItem("idu");
+      localStorage.clear();
       Backbone.history.navigate("login",{
         trigger: true
       });

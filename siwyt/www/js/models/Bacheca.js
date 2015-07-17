@@ -21,7 +21,7 @@ define(function(require) {
 
     	
     	//passandogli un'array r contenente gli idb restituisce un'array contenente tutti i dati della bacheca con id idb
-    	listaDatiBacheche: function(r){
+    	listaDatiBachecheUtente: function(r){
     		var a = new Array();
     		var THIS = this;
     		
@@ -37,42 +37,106 @@ define(function(require) {
 							}
 						}
 					}
-					THIS.trigger("eventolistabacheche", a);	
+					console.log(a);
+					THIS.trigger("bachecheutente", a);	
 				})
 				.fail(function(error2) {
 					console.log("error ", error2);
 				})
     	},
-
-	    listaDatiBacheche2: function(r){
-			var THIS = this;
-			var a = new Array();
-			var c=0;
-			for(var i=0; i<r.length; i++){
-				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[i].idb+"'" })
-					.done(function(res) {
-						console.log("res ", res);
-						a[c] = res;
-						c++;
-						if(c == r.length){
-							THIS.trigger("eventolistabacheche", a);	
-						}
-					})
-					.fail(function(error) {
-						THIS.trigger("error", error);
-					})
-			}
-		},
-
-    	//funzione che ritorna un array contenente gli idb dell'utente con id idu
+    
+		//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK
-		listaIdBacheche: function(){
+		listaIdBachecheUtente: function(){
+		console.log("idutente");
 		var THIS = this;
 		
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
 					console.log("res ", res);
-					THIS.listaDatiBacheche(res);
+					THIS.listaDatiBachecheUtente(res);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
+		//passandogli un'array r contenente gli idb restituisce un'array contenente tutti i dati della bacheca con id idb
+    	listaDatiBachecheResponsabile: function(r){
+    		var a = new Array();
+    		var THIS = this;
+    		
+    		console.log(r);
+    		
+    		BaasBox.loadCollection("Bacheca")
+				.done(function(res) {
+					for(var i=0; i<r.length; i++){
+						for(var j=0; j<res.length; j++){
+							if(r[i].idb == res[j].id){
+								a[i] = res[j];
+								break;
+							}
+						}
+					}
+					THIS.trigger("bachecheresponsabile", a);	
+				})
+				.fail(function(error2) {
+					console.log("error ", error2);
+				})
+    	},
+    
+		//funzione che ritorna un array contenente gli idb dell'utente con id idu
+		//OK
+		listaIdBachecheResponsabile: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.listaDatiBachecheResponsabile(res);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
+		//passandogli un'array r contenente gli idb restituisce un'array contenente tutti i dati della bacheca con id idb
+    	listaDatiBachecheAmministratore: function(r){
+    		var a = new Array();
+    		var THIS = this;
+    		
+    		console.log(r);
+    		
+    		BaasBox.loadCollection("Bacheca")
+				.done(function(res) {
+					console.log(r.length);
+					for(var i=0; i<r.length; i++){
+						console.log(i);
+						for(var j=0; j<res.length; j++){
+							if(r[i].idb == res[j].id){
+								a[i] = res[j];
+								console.log(i);	
+								//break;
+							}
+							//console.log(j);
+						}
+					}
+					console.log("BACHECHE AMMINISTRATORE")
+					console.log(a);
+					THIS.trigger("bachecheamministratore", a);	
+				})
+				.fail(function(error2) {
+					console.log("error ", error2);
+				})
+    	},
+    
+		//funzione che ritorna un array contenente gli idb dell'utente con id idu
+		//OK
+		listaIdBachecheAmministratore: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.listaDatiBachecheAmministratore(res);
 				})
 				.fail(function(error) {
 					console.log("errorlistabacheche ", error);
@@ -83,10 +147,11 @@ define(function(require) {
 		//CONTROLLARE	
 		listaIdMembriDiUnaBacheca: function(idb){
 		var THIS = this;
-		
+			
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idb='"+idb+"'" })
 				.done(function(res) {
 					console.log("res ", res);
+
 
 					THIS.listaDatiMembriDiUnaBacheca(res);
 				})
@@ -122,29 +187,7 @@ define(function(require) {
 				})
 		},
 
-		//si può provae come abbiamo fatto per salvaUtenti
-		//PROVARE PER NICHOLAS
-		listaDatiMembriDiUnaBacheca2:  function(r){
-		var THIS = this;
-			var a = new Array();
-			var c=0;
-			for(var i=0; i<r.length; i++){
-				BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[i].idu+"'" })
-				.done(function(res) {
-					console.log("res ", res);
-					a[c] = res;
-					c++;
-					if(c == r.length){
-						console.log(a);
-						THIS.trigger("eventolistamembri ", a);	
-					}
-				})
-				.fail(function(error) {
-				//console.log("erroridmembri", error);
-					THIS.trigger("errorEventolistamembri", error);
-				})
-			}
-		},
+		
 
 		//FUNZIONA MA HO SCRITTO IO PER PROVARE PER NICHOLAS
 		salvaBacheca: function(nome){
@@ -202,7 +245,7 @@ define(function(require) {
 				BaasBox.save(post, "Bacheca_Utente")
 					.done(function(res) {
 						c++;
-						if(c == r.length-1){
+						if(c == r.length){
 							THIS.trigger("salvataggioUtenti", true);
 						}
 					})
@@ -281,6 +324,7 @@ define(function(require) {
 			post.idb = idb;     
 			BaasBox.save(post, "Amministratore")
 				.done(function(res) {
+					console.log(res);
 					THIS.trigger("salvataggioAmministratore", true);
 				})
 				.fail(function(error) {
@@ -294,7 +338,7 @@ define(function(require) {
    			var post = new Object();
 			post.idu = idu;
 			post.idb = idb;     
-			BaasBox.save(post, "Amministratore")
+			BaasBox.save(post, "Responsabile")
 				.done(function(res) {
 					THIS.trigger("salvataggioResponsabili", true);
 				})
@@ -305,18 +349,21 @@ define(function(require) {
 
    		//aggiunge un array di 'responsabili' con id idu alla bacheca con id 'idb'
    		salvaResponsabili: function(r, idb){
+   			console.log("r"+r);
 		 	var THIS=this;
 	  		var c=0;
+	  		console.log(r);
 	  		for(var i=0; i<r.length; i++){
 				var post = new Object();
-				post.idu = r[i];
-				post.idb = idb;     
+				post.idu = r[i].idu;
+				post.idb = idb;   
+				console.log(post);  
 				BaasBox.save(post, "Responsabile")
 					.done(function(res) {
 						c++;
-						if(c == r.length-1){
+						if(c == r.length){
 							console.log(r);
-							//THIS.trigger("salvataggioResponsabili", true);
+							THIS.trigger("salvataggioResponsabili", true);
 						}
 					})
 					.fail(function(error) {

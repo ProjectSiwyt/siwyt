@@ -97,6 +97,7 @@ define(function(require) {
       console.log("ciao2");
       var page= new NoticeboardManagement(idb);
       this.changePage(page);
+      page.caricaMembri();
     },
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");
@@ -124,7 +125,7 @@ define(function(require) {
     create: function(){
       var page = new CreateBacheca();
       this.changePage(page);
-      page.caricaMembri();
+      page.caricaDati();
     },
 
     // load the structure view
@@ -151,6 +152,7 @@ define(function(require) {
       
       var page = new AddContacts(idpage, idb);
       this.changePage(page);
+      page.loadData();
     }
     /*
     newBacheca: function(nome){

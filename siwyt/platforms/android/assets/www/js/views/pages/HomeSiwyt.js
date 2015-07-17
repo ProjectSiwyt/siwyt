@@ -29,8 +29,12 @@ define(function(require) {
       spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"
       this.bacheca=new Bacheca();
-      this.bacheca.on("eventolistabacheche", this.appendNoticeboards,this);
-      this.bacheca.listaIdBacheche();
+      this.bacheca.on("bachecheutente", this.appendNoticeboardsUsers,this);
+      this.bacheca.on("bachecheamministratore", this.appendNoticeboardsManager,this);
+      this.bacheca.on("bachecheresponsabile", this.appendNoticeboardsAdmins,this);
+      this.bacheca.listaIdBachecheAmministratore();
+
+
     },
 
     id: "homeSiwyt",
@@ -43,14 +47,37 @@ define(function(require) {
       "swipeLeft": "goToProfile",
       "swipeRight": "goToContacts"
     },
-    appendNoticeboards: function(result){
-    //console.log(result);
+    appendNoticeboardsUsers: function(result){
+      console.log(result);
+      var b= new Bacheche();
+      console.log(b);
+      b.add(result);
+      console.log(b);
+      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      console.log(this.subView);
+      document.getElementById("noticeboardsList").appendChild(this.subView);
+    },
+     appendNoticeboardsAdmins: function(result){
+      console.log("noticeboardadmin");
+      console.log(result);
       var b= new Bacheche();
       b.add(result);
       console.log(b);
       this.subView = (new ShowListNoticeboards({collection: b})).render().el;
       console.log(this.subView);
       document.getElementById("noticeboardsList").appendChild(this.subView);
+      this.bacheca.listaIdBachecheUtente();
+      
+    },
+     appendNoticeboardsManager: function(result){
+      console.log(result);
+      var b= new Bacheche();
+      b.add(result);
+      console.log(b);
+      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      console.log(this.subView);
+      document.getElementById("noticeboardsList").appendChild(this.subView);
+      this.bacheca.listaIdBachecheResponsabile();
     },
     render: function() {
       spinner.stop();

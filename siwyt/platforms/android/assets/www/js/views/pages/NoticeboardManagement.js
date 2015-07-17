@@ -40,7 +40,7 @@ define(function(require) {
 
       this.bacheca.on("datiBacheca", this.setTitle, this);
       this.bacheca.noticeboardData(this.idb);
-      this.bacheca.idAmministratore(this.idb);
+      //this.bacheca.idAmministratore(this.idb);
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -55,6 +55,35 @@ define(function(require) {
 
     id: "noticeboardManagement",
     className: "i-g page",
+    caricaMembri: function(){
+
+      console.log("caricaMembri");
+        var o1=new Object();
+        o1.nome=localStorage.getItem('nameLogged');
+        o1.cognome=localStorage.getItem('surnameLogged');
+        var a = new Array();
+        a[0]=o1;
+        var b=new Utenti();
+        b.add(a);
+
+        console.log(b);
+        this.subview1=(new ShowListMembers({collection: b})).render().el;
+        document.getElementById("membri").appendChild(this.subview1);
+        var responsabili = localStorage.getItem('responsabili');
+        if (responsabili!=null){
+          var r= new Utenti();
+          r.add(responsabili);
+          this.subview2=(new ShowListAdmins({collection: b})).render().el;
+          document.getElementById("membri").appendChild(this.subview2);
+          this.appendUsers();
+          
+        }
+        else{
+           this.bacheca.listaIdResponsabiliDiUnaBacheca(this.idb);   
+        }
+
+       
+    },
     setTitle: function(res){
         document.getElementById("titleBacheca").value=res[0].nome;
     },
@@ -80,7 +109,17 @@ define(function(require) {
       this.subView = (new ShowListAdmins({collection: b})).render().el;
       console.log(this.subView);
       document.getElementById("membri").appendChild(this.subView);
-      this.bacheca.listaIdMembriDiUnaBacheca(this.idb);
+      var users = localStorage.getItem('utenti');
+      if (users!=null){
+            var u =new Utenti();
+            u.add(JSON.parse(users));
+            console.log(u);
+            this.subview3=(new ShowListUsers({collection: u})).render().el;
+            document.getElementById("membri").appendChild(this.subview3);
+      }
+      else{
+        this.bacheca.listaIdMembriDiUnaBacheca(this.idb);
+      }
     },
     appendUsers: function(result){
     console.log(result);
@@ -102,6 +141,8 @@ define(function(require) {
     },
     update: function(e){
         this.bacheca.modificaTitolo(this.idb, document.getElementById("titleBacheca").value);        
+        localStorage.removeItem("responsabili");
+        localStorage.removeItem("utenti");
     },
     render: function() {
       $(this.el).html(this.template);

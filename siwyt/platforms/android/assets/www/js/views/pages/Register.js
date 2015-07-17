@@ -18,10 +18,13 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.register;
       console.log("initialize register");
-      document.getElementById("navigation").style.display="none";
+      document.getElementById("navigation").classList.add('hide');
       document.getElementById("title").innerHTML="";
-      $("#header").removeAttr("style");
-      document.getElementById("settingsMenu").style.display="none";
+      var header=doucment.getElementById('header');
+      if (header.classList.contains('hide')){
+          header.classList.remove('hide');
+      }
+      document.getElementById("settingsMenu").classList.add('hide');
 
       this.utente= new Utente();
       this.utente.on("eventoRegister", this.sendMail, this);

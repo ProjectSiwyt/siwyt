@@ -27,7 +27,7 @@ define(function(require) {
 				.done(function(res) {
 					console.log("res ", res);
 
-					//THIS.trigger("eventoElencopostits ", res);
+					THIS.trigger("elencopostits ", res);
 				})
 				.fail(function(error) {
 					console.log("errorElencopostits ", error);

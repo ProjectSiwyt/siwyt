@@ -19,8 +19,8 @@ define(function(require) {
       console.log("inizalize login");
       console.log(this.sendemail);
       $(".errorReg").removeAttr("style");
-      document.getElementById("navigation").style.display="none";
-      document.getElementById("header").style.display="none";
+      document.getElementById("header").classList.add('hide');
+      document.getElementById("navigation").classList.add('hide');
       this.utente = new Utente();
       this.utente.on("resultLogin",this.login, this);
       this.utente.on("mailSent", this.showMessageMail, this );
