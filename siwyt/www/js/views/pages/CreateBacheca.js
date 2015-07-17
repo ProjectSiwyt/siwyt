@@ -213,7 +213,9 @@ define(function(require) {
       var a=new Array();
       var input= document.getElementsByName('licence');
       var c=0;
+      var conta=0;
       for (var i=0; i<input.length;i++){
+        conta++;
         if(input[i].checked){
             var o=new Object({idu: input[i].value});
             console.log(o);
@@ -222,9 +224,14 @@ define(function(require) {
             }
         }
       }
+      if (conta==0){
+        localStorage.removeItem("responsabili");
+        localStorage.removeItem("utenti");
+      }
+
 
       console.log(a);
-      if(a[0]!=undefined){
+      if(a[0]!=undefined && a.length!=0){
         localStorage.setItem("responsabili", JSON.stringify(a));
       }
       else{
