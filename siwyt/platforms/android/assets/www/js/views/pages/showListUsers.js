@@ -27,11 +27,12 @@ define(function(require) {
     },
 
     id: "showlistusers",
-    className: "i-g page",
+    //className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap .rigamembro": "gestioneOpenClose"
+      "tap .rigamembro": "gestioneOpenClose",
+      "tap .removeUser": "rimuovi"
       //"swipeLeft": "goToContacts"
 
     },
@@ -45,6 +46,11 @@ define(function(require) {
       console.log("OPENCLOSE");
         document.getElementById("toggle"+e.currentTarget.id).classList.toggle('close-member');
         document.getElementById("toggle"+e.currentTarget.id).classList.toggle('open-member');
+    },
+    rimuovi: function(e){
+      var el=document.getElementById(""+e.currentTarget.id).getAttribute("data-id");
+      console.log(el);
+      $("#toggle"+el).remove();
     },
     goToBacheca: function(e){
       console.log(this.model);
