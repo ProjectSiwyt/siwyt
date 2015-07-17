@@ -208,6 +208,7 @@ color: #F4F4F4;
 }
 .table-view-cell{
     border-color: #bdb8b6;
+    list-style-type: none;
 }
 .table-view-cell:active,.table-view-cell>a:not(.btn):active{
     background-color: #f4f4f4;
@@ -220,7 +221,13 @@ color: #F4F4F4;
 .activable:active>.navigate-right:after{
     color: #f4f4f4;
 }
-
+#showlistmembers > ul{
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+.table-view-cell:last-child {
+  border-bottom: 1px solid #bdb8b6;
+}
 .border-nav {
     border-bottom: 3px solid #bdb8b6;
 }
@@ -251,7 +258,10 @@ color: #F4F4F4;
 .icon-bar>div {
     margin-top: -2px;
 }
-
+.c-icon{
+    font-size: .9em;
+    margin-top: -6px;
+}
 .btn-new {
     position: absolute;
     bottom: 7em;
