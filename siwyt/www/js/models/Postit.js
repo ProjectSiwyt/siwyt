@@ -72,10 +72,10 @@ define(function(require) {
 
 			BaasBox.save(post, "Postit")
 				.done(function(res) {
-					THIS.trigger("eventoAggiungiPostit", true);
+					THIS.trigger("eventoAggiungiPostit", res);
 				})
 				.fail(function(error) {
-					THIS.trigger("errorAggiungiPostit", false);
+					THIS.trigger("errorAggiungiPostit", error);
 				})
 		},
 
