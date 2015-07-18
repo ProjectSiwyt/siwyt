@@ -152,6 +152,7 @@ define(function(require) {
     showNoticeboard: function(idb){
         var page = new BachecaHome(idb);
         this.changePage(page);
+        page.caricaDati();
 
     },
 

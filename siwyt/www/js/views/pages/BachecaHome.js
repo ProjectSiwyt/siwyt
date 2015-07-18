@@ -41,14 +41,13 @@ define(function(require) {
             //Mi metto in ascolto della funzione che si occupa del salvataggio di nuovi postit
             this.postits.on("eventoAggiungiPostit", this.createPostit, this);
             //chiama la funzion che calcola i dati che restituisce i dati della bacheca con id idb
-            this.bacheca.noticeboardData(idb);
+            
 
         },
 
         id: "bachecahome",
         className: "i-g page",
         postit: 1,
-        drag_start_border: "",
         dragmode: 0,
         drag_start_pos : {
                 x: 0,
@@ -79,6 +78,9 @@ define(function(require) {
             "touchend .fa-arrows": "endDrag",
             "tap .overlay": "hideElements"
 
+        },
+        caricaDati:function(){
+            this.bacheca.noticeboardData(this.idb);
         },
         goBack: function() {
             window.history.back();
@@ -144,19 +146,22 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("nameLogged"), 80, 123, (this.postit * 10), (this.postit * 10) + 50);
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", (this.postit * 10) + 50)+"px";
             //Gestione Salvataggio postit
 
         },
         //Funzione che si occupa della creazione di nuovi postit
         createPostit: function(res) {
+            console.log(res);
             var boardContent = document.getElementById("boardContent");
             //Creazione postit
             //Contenitore postit
             var postit = document.createElement("div");
-            postit.id = res.idp;
-            postit.style.left = res.x + "px";
-            postit.style.top = res.y + "px";
+            postit.id = res.id;
+            postit.style.left = res.x;
+            postit.style.top = res.y;
+            postit.style.heigth=res.altezza;
+            postit.style.width=res.larghezza;
             //Elementi del corpo del postit            
             var h3 = document.createElement("h3");
             var autore = document.createElement("div");
@@ -166,10 +171,10 @@ define(function(require) {
             h3.classList.add("postit-title");
             h3.innerHTML = res.contenuto;
             autore.classList.add("pull-left", "caption");
-            autore.innerHTML = res.idu;
+            autore.innerHTML = localStorage.getItem('nameLogged');
             data.classList.add("pull-right", "caption");
             data.innerHTML = res.data;
-            link.id = res.idp + "Link";
+            link.id = res.id + "Link";
             link.classList.add("popup");
             pencil.classList.add("fa", "fa-pencil");
             link.appendChild(pencil);
@@ -182,10 +187,10 @@ define(function(require) {
             // Fine creazione postit
             // Creazione dialog per il rename
             var layerDialog = document.createElement("div");
-            layerDialog.id = res.idp + "RenameScreen";
+            layerDialog.id = res.id + "RenameScreen";
             layerDialog.classList.add("popup-screen", "overlay", "in", "hide");
             var dialog = document.createElement("div");
-            dialog.id = res.idp + "RenamePopup";
+            dialog.id = res.id + "RenamePopup";
             dialog.classList.add("postit-popup", "popup-container", "hide");
             var textarea = document.createElement("textarea");
             var submit = document.createElement("input");
@@ -198,10 +203,10 @@ define(function(require) {
             boardContent.appendChild(dialog);
             // Creazione popup menu
             var layerPopup = document.createElement("div");
-            layerPopup.id = res.idp + "LinkScreen";
+            layerPopup.id = res.id + "LinkScreen";
             layerPopup.classList.add("popup-screen", "overlay", "in", "hide");
             var popup = document.createElement("div");
-            popup.id = res.idp + "LinkPopup";
+            popup.id = res.id + "LinkPopup";
             popup.classList.add("postit-popup", "popup-container", "hide");
             //Menu del popup
             var ul = document.createElement("ul");
@@ -268,7 +273,7 @@ define(function(require) {
             popup.appendChild(ul);
             boardContent.appendChild(layerPopup);
             boardContent.appendChild(popup);
-            this.showDialog(res.idp);
+            this.showDialog(res.id);
         },
         //Funzione che gestisce la visibilità del dialog di rinomina postit
         showDialog: function(idp) {
@@ -282,9 +287,11 @@ define(function(require) {
         rename: function(e) {
             console.log("rename");
             var obj = e.currentTarget.parentNode;
+            debugger;
             var postit = document.getElementById(obj.id.replace("RenamePopup", ""));
             if (obj.firstChild.value != "") {
                 postit.firstChild.innerHTML = obj.firstChild.value;
+                this.postits.saveContenuto(obj.id.replace("RenamePopup", ""),obj.firstChild.value);
             }
             this.showDialog(obj.id.replace("RenamePopup", ""));
             //this.postits.aggiungiPostit(this.idb, postit.firstChild.innerHTML, localStorage.getItem("idu"), "", "", x, y);            
@@ -334,12 +341,6 @@ define(function(require) {
                 w: drag_object.offsetWidth,
                 h: drag_object.offsetHeight
             };
-            //bordo iniziale dell'oggetto     
-            //initial object border
-            this.drag_start_border = drag_object.style.border;
-            drag_object.style.border = "2px dashed black";
-            console.log(this.drag_start_tap_pos.x - this.drag_start_pos.x);
-            console.log(this.drag_start_size.w - 10);
             if ((this.drag_start_tap_pos.x - this.drag_start_pos.x >= this.drag_start_size.w - 10) && (this.drag_start_tap_pos.y - this.drag_start_pos.y >= this.drag_start_size.h - 10)) {
                 //attiviamo la modalità "ridimensiona"
                 //activate the resize mode
@@ -403,9 +404,8 @@ define(function(require) {
             console.log("end");
             var drag_object = e.currentTarget.parentNode;
             drag_object.style.cursor = "auto";
-            drag_object.style.border = this.drag_start_border;
             drag_object.removeChild(drag_object.lastChild);
-
+            this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
         },
         getTapPos: function(e) {
             if (e.originalEvent.touches[0].pageX || e.originalEvent.touches[0].pageY) {
