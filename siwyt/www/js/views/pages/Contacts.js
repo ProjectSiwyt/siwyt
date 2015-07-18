@@ -4,8 +4,12 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
   var Utenti = require("collections/Utenti");
+  var Bacheche = require("collections/Bacheche");
+  var Bacheca = require("models/Bacheca");
   var Contatto = require("models/Contatto");
   var ShowListContacts = require("views/pages/ShowListContacts");
+  var ShowListNoticeboardContacts = require("views/pages/ShowListNoticeboardContacts");
+  var $ = require("jquery");
 
 
   var Contacts = Utils.Page.extend({
@@ -13,6 +17,7 @@ define(function(require) {
     constructorName: "Contacts",
     model: Utente,
     model: Contatto,
+   
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
@@ -20,14 +25,27 @@ define(function(require) {
       console.log("initialize template contacts");
       /*document.getElementById("navigation").style.display="inlne-block";
       document.getElementById("header").style.display="inherit";*/
-      $("#navigation , #header  , #settingsMenu").removeAttr("style");
- 
+      var navigation= document.getElementById("navigation");
+      var header= document.getElementById("header");
+      if (header.classList.contains('hide')){
+        header.classList.remove('hide');
+      }
+      if (navigation.classList.contains('hide')){
+        navigation.classList.remove('hide');
+      };
+      document.getElementById("back").classList.add('hide');
+      spinner.spin(); 
       document.getElementById("title").innerHTML="Contacts";
       document.getElementById("back").style.display="none";
       this.contatto = new Contatto();
       this.utente = new Utente();
+      this.bacheca = new Bacheca();
+      this.bacheca.on("bachecheamministratore", this.elencoBacheche ,this);
+      this.utente.on("elencoUtenti", this.search, this);      
+
       this.utente.on("listContacts", this.showContacts, this);
-      this.utente.listContacts(localStorage.getItem("idu"));
+
+      
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -46,7 +64,11 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "swipeLeft": "goToHome",
-      "tap .removeContact": "removeContact"
+      "tap .removeContact": "removeContact",
+      "tap .addToBoard": "showBoard",
+      "tap .overlay": "chiudiPopup"
+      /*"change #search": "startSearch"*/
+      //"tap .rigabacheca": "aggiungiUtente"
       /*"tap .add_to_board": "add_to_board",
       "tap .remove_contact": "remove_contact"*/
     },
@@ -57,10 +79,12 @@ define(function(require) {
       c.add(result);
       /*console.log(c);
       console.log("contattiiiii: "+c);*/
-      this.subView = (new ShowListContacts({collection: c})).render().el;
+      this.subViewContacts = (new ShowListContacts({collection: c})).render().el;
       /*console.log("subview " +this.subView);*/
-        
-      document.getElementById("contactsContent").appendChild(this.subView);
+       console.log(this.subViewContacts); 
+      document.getElementById("contactsContent").appendChild(this.subViewContacts);
+      document.getElementById("search").addEventListener("keyup", this.startSearch(document.getElementById("search").value));
+
     },
 
     render: function() {
@@ -70,20 +94,81 @@ define(function(require) {
     },
 
     removeContact: function(e){
-      var name = e.currentTarget.parentNode.id
+     /* var name = e.currentTarget.parentNode.id*/
       console.log(e.currentTarget.parentNode.id);
       var r = confirm("Are you sure you want to remove this contact");
-      if (r)
-        this.contatto.removeContact(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
+      if (r){
+        this.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
+        //this.utente.listContacts(localStorage.getItem("idu"));
+        this.render();
+      }
+      
+      
     },
 
-    
+    startQuery: function(e){
+      this.bacheca.listaIdBachecheAmministratore();
+      this.utente.listContacts(localStorage.getItem("idu"));
+      this.startListenerSearch();
+    },
+
+    chiudiPopup: function(e){
+        idu = sessionStorage.getItem("idUserToAdd");
+        var popScreen = document.getElementById(""+idu+"LinkScreen");
+        var popPopup = document.getElementById(""+idu+"LinkPopup");
+        popScreen.classList.toggle('hide');
+        popPopup.classList.toggle('hide');
+    },
+   /* elencoUtenti: function(e){
+      this.utente.elencoUtenti();
+    },*/
+
+    //Creo una subview con l'elnco di bacheche d
+    elencoBacheche: function(result){
+      console.log(result);
+      var c = new Bacheche();
+
+      c.add(result);
+      console.log(c);
+      this.subViewBoards = (new ShowListNoticeboardContacts({collection: c})).render().el;
+    },
+
+    aggiungiUtente: function(e){
+      var idu = sessionStorage.getItem("idUserToAdd");
+      var idb = e.currentTarget.id;
+      this.bacheca.salvaUtenti(idu, idb);
+    },
+
+    showBoard: function(e){
+      //$("#subviewContacts").remove();
+      console.log(this.subViewBoards);
+      document.getElementById(e.currentTarget.parentNode.id+"LinkPopup").appendChild(this.subViewBoards);
+      var popScreen = document.getElementById(""+e.currentTarget.parentNode.id+"LinkScreen");
+      var popPopup = document.getElementById(""+e.currentTarget.parentNode.id+"LinkPopup");
+      popScreen.classList.toggle('hide');
+      popPopup.classList.toggle('hide');
+      sessionStorage.setItem("idUserToAdd", e.currentTarget.parentNode.id );
+    },
+
 
     goToHome: function(e) {
       Backbone.history.navigate("homeSiwyt", {
         trigger: true
       });
-    }
+    },
+
+    startListenerSearch: function(e){
+      console.log(document.getElementById("search"));
+      document.getElementById("search").addEventListener("keyup", this.startSearch(document.getElementById("search").value));
+      
+    },
+
+    startSearch:function(){
+      str = document.getElementById("search").value;
+      if( str.length > 4)
+      console.log(str);
+    } 
+
 
   });
 
