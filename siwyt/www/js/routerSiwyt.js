@@ -40,7 +40,7 @@ define(function(require) {
       "newBacheca/:nome": "newBacheca",
       "login":"login",
       "register":"register",
-      "boardManagement/:idb":"boardManagement"
+      "boardManagement/:idb/:idpage":"boardManagement"
     },
 
     BAASBOX_URL : "http://localhost:9000",
@@ -93,11 +93,18 @@ define(function(require) {
       var page= new Register();
       this.changePage(page);
     },
-    boardManagement: function(idb){
+    boardManagement: function(idb,idpage){
       console.log("ciao2");
       var page= new NoticeboardManagement(idb);
       this.changePage(page);
-      page.caricaMembri();
+      if(idpage=='bachecahome'){
+        page.caricaDati();
+        page.caricaMembriDaHome();  
+      }
+      else{
+        page.caricaMembriDaContacts();
+      }
+      
     },
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");

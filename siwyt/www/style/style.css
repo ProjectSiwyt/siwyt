@@ -203,6 +203,7 @@ color: #F4F4F4;
 
 .table-view {
     border-top: 0;
+    border-bottom: 0;
     border-color: #bdb8b6;
     background-color: #f4f4f4;
 }

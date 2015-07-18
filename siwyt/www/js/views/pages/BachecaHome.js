@@ -74,6 +74,7 @@ define(function(require) {
         //inserisce il titolo della bacheca nella pagina
         appendTitle: function(result) {
             console.log(result[0].nome);
+            this.titolo=result[0].nome;
             document.getElementById("titleBacheca").innerHTML = result[0].nome;
 
             //chiamo la funzione per prendere i postit
@@ -202,8 +203,11 @@ define(function(require) {
             alert("goToComments");
         },
         goToBoardManagement: function(e) {
+            localStorage.setItem("titolo", ""+this.titolo);
             console.log(this.idb);
-            Backbone.history.navigate("boardManagement/" + this.idb, {
+            localStorage.removeItem('utenti');
+            localStorage.removeItem('responsabili');
+            Backbone.history.navigate("boardManagement/" + this.idb+"/"+this.id, {
                 trigger: true
             });
         }
