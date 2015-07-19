@@ -20,7 +20,7 @@ define(function(require) {
       console.log("initialize register");
       document.getElementById("navigation").classList.add('hide');
       document.getElementById("title").innerHTML="";
-      var header=doucment.getElementById('header');
+      var header=document.getElementById('header');
       if (header.classList.contains('hide')){
           header.classList.remove('hide');
       }
