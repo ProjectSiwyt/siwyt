@@ -159,6 +159,9 @@ body {
     background-color: #ED7800;
 color: #F4F4F4;
 }
+#search{
+    z-index: 1100;
+}
 .title {
     font-size: 2.5em;
     color: #f4f4f4;
@@ -362,6 +365,9 @@ color: #F4F4F4;
     top: 5px;
     right: 5px;
 }
+.second-icon-search{
+    right: 5px;
+}
 /*
 .popup {
     display: none;
@@ -412,6 +418,10 @@ color: #F4F4F4;
     width: 35%;
     font-size: 1.1em;
 }
+.postit-popup-search{
+    width: 98%;
+    font-size: 1em;
+}
 .postit-popup input, .postit-popup select{
     margin: 0;
 }
@@ -445,20 +455,39 @@ color: #F4F4F4;
   opacity: 0;
   z-index: 1099;
 }
+
+.search{
+    top:3em;
+}
+
 .overlay{
-      background-color: #f9f9f9;
-  border-color: #bbb;
-  color: #333;
-  text-shadow: 0 1px 0 #f3f3f3
+    background-color: #bdb8b6;
+    border-color: #bbb;
+    color: #333;
+    text-shadow: 0 1px 0 #f3f3f3
+}
+
+.overlaySearch{
+    background-color: #bdb8b6;
+    border-color: #bbb;
+    color: #333;
+    text-shadow: 0 1px 0 #f3f3f3
 }
 .popup-container {
+    z-index: 1100;
+    display: inline-block;
+    position: absolute;
+    padding: 0;
+    outline: 0;
+    top: 25%;
+    right: 35%;
+}
+.popup-container-search{
   z-index: 1100;
   display: inline-block;
   position: absolute;
   padding: 0;
   outline: 0;
-    top: 25%;
-  right: 35%;
 }
 .popup-container > .table-view > .table-view-cell{
     padding: 11px 15px 11px 15px;

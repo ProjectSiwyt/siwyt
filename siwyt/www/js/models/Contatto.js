@@ -19,10 +19,12 @@ define(function(require) {
 
 			BaasBox.save(post, "Contatto")
 				.done(function(res) {
-					//THIS.trigger("eventoLukzen", res);
+					console.log("contatto aggiunto");
+					THIS.trigger("resultAggiungiContatto", post.id2);
 				})
 				.fail(function(error) {
-					THIS.trigger("error", true);
+					console.log("error aggiungiContatto");
+					THIS.trigger("resultAggiungiContatto", false);
 				})
 
 		},
@@ -40,10 +42,10 @@ define(function(require) {
 					for(var i=0; i<res.length; i++){
 						
 						if(res[i].id1 == id1 && res[i].id2 == id2 || res[i].id1 == id2 && res[i].id2 == id1){
-							
+					
 							BaasBox.deleteObject(res[i].id, "Contatto")
 								.done(function(res) {
-									THIS.trigger("contattoCancellato", true);
+									THIS.trigger("contattoCancellato", id1);
 									console.log("r ", res);
 
 								})
