@@ -1,11 +1,20 @@
-<div class="i-12">
+
+<div class="i-12" id="searchContactsContent" >
     <input id="search" type="search" name="contactSearch" placeholder="Search">
     <div class="absolute search-delete"><i class="fa fa-times-circle-o fa-2x"></i></div>
+	<div id="searchPopup" class="postit-popup-search popup-container-search hide">
+
 </div>
+</div>
+
+<div class="popup-screen overlay in hide" id="LinkScreen"></div>
 <div class="i-12">
     Your contacts:
 </div>
-<div id="contactsContent" class="i-12 scroll"></div>
+<div id="contactsContent" class="i-12 scroll">
+	
+</div>
+<div class="popup-screen overlaySearch search in hide" id="searchScreen"></div>
 <div class="i-12 btn-block btn-new center">
     <form>
         <input type="text" placeholder="Insert email to invite to Siwyt">
