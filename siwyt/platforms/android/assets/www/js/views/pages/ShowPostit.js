@@ -1,19 +1,18 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var Commento = require("models/Commento");
-  var Bacheche = require("collections/Bacheche");
+  var Postit = require("models/Postit");
   var Utils = require("utils");
 
-  var showListComments = Utils.Page.extend({
+  var showPostit = Utils.Page.extend({
 
-    constructorName: "showListComments",
+    constructorName: "showPosti",
 
-    model: Commento,
+    model: Postit,
 
     initialize: function() {
       // load the precompiled template
-      this.template = Utils.templates.contentListComments;
+      this.template = Utils.templates.contentPostit;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -26,7 +25,7 @@ define(function(require) {
     },
 
     //id: "showlistnoticeboards",
-    className: "i-g page",
+    className: "div i-12",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
@@ -46,6 +45,6 @@ define(function(require) {
     }
   });
 
-  return showListComments;
+  return showPostit;
 
 });

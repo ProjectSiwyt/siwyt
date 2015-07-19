@@ -29,6 +29,7 @@ define({
     register: "templates/register.html",
     login: "templates/login.html",
     profile: "templates/profile.html",
-    appSettings: "templates/appSettings.html"
+    appSettings: "templates/appSettings.html",
+    contentPostit: "templates/content_postit.html"
     
 });

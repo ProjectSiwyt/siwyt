@@ -18,7 +18,16 @@ define(function(require) {
 		},
 		constructorName: "Postit",
 
-
+		postitData: function(idp){
+    		var THIS=this;
+			BaasBox.loadCollectionWithParams("Postit", {where: "id='"+idp+"'" })
+			 .done(function(res) {
+			 	THIS.trigger("datiPostit", res);
+			 })
+			 .fail(function(error) {
+			 	THIS.trigger("error",error);
+			 })
+		},
 		//restituisci i postit della bacheca con id uguale a quello passato come parametro
 		elencoPostitBacheca: function(idb){
 		var THIS = this;
@@ -184,14 +193,14 @@ define(function(require) {
 				})
    		},
    		 //restituisci il nome dell'autore del postit 
-        nomeaAutore: function(idu){ 
+        nomeAutore: function(idu){ 
         var THIS = this; 
          
             BaasBox.loadCollectionWithParams("Utente", {where: "id='"+idu+"'" }) 
                 .done(function(res) { 
                     console.log("res ", res); 
  
-                    //THIS.trigger("eventoNomeAutore ", res.nome); 
+                    THIS.trigger("datiAutore", res[0].nome+" "+res[0].cognome); 
                 }) 
                 .fail(function(error) { 
                     console.log("errorElencopostits ", error); 

@@ -1,15 +1,15 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var Bacheca = require("models/Bacheca");
+  var Commento = require("models/Commento");
   var Bacheche = require("collections/Bacheche");
   var Utils = require("utils");
 
-  var showListNoticeboards = Utils.Page.extend({
+  var showListComments = Utils.Page.extend({
 
-    constructorName: "showListNoticeboards",
+    constructorName: "showListComments",
 
-    model: Bacheca,
+    model: Commento,
 
     initialize: function() {
       // load the precompiled template
@@ -46,6 +46,6 @@ define(function(require) {
     }
   });
 
-  return showListNoticeboards;
+  return showListComments;
 
 });

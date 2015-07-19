@@ -5,7 +5,10 @@ define(function(require) {
   var Commenti = require("collections/Commenti");
   var Commento = require("models/Commento");
   var Utils = require("utils");
+  var Postit= require("models/Postit");
+  var Postits=require("collections/Postits");
   var ShowListComments = require("views/pages/ShowListComments");
+  var ShowPostit= require("views/pages/ShowPostit");
 
   var PostitHome = Utils.Page.extend({
 
@@ -38,7 +41,9 @@ define(function(require) {
       this.commento=new Commento();
       this.commento.on("elencoCommenti", this.appendComments, this);
       this.commento.on("aggiuntoCommento", this.appendComments, this);
-      
+      this.postit=new Postit();      
+      this.postit.on("datiPostit", this.loadPostit, this);
+      this.postit.on("datiAutore", this.loadPostit2, this)
 
     },
 
@@ -52,14 +57,31 @@ define(function(require) {
       
     },
     caricaDati: function(){
+        this.postit.postitData(this.idp);
+
+    },
+    loadPostit: function(result){
+        this.resultpostit=result;
+        this.postit.nomeAutore(result[0].idu);
+        console.log(result[0].idu)
+     },
+     loadPostit2: function(result){
+        console.log(result);
+        this.resultpostit[0].idu=result;
+        var post=new Postits();
+        post.add(this.resultpostit);
+        this.subView = (new ShowPostit({collection: post})).render().el;
+        console.log(this.subView);
+        document.getElementById("postitContent").appendChild(this.subView);
         this.commento.elencoCommentiPostit(this.idp);
     },
     appendComments: function(result){
+
         var commenti=new Commenti();
         commenti.add(result);
         this.subView = (new ShowListComments({collection: commenti})).render().el;
-      console.log(this.subView);
-      document.getElementById("postitContent").appendChild(this.subView);
+        console.log(this.subView);
+        document.getElementById("postitContent").appendChild(this.subView);
     },
     submit: function(e){
       this.commento.aggiungiCommento(this.idp, document.getElementById("textComment").value, localStorage.getItem("idu"));
