@@ -37,7 +37,6 @@ define(function(require) {
       document.getElementById("back").classList.add('hide');
       spinner.spin(); 
       document.getElementById("title").innerHTML="Contacts";
-      document.getElementById("back").style.display="none";
       this.contatto = new Contatto();
       this.utente = new Utente();
       this.bacheca = new Bacheca();
