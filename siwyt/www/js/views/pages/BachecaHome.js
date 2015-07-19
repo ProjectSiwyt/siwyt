@@ -430,11 +430,13 @@ define(function(require) {
             Backbone.history.navigate("homeSiwyt", {
                 trigger: true
             });
-            document.getElementById("header").style.display = 'block';
         },
         goToComments: function(e) {
-            e.stopPropagation();
-            alert("goToComments");
+            //e.stopPropagation();
+            Backbone.history.navigate("postit/"+e.currentTarget.id+"/"+this.idb, {
+                trigger: true
+            });
+            
         },
         goToBoardManagement: function(e) {
             localStorage.setItem("titolo", ""+this.titolo);

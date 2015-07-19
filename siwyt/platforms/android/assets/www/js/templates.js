@@ -20,6 +20,7 @@ define({
     structureBoardManagement: "templates/structure_boardManagement.html",
     contentListPostits: "templates/content_listPostits.html",
     contentListMembers: "templates/content_listMembers.html",
+    contentListBoardsContacts: "templates/content_listBoardsContacts.html",
     contentListComments: "templates/content_listComments.html",
     contentListAddContacts: "templates/content_listAddContacts.html",
     contentListBoards: "templates/content_listBoards.html",

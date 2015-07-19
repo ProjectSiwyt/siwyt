@@ -22,12 +22,16 @@ define(function(require) {
       document.getElementById("title").innerHTML="Board Management";
       var header= document.getElementById("header");
       var back=document.getElementById("back");
+      var title=document.getElementById("title");
       if (header.classList.contains('hide')){
         header.classList.remove('hide');
       }
       if (back.classList.contains('hide')){
         back.classList.remove('hide');
-      } 
+      }
+      if (title.classList.contains('hide')){
+        title.classList.remove('hide');
+      }  
 
       
       // load the precompiled template
@@ -295,12 +299,12 @@ define(function(require) {
           }
           if(!tr){
             for(var k=0; k<this.utenti.length;k++){
-              if(this.oldAdmins[i].id==this.utenti[j].idu){
+              if(this.oldAdmins[i].id==this.utenti[k].idu){
                   tr=true;
               }
             }
             if(tr){
-              adiminsEliminare[cae++]=o;
+              adminsEliminare[cae++]=o;
               usersAggiungere[cua++]=o;
             }
             else{
@@ -308,7 +312,12 @@ define(function(require) {
             }
           }
       }
-      
+      console.log(usersAggiungere);
+      console.log(usersEliminare);
+      console.log(adminsAggiungere);
+      console.log(adminsEliminare);
+
+
       //controllo se i vecchi utenti ci sono ancora
       for (var i=0; i<this.oldUsers.length;i++){
           tr=false;
@@ -320,19 +329,24 @@ define(function(require) {
           }
           if(!tr){
             for(var k=0; k<this.responsabili.length;k++){
-              if(this.oldUsers[i]==this.responsabili[j]){
+              if(this.oldUsers[i]==this.responsabili[k]){
                   tr=true;
               }
             }
             if(tr){
               usersEliminare[cue++]=o;
-              usersAggiungere[cua++]=o;
+              adminsAggiungere[cua++]=o;
             }
             else{
               usersEliminare[cue++]=o;
             }
           }
       }
+
+     console.log(usersAggiungere);
+      console.log(usersEliminare);
+      console.log(adminsAggiungere);
+      console.log(adminsEliminare);
       //controllo se i nuovi responsabili c'erano
       for (var i=0; i<this.responsabili.length;i++){
           tr=false;
@@ -344,7 +358,7 @@ define(function(require) {
           }
           if(!tr){
             for(var k=0; k<this.oldUsers.length; k++){
-              if(this.responsabili[i].idu==this.oldUsers[j].id){
+              if(this.responsabili[i].idu==this.oldUsers[k].id){
                   tr=true;
               }
             }
@@ -357,6 +371,11 @@ define(function(require) {
             }
           }
       }
+
+      console.log(usersAggiungere);
+      console.log(usersEliminare);
+      console.log(adminsAggiungere);
+      console.log(adminsEliminare);
       //controllo se i nuovi utenti c'erano
       for (var i=0; i<this.utenti.length;i++){
           tr=false;
@@ -368,7 +387,7 @@ define(function(require) {
           }
           if(!tr){
             for(var k=0; k<this.oldAdmins.length; k++){
-              if(this.utenti[i].idu==this.oldAdmins[j].id){
+              if(this.utenti[i].idu==this.oldAdmins[k].id){
                   tr=true;
               }
             }
@@ -389,7 +408,7 @@ define(function(require) {
       console.log(this.usersAggiungere);
       console.log(this.usersEliminare);
       console.log(this.adminsAggiungere);
-      console.log(this.usersEliminare);
+      console.log(this.adminsEliminare);
 
 
       console.log("salvaResponsabili");

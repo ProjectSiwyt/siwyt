@@ -1,9 +1,9 @@
 <ul class="table-view">
     {{#each this}}
-    <li class="table-view-cell">
+    <li id="{{id}}" class="table-view-cell">
         {{nome}} {{cognome}}
-        <span class="absolute second-icon"><i class="pull-right fa fa-user-times fa-2x"></i></span>
-        <span id="{{id}}Link" class="absolute first-icon popup"><i class="pull-right fa fa-plus fa-2x"></i></span>
+        <span class="absolute second-icon removeContact"><i class="pull-right fa fa-user-times fa-2x"></i></span>
+        <span id="{{id}}Link" class="absolute first-icon popup addToBoard"><i class="pull-right fa fa-plus fa-2x"></i></span>
     </li>
     <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
     <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">

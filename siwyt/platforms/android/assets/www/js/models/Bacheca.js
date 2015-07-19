@@ -393,7 +393,7 @@ define(function(require) {
 			var THIS=this
 			var a = new Array()
 			
-			BaasBox.loadCollection("Responsabile")
+			BaasBox.loadCollection("Utente")
 				.done(function(res) {
 					for(var i=0; i<r.length; i++){
 						for(var j=0; j<res.length; j++){
@@ -414,33 +414,105 @@ define(function(require) {
 				})
 		},
 
-   		//Per la funzione rimuoviResponsabile devo fare prima una query che mi ritorna l'id della riga
-   		idRigaResponsabile: function(idu, idb){
-			BaasBox.loadCollection("Responsabile")
+   		 //Per la funzione rimuoviResponsabili devo fare prima una query che mi ritorna un array contenente gli id delle righe 
 
-				.done(function(res) {
-					console.log("res ", res);
-					for(var i=0; i<res.length; i++){
-						if(res[i].idu == idu && res[i].idb == idb){
-							console.log(res[i].id);
-						}
-					}
-				})
-				.fail(function(error) {
-					console.log("error ", error);
-				})
-   		},
+           idRigheResponsabili: function(r, idb){
+            var a= new Array();
+ 				var c =0;
+ 				var THIS=this;
+            BaasBox.loadCollection("Responsabile") 
+                .done(function(res) { 
+                    console.log("res ", res); 
+                    for(var i=0; i<r.length; i++){
+                        for(var j=0; j<res.length; j++){ 
+                            if(r[i].idu == res[j].idu && res[j].idb==idb){ 
+                                console.log(res[i].id);
+                                a[c++]=res[j]; 
+                            }
+                        } 
+                    }
 
-   		//rimuove dalla tabella 'Responsabile' la riga con id idu
-   		rimuoviResponsabile: function(idRiga){
-   			BaasBox.deleteObject(idRiga, "Responsabile")
-				.done(function(res) {
-					console.log("res ", res);
-				})
-				.fail(function(error) {
-					console.log("error ", error);
-				})
-   		}
+                    THIS.rimuoviResponsabili(a);
+                }) 
+                .fail(function(error) { 
+                    console.log("error ", error); 
+                }) 
+           },
+
+         
+           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
+           rimuoviResponsabili: function(r){
+           	var THIS=this;
+           	var c=0;
+           	console.log(r);
+            for(var i=0; i<r.length; i++){ 
+            		console.log(i);
+                   BaasBox.deleteObject(r[i].id, "Responsabile") 
+                    .done(function(res) {
+                    	c++; 
+                    	console.log(c);
+                    	console.log(r.length);
+                    	if (c==r.length){
+                    		console.log("eliminato");
+                    		THIS.trigger("rimuoviResponsabili", true);
+                        	console.log("res ", res); 
+                    	}
+                    }) 
+                    .fail(function(error) { 
+                        console.log("error ", error); 
+                    })
+            } 
+           },
+           //Per la funzione rimuoviResponsabili devo fare prima una query che mi ritorna un array contenente gli id delle righe 
+
+           idRigheMembri: function(r, idb){
+            var a= new Array();
+ 				var c =0;
+ 				var THIS=this;
+            BaasBox.loadCollection("Bacheca_Utente") 
+                .done(function(res) { 
+                    console.log("res ", res); 
+                    for(var i=0; i<r.length; i++){
+                        for(var j=0; j<res.length; j++){ 
+                            if(r[i].idu == res[j].idu && res[j].idb==idb){ 
+                                console.log(res[i].id);
+                                a[c++]=res[j]; 
+                            }
+                        } 
+                    }
+
+                    THIS.rimuoviMembri(a);
+                }) 
+                .fail(function(error) { 
+                    console.log("error ", error); 
+                }) 
+           },
+
+         
+           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
+           rimuoviMembri: function(r){
+           	var THIS=this;
+           	var c=0;
+           	console.log(r);
+            for(var i=0; i<r.length; i++){ 
+            		console.log(i);
+                   BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
+                    .done(function(res) {
+                    	c++; 
+                    	console.log(c);
+                    	console.log(r.length);
+                    	if (c==r.length){
+                    		console.log("eliminato");
+                    		THIS.trigger("rimuoviMembri", true);
+                        	console.log("res ", res); 
+                    	}
+                    }) 
+                    .fail(function(error) { 
+                        console.log("error ", error); 
+                    })
+            } 
+           }
+
 
 	});
 

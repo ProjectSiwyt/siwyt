@@ -1,5 +1,5 @@
 {{#each this}}
-<div id="{{id}}" class="postit moveable block absolute center" style="top: {{y}}px; left: {{x}}px;">
+<div id="{{id}}" class="postit moveable block absolute center" style="top: {{y}}; left: {{x}}; height: {{altezza}}; width: {{larghezza}}">
     <h3 class="postit-title">{{contenuto}}</h3>
     <div class="pull-left caption">{{idu}}</div>
     <div class="pull-right caption">{{data}}</div>
@@ -14,10 +14,10 @@
 <!--Popup menu to manage postit-->
 <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
     <ul class="table-view border-table-view">
-        <li class="table-view-cell border-top media">New relation</li>
-        <li class="table-view-cell media">Rename</li>
+        <li class="table-view-cell border-top media">New relation<span class="pull-right"><i class="fa fa-plus"></i></span></li>
+        <li class="table-view-cell media">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
         <li class="table-view-cell media">Change Color:
-            <input type="color" id="html5colorpicker" value="#ff0000">
+            <input type="color" value="#ff0000">
         </li>
         <li class="table-view-cell media">Font:
             <select>
@@ -26,10 +26,10 @@
                 <option>Font 3</option>
             </select>
         </li>
-        <li class="table-view-cell media">Size:
-            <input type="text" value="12" />
+        <li class="table-view-cell media">Font size:
+            <input type="number" value="12" />
         </li>
-        <li class="table-view-cell media">Delete</li>
+        <li class="table-view-cell media">Delete Postit<span class="pull-right"><i class="fa fa-trash-o"></i></span></li>
     </ul>
 </div>
 {{/each}}

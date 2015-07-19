@@ -4,13 +4,15 @@
         <div class="pull-left caption">by {{postit_author}}</div>
         <div class="pull-right caption">posted on {{postit_date}}</div>
     </div>
-    <div id="postitContent" class="i-12">
+    <div class="i-12">
+        <ul id="postitContent" class="table-view">
+        </ul>
     </div>
     <div class="i-12 btn-block btn-new center">
         <form>
-            <input type="text" placeholder="ADD COMMENT" />
+            <input type="text" id="textComment" placeholder="ADD COMMENT" />
             <div class="absolute send">
-                <i class="fa fa-share-square-o"></i>
+                <i class="fa fa-share-square-o" id="submitComment"></i>
             </div>
         </form>
     </div>

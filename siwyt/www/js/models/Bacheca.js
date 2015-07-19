@@ -423,11 +423,11 @@ define(function(require) {
             BaasBox.loadCollection("Responsabile") 
                 .done(function(res) { 
                     console.log("res ", res); 
-                    for(var i=0; i<res.length; i++){
-                        for(var j=0; j<r.length; j++){ 
-                            if(res[i].idu == r[j].idu && res[i].idb==idb){ 
+                    for(var i=0; i<r.length; i++){
+                        for(var j=0; j<res.length; j++){ 
+                            if(r[i].idu == res[j].idu && res[j].idb==idb){ 
                                 console.log(res[i].id);
-                                a[c++]=res[i]; 
+                                a[c++]=res[j]; 
                             }
                         } 
                     }
@@ -472,11 +472,11 @@ define(function(require) {
             BaasBox.loadCollection("Bacheca_Utente") 
                 .done(function(res) { 
                     console.log("res ", res); 
-                    for(var i=0; i<res.length; i++){
-                        for(var j=0; j<r.length; j++){ 
-                            if(res[i].idu == r[j].idu && res[i].idb==idb){ 
+                    for(var i=0; i<r.length; i++){
+                        for(var j=0; j<res.length; j++){ 
+                            if(r[i].idu == res[j].idu && res[j].idb==idb){ 
                                 console.log(res[i].id);
-                                a[c++]=res[i]; 
+                                a[c++]=res[j]; 
                             }
                         } 
                     }

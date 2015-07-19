@@ -19,11 +19,15 @@ define(function(require) {
       this.template = Utils.templates.structureHomeSiwyt;
       var navigation= document.getElementById("navigation");
       var header= document.getElementById("header");
+      var settings = document.getElementById("settingsMenu");
       if (header.classList.contains('hide')){
         header.classList.remove('hide');
       }
       if (navigation.classList.contains('hide')){
         navigation.classList.remove('hide');
+      };
+      if (settings.classList.contains('hide')){
+        settings.classList.remove('hide');
       };
       document.getElementById("back").classList.add('hide');
       spinner.spin();
@@ -97,6 +101,9 @@ define(function(require) {
       });
     },
     goToCreateBacheca: function(e){
+      localStorage.removeItem('utenti');
+      localStorage.removeItem('responsabili');
+      localStorage.removeItem('titolo');
       Backbone.history.navigate("createBacheca", {
         trigger: true
       });

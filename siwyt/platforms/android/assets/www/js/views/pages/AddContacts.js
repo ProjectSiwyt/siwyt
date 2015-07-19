@@ -46,31 +46,107 @@ define(function(require) {
       console.log(result);
       var b = new Utenti();
       var users= localStorage.getItem("utenti");
+      var admins=localStorage.getItem("responsabili");
       
       if (users!= null){
+        if (admins!=null){
+              var array=new Array();
+              var array2= new Array();
+              var c=0;
+              var c2=0;
+              var a=JSON.parse(admins);
+              var u=JSON.parse(users);
+              var tr=false;
+              for (var i=0; i<result.length;i++){
+                tr=false;
+                for (var j=0; j<u.length;j++){
+                    if (result[i].id==u[j].idu){
+                      tr=true;
+                    }
+                }
+                for (var k=0; k<a.length;k++){
+                    if (result[i].id==a[k].idu){
+                      tr=true;
+                    } 
+                }
+                if (!tr){
+                  b.add(result[i]);
+                  array[c++]=result[i];
+                }
+                else{
+                  array2[c2++]=result[i];
+                }
+              }
+              this.addMembers=array;
+              this.returnResult=array2;
+              console.log(this.returnResult);
+        }
+        else{
           var array=new Array();
+          var array2=new Array();
           var c=0;
-          var a=JSON.parse(users);
-        
+          var c2=0;
+          var u=JSON.parse(users);
           var tr=false;
           for (var i=0; i<result.length;i++){
-            tr=false
-            for (var j=0; j<a.length;j++){
-                if (result[i]==a[j]){
+            tr=false;
+            for (var j=0; j<u.length;j++){
+                if (result[i].id==u[j].idu){
                   tr=true;
                 }
             }
             if (!tr){
-              b.add(a[j]);
-              array[c++]=a[j];
+              b.add(result[i]);
+              array[c++]=result[i];
+            }
+            else{
+              array2[c2++]=result[i];
             }
           }
           this.addMembers=array;
+          this.returnResult=array2;
+          console.log(this.returnResult);
+        }
+        console.log(this.addMembers);
       }
       else{
-        b.add(result);
-        this.addMembers=result;
-      } 
+        if (admins!=null){
+            var array=new Array();
+            var array2= new Array();
+            var c=0;
+            var c2=0;
+            var a=JSON.parse(admins);
+            var tr=false;
+            for (var i=0; i<result.length;i++){
+              tr=false;
+              for (var j=0; j<a.length;j++){
+                  if (result[i].id==a[j].idu){
+                    tr=true;
+                  }
+              }
+              if (!tr){
+                b.add(result[i]);
+                array[c++]=result[i];
+              }
+              else{
+                array2[c2++]=result[i];
+              }
+            }
+            this.addMembers=array;
+            this.returnResult=array2;
+            console.log(this.returnResult);
+        }
+        else{
+          console.log(result);
+          b.add(result);
+          this.addMembers=result;
+        }
+      }
+      if (this.addMembers[0]==undefined){
+          this.returnResult=result;
+      }
+      console.log(this.returnResult);
+      console.log(this.addMembers);
       console.log(b);
       this.subView = (new ShowListAddContacts({collection: b})).render().el;
       console.log(this.subView);
@@ -87,21 +163,51 @@ define(function(require) {
     },
     //torna alla pagina da cui si proviene
     goToPage: function(e) {
-      var c=new Utenti();
+      //var c=new Utenti();
+     var c= new Array();
+      var j=0;
       console.log(this.addMembers);
       if (this.addMembers[0]!=undefined){
         for (var i=0; i<this.addMembers.length;i++){
           if (document.getElementById(""+this.addMembers[i].id).classList.contains("fa-user-times")){
-              c.add(this.addMembers[i]);
+              c[j++]=this.addMembers[i];
+              console.log(this.addMembers[i]);
           }
         }
       }
-      console.log(c);
-      if(c.length!=0){
-        localStorage.setItem("utenti", JSON.stringify(c));
+      else{
+        var collection=new Utenti();
+        collection.add(this.returnResult);
+        console.log(collection);
+        localStorage.setItem("utenti", JSON.stringify(collection));
+        console.log(localStorage.getItem("utenti"));
       }
+
+      if(c.length!=0 && c!=undefined){
+        console.log(this.returnResult);
+        if (this.returnResult!=undefined){
+          var collection=new Utenti();
+          collection.add(this.returnResult);
+          console.log(collection);
+          collection.add(c);
+          console.log(collection);
+        }
+        else{
+          var collection= new Utenti();
+          collection.add(c);
+        }
+        localStorage.setItem("utenti", JSON.stringify(collection));
+        console.log(localStorage.getItem("utenti"));
+      }
+      else{
+        var collection= new Utenti();
+        collection.add(this.returnResult);
+        localStorage.setItem("utenti", JSON.stringify(collection));
+        console.log(localStorage.getItem("utenti"));
+      }
+      
       if (this.returnpage=="noticeboardManagement"){
-          Backbone.history.navigate("boardManagement/"+this.idb, {
+          Backbone.history.navigate("boardManagement/"+this.idb+"/"+this.id, {
           trigger: true
         });
       }

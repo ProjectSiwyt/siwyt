@@ -73,54 +73,56 @@ define(function(require) {
           document.getElementById("nomeBacheca").value=titolo;
       }
       console.log("caricaMembri");
-        var o1=new Object();
-        o1.nome=localStorage.getItem('nameLogged');
-        o1.cognome=localStorage.getItem('surnameLogged');
-        var a = new Array();
-        a[0]=o1;
-        var b=new Utenti();
-        b.add(a);
+      var o1=new Object();
+      o1.nome=localStorage.getItem('nameLogged');
+      o1.cognome=localStorage.getItem('surnameLogged');
+      var a = new Array();
+      a[0]=o1;
+      var b=new Utenti();
+      b.add(a);
 
-        console.log(b);
-        this.subview1=(new ShowListMembers({collection: b})).render().el;
-        document.getElementById("membri").appendChild(this.subview1);
-        var us = localStorage.getItem('utenti');
-        var re= localStorage.getItem('responsabili');
-        if (us!=null){
-            var u =new Utenti();
-            var users = JSON.parse(localStorage.getItem('utenti'));
-            if(re!=null){ 
-              var r = new Utenti();
-              var admins = JSON.parse(localStorage.getItem('responsabili'));
-              for (var i=0; i<users.length;i++){
-                  var tr= false;
-                  for (var j=0; j<admins.length; j++){
-                    console.log(users[i].id);
-                    console.log(admins[j].id);
+      console.log(b);
+      this.subview1=(new ShowListMembers({collection: b})).render().el;
+      document.getElementById("membri").appendChild(this.subview1);
+      
+      var us = localStorage.getItem('utenti');
+      var re= localStorage.getItem('responsabili');
+      if (us!=null){
+          var u =new Utenti();
+          var users = JSON.parse(localStorage.getItem('utenti'));
+          if(re!=null){ 
+            var r = new Utenti();
+            var admins = JSON.parse(localStorage.getItem('responsabili'));
+            for (var i=0; i<users.length;i++){
+                var tr= false;
+                for (var j=0; j<admins.length; j++){
+                  console.log(users[i].id);
+                  console.log(admins[j].id);
 
-                    if (users[i].id==admins[j].idu){
-                      tr =true;
-                    }
+                  if (users[i].id==admins[j].idu){
+                    tr =true;
                   }
-                  if (tr){
-                    r.add(users[i]);
-                  }
-                  else{
-                    u.add(users[i]);
-                  }
-              }
-              console.log(r);
-              console.log(u);
-              this.subview2=(new ShowListAdmins({collection: r})).render().el;  
-              document.getElementById("membri").appendChild(this.subview2);
-              this.subview3=(new ShowListUsers({collection: u})).render().el;  
-              document.getElementById("membri").appendChild(this.subview3); 
+                }
+                if (tr){
+                  r.add(users[i]);
+                }
+                else{
+                  u.add(users[i]);
+                }
             }
-            else{
-              u.add(users);
-              this.subview2=(new ShowListUsers({collection: u})).render().el;  
-              document.getElementById("membri").appendChild(this.subview2); 
-            }
+            console.log(r);
+            console.log(u);
+            this.subview2=(new ShowListAdmins({collection: r})).render().el;  
+            document.getElementById("membri").appendChild(this.subview2);
+            this.subview3=(new ShowListUsers({collection: u})).render().el;  
+            document.getElementById("membri").appendChild(this.subview3); 
+          }
+          else{
+            u.add(users);
+            console.log(u);
+            this.subview2=(new ShowListUsers({collection: u})).render().el;  
+            document.getElementById("membri").appendChild(this.subview2); 
+          }
       }
     },
     //chiama la query che si occupa del salvataggio dei dati della bacheca
@@ -161,7 +163,9 @@ define(function(require) {
       var o;
       var c1=0;
       var c2=0;
-      var input= document.getElementsByName('licence');
+      var input= document.getElementsByClassName('licence');
+      console.log("INPUT");
+      console.log(input);
       for (var i=0; i<input.length;i++){
         if(input[i].checked){
             o=new Object({idu: input[i].value});
@@ -211,8 +215,10 @@ define(function(require) {
     //e vado alla pagina AddContacts
     goToAddContacts: function(e) {
       var a=new Array();
-      var input= document.getElementsByName('licence');
-      var c=0;
+      var u= new Array();
+      var input= document.getElementsByClassName('licence');
+      var ca=0;
+      var cu=0;
       var conta=0;
       for (var i=0; i<input.length;i++){
         conta++;
@@ -220,7 +226,10 @@ define(function(require) {
             var o=new Object({idu: input[i].value});
             console.log(o);
             if (input[i].classList.contains('admin')){
-              a[c++]=o;
+              a[ca++]=o;
+            }
+            else{
+              u[cu++]=o;
             }
         }
       }
@@ -228,14 +237,21 @@ define(function(require) {
         localStorage.removeItem("responsabili");
         localStorage.removeItem("utenti");
       }
-
-
-      console.log(a);
-      if(a[0]!=undefined && a.length!=0){
-        localStorage.setItem("responsabili", JSON.stringify(a));
-      }
       else{
-        localStorage.removeItem("responsabili");
+        console.log(a);
+        console.log(u);
+        if(a!=undefined && a.length!=0){
+          localStorage.setItem("responsabili", JSON.stringify(a));
+        }
+        else{
+          localStorage.removeItem("responsabili");
+        }
+        if(u!=undefined && u.length!=0){
+          localStorage.setItem("utenti", JSON.stringify(u));
+        }
+        else{
+          localStorage.removeItem("utenti");
+        }
       }
 
       localStorage.setItem("titolo", document.getElementById("nomeBacheca").value);

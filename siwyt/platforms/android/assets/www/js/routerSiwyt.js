@@ -23,6 +23,7 @@ define(function(require) {
   var Login = require("views/pages/Login");
   var Register = require("views/pages/Register");
   var NoticeboardManagement = require("views/pages/NoticeboardManagement");
+  var PostitHome = require("views/pages/PostitHome");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -40,7 +41,8 @@ define(function(require) {
       "newBacheca/:nome": "newBacheca",
       "login":"login",
       "register":"register",
-      "boardManagement/:idb":"boardManagement"
+      "boardManagement/:idb/:idpage":"boardManagement",
+      "postit/:idp/:idb": "postit"
     },
 
     BAASBOX_URL : "http://localhost:9000",
@@ -93,11 +95,18 @@ define(function(require) {
       var page= new Register();
       this.changePage(page);
     },
-    boardManagement: function(idb){
+    boardManagement: function(idb,idpage){
       console.log("ciao2");
       var page= new NoticeboardManagement(idb);
       this.changePage(page);
-      page.caricaMembri();
+      if(idpage=='bachecahome'){
+        page.caricaDati();
+        page.caricaMembriDaHome();  
+      }
+      else{
+        page.caricaMembriDaContacts();
+      }
+      
     },
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");
@@ -145,6 +154,7 @@ define(function(require) {
     showNoticeboard: function(idb){
         var page = new BachecaHome(idb);
         this.changePage(page);
+        page.caricaDati();
 
     },
 
@@ -153,6 +163,11 @@ define(function(require) {
       var page = new AddContacts(idpage, idb);
       this.changePage(page);
       page.loadData();
+    },
+    postit: function(idp, idb){
+      var page = new PostitHome(idp,idb);
+      this.changePage(page);
+      page.caricaDati();
     }
     /*
     newBacheca: function(nome){

@@ -203,11 +203,14 @@ color: #F4F4F4;
 
 .table-view {
     border-top: 0;
+    border-bottom: 0;
     border-color: #bdb8b6;
     background-color: #f4f4f4;
+    border-bottom: 0;
 }
 .table-view-cell{
     border-color: #bdb8b6;
+    list-style-type: none;
 }
 .table-view-cell:active,.table-view-cell>a:not(.btn):active{
     background-color: #f4f4f4;
@@ -220,7 +223,13 @@ color: #F4F4F4;
 .activable:active>.navigate-right:after{
     color: #f4f4f4;
 }
-
+#showlistmembers > ul{
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+.table-view-cell:last-child {
+  border-bottom: 1px solid #bdb8b6;
+}
 .border-nav {
     border-bottom: 3px solid #bdb8b6;
 }
@@ -251,7 +260,10 @@ color: #F4F4F4;
 .icon-bar>div {
     margin-top: -2px;
 }
-
+.c-icon{
+    font-size: .9em;
+    margin-top: -6px;
+}
 .btn-new {
     position: absolute;
     bottom: 7em;
@@ -393,16 +405,18 @@ color: #F4F4F4;
   border: 1px solid;
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em; 
+  overflow: auto;
+  background-color: #f4f4f4;
 }
 .postit-popup{
-    width: 25%;
-    font-size: .8em;
+    width: 35%;
+    font-size: 1.1em;
 }
 .postit-popup input, .postit-popup select{
     margin: 0;
 }
 .border-table-view{
-    border-left: 0;
+    border-left: 1px;
     border-right: 1px;
     border-color: #bdb8b6;
     border-style: solid;
@@ -446,6 +460,9 @@ color: #F4F4F4;
     top: 25%;
   right: 35%;
 }
+.popup-container > .table-view > .table-view-cell{
+    padding: 11px 15px 11px 15px;
+}
 .scroll-popup{
     height: 40%;
 }
@@ -472,4 +489,15 @@ input, select, textarea{
 
 textarea:focus, input:focus {
     color: #000000;
+}
+.icons-postit{
+    padding: 3px;
+    border-radius: 1em;
+    border: 2px solid #004a93;
+    background-color: #bdb8b6;
+    color: #004a93;
+}
+.fa-arrows{
+    top:13%;
+    left:27%;
 }

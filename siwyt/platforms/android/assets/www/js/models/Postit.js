@@ -72,10 +72,10 @@ define(function(require) {
 
 			BaasBox.save(post, "Postit")
 				.done(function(res) {
-					THIS.trigger("eventoAggiungiPostit", true);
+					THIS.trigger("eventoAggiungiPostit", res);
 				})
 				.fail(function(error) {
-					THIS.trigger("errorAggiungiPostit", false);
+					THIS.trigger("errorAggiungiPostit", error);
 				})
 		},
 
@@ -90,6 +90,58 @@ define(function(require) {
 				.fail(function(error) {
 				   	console.log("error ", error);
 				    THIS.trigger("errorSaveContenuto", false);
+				})
+		},
+		//funzione che cambia il contenuto del postit con id idp
+		saveXY: function(idp, x, y){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "x", x)
+				.done(function(res) {
+					console.log("res ", res);
+
+					THIS.saveY(idp,y);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("error", error);
+				})
+		},
+		saveY: function(idp,y){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "y", y)
+				.done(function(res) {
+					console.log("res ", res);
+
+					THIS.trigger("eventoSaveXY", res);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("error", error);
+				})
+		},
+		//funzione che cambia il contenuto del postit con id idp
+		saveHW: function(idp, h,w){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "altezza", h)
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.saveW(idp,w);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("error", error);
+				})
+		},
+		saveW: function(idp,w){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "larghezza", w)
+				.done(function(res) {
+					console.log("res ", res);
+					THIS.tigger("eventoSaveHW", res);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("error", error);
 				})
 		},
 

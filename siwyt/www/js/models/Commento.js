@@ -13,9 +13,21 @@ define(function(require) {
 		},
 
 		constructorName: "Commento",
+		elencoCommentiPostit: function(idp){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Commento", {where: "idp='"+idp+"'" })
+				.done(function(res) {
+					console.log("res ", res);
 
+					THIS.trigger("elencoCommenti", res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+		},
 		//aggiunge una nuova riga alla collezione Commento
-		aggiungiCommento: function(idc, idp, contenuto, idu){
+		aggiungiCommento: function(idp, contenuto, idu){
 
 			var THIS = this;
 
@@ -32,10 +44,10 @@ define(function(require) {
 			
 			BaasBox.save(post, "Commento")
 				.done(function(res) {
-					//THIS.trigger("eventoAggiungiPostit", true);
+					THIS.trigger("aggiuntoCommento", res);
 				})
 				.fail(function(error) {
-					//THIS.trigger("errorAggiungiPostit", false);
+					THIS.trigger("error", error);
 				})
 		},
 
