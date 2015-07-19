@@ -51,6 +51,7 @@ define(function(require) {
       var id2 = e.currentTarget.parentNode.id;
       console.log(id2);
       var id1 = localStorage.getItem("idu");
+      //this.contatto.aggiungiContattoConNotifica(id1, id2);
       this.contatto.aggiungiContatto(id1, id2);
     },
 

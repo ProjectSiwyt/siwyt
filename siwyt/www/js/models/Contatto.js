@@ -29,6 +29,33 @@ define(function(require) {
 
 		},
 
+		aggiungiContattoConNotifica: function(id1, id2){
+			
+			var THIS=this;
+			var post = new Object();
+			post.id1 = id1;
+			post.id2 = id2;
+
+			BaasBox.save(post, "Contatto")
+				.done(function(res) {
+					BaasBox.sendPushNotification({"message" : "sei stato aggiunto a una lista contatti", "users" : [id2]})
+					  .done(function(res) {
+					  	console.log("contatto aggiunto con notifica");
+					  	THIS.trigger("resultAggiungiContatto", post.id2);
+					    console.log("res ", res);
+					  })
+					  .fail(function(error) {
+					  	THIS.trigger("resultAggiungiContatto", false);
+					    console.log("error ", error);
+					  })
+				})
+				.fail(function(error) {
+					THIS.trigger("resultAggiungiContatto", false);
+					THIS.trigger("error", true);
+				})
+
+		},
+
    		//Prende come parametri due id e rimuove la riga corrispondente della tabella 'Contatto'
    		rimuoviContatto: function(id1, id2){
    			var THIS =	this;

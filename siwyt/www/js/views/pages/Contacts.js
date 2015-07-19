@@ -71,7 +71,8 @@ define(function(require) {
       "tap .overlay": "chiudiPopup",
       "tap .overlaySearch": "chiudiPopupSearch",
       "keyup":"startSearch",
-      "tap #search": "startSearch"
+      "tap #search": "startSearch",
+      "tap .fa-times-circle-o":"resetSearch"
       //"tap .rigabacheca": "aggiungiUtente"
       /*"tap .add_to_board": "add_to_board",
       "tap .remove_contact": "remove_contact"*/
@@ -101,6 +102,15 @@ define(function(require) {
       $(this.el).html(this.template());
 
       return this;
+    },
+
+    resetSearch: function(e){
+      console.log("ohvfajlsdhfv");
+        document.getElementById("search").value="";
+        var searchPopup = document.getElementById("searchPopup");
+        var searchScreen = document.getElementById("searchScreen");
+        searchScreen.classList.add('hide');
+        searchPopup.classList.add('hide');
     },
 
     removeContact: function(e){
@@ -172,6 +182,8 @@ define(function(require) {
     showResultSearch: function(result){
         if(!result){
           var searchPopup = document.getElementById("searchPopup");
+          var searchScreen = document.getElementById("searchScreen");
+          searchScreen.classList.remove('hide');
             searchPopup.innerHTML="Nessun risultato";
             searchPopup.classList.remove('hide');
 
