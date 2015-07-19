@@ -312,24 +312,25 @@ define(function(require) {
             }
           }
       }
+      
       console.log(usersAggiungere);
       console.log(usersEliminare);
       console.log(adminsAggiungere);
       console.log(adminsEliminare);
-
+      
 
       //controllo se i vecchi utenti ci sono ancora
       for (var i=0; i<this.oldUsers.length;i++){
           tr=false;
           o=new Object({idu: this.oldUsers[i].id});
           for(var j=0;j<this.utenti.length;j++){
-              if(this.oldUsers[i]==this.utenti[j]){
+              if(this.oldUsers[i].id==this.utenti[j].idu){
                 tr=true;
               }
           }
           if(!tr){
             for(var k=0; k<this.responsabili.length;k++){
-              if(this.oldUsers[i]==this.responsabili[k]){
+              if(this.oldUsers[i].id==this.responsabili[k].idu){
                   tr=true;
               }
             }
@@ -342,11 +343,12 @@ define(function(require) {
             }
           }
       }
-
+      
      console.log(usersAggiungere);
       console.log(usersEliminare);
       console.log(adminsAggiungere);
       console.log(adminsEliminare);
+      
       //controllo se i nuovi responsabili c'erano
       for (var i=0; i<this.responsabili.length;i++){
           tr=false;
@@ -371,11 +373,12 @@ define(function(require) {
             }
           }
       }
-
+      
       console.log(usersAggiungere);
       console.log(usersEliminare);
       console.log(adminsAggiungere);
       console.log(adminsEliminare);
+      
       //controllo se i nuovi utenti c'erano
       for (var i=0; i<this.utenti.length;i++){
           tr=false;
@@ -405,6 +408,7 @@ define(function(require) {
       this.usersEliminare=usersEliminare;
       this.adminsAggiungere=adminsAggiungere;
       this.adminsEliminare=adminsEliminare;
+      
       console.log(this.usersAggiungere);
       console.log(this.usersEliminare);
       console.log(this.adminsAggiungere);

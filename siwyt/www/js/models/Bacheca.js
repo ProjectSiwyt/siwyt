@@ -25,8 +25,6 @@ define(function(require) {
     		var a = new Array();
     		var THIS = this;
     		
-    		console.log(r);
-    		
     		BaasBox.loadCollection("Bacheca")
 				.done(function(res) {
 					for(var i=0; i<r.length; i++){
@@ -37,7 +35,6 @@ define(function(require) {
 							}
 						}
 					}
-					console.log(a);
 					THIS.trigger("bachecheutente", a);	
 				})
 				.fail(function(error2) {
@@ -48,12 +45,10 @@ define(function(require) {
 		//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK
 		listaIdBachecheUtente: function(){
-		console.log("idutente");
 		var THIS = this;
 		
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
-					console.log("res ", res);
 					THIS.listaDatiBachecheUtente(res);
 				})
 				.fail(function(error) {
@@ -64,8 +59,6 @@ define(function(require) {
     	listaDatiBachecheResponsabile: function(r){
     		var a = new Array();
     		var THIS = this;
-    		
-    		console.log(r);
     		
     		BaasBox.loadCollection("Bacheca")
 				.done(function(res) {
@@ -91,7 +84,6 @@ define(function(require) {
 		
 			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
-					console.log("res ", res);
 					THIS.listaDatiBachecheResponsabile(res);
 				})
 				.fail(function(error) {
@@ -113,14 +105,11 @@ define(function(require) {
 						for(var j=0; j<res.length; j++){
 							if(r[i].idb == res[j].id){
 								a[i] = res[j];
-								console.log(i);	
 								//break;
 							}
 							//console.log(j);
 						}
 					}
-					console.log("BACHECHE AMMINISTRATORE")
-					console.log(a);
 					THIS.trigger("bachecheamministratore", a);	
 				})
 				.fail(function(error2) {
@@ -135,7 +124,6 @@ define(function(require) {
 		
 			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
-					console.log("res ", res);
 					THIS.listaDatiBachecheAmministratore(res);
 				})
 				.fail(function(error) {
@@ -150,9 +138,6 @@ define(function(require) {
 			
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idb='"+idb+"'" })
 				.done(function(res) {
-					console.log("res ", res);
-
-
 					THIS.listaDatiMembriDiUnaBacheca(res);
 				})
 				.fail(function(error) {
@@ -177,7 +162,6 @@ define(function(require) {
 							}
 						}
 					}
-					console.log(a);
 					THIS.trigger("datiMembri ", a);					
 
 				})
@@ -209,11 +193,9 @@ define(function(require) {
     		var THIS=this;
 			BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+idb+"'" })
 			 .done(function(res) {
-			 	console.log("res ", res);
 			 	THIS.trigger("datiBacheca", res);
 			 })
 			 .fail(function(error) {
-			 	console.log("error ", error);
 			 	THIS.trigger("error");
 			 })
 		},
@@ -224,12 +206,10 @@ define(function(require) {
 			var THIS = this;
 			BaasBox.updateField(idb, "Bacheca", "nome", nuovo)
 				.done(function(res) {
-					console.log("res ", res);
-					THIS.trigger("eventomodificaTitolo", true);
+					THIS.trigger("eventomodificaTitolo", res);
 				})
 				.fail(function(error) {
-				   	console.log("error ", error);
-				    THIS.trigger("errormodificaTitolo", false);
+				    THIS.trigger("errormodificaTitolo", error);
 				})
    		}, 
 
@@ -246,11 +226,11 @@ define(function(require) {
 					.done(function(res) {
 						c++;
 						if(c == r.length){
-							THIS.trigger("salvataggioUtenti", true);
+							THIS.trigger("salvataggioUtenti", res);
 						}
 					})
 					.fail(function(error) {
-						THIS.trigger("errorAggiungiUtenti", true);
+						THIS.trigger("errorAggiungiUtenti", error);
 					})
 			}
 		},
@@ -262,10 +242,8 @@ define(function(require) {
    		//OK 
    		idAmministratore: function(idb){
    			var THIS = this;
-   			console.log("idb='"+idb+"'")
    			BaasBox.loadCollectionWithParams("Amministratore", {where: "idb='"+idb+"'" })
    				.done(function(res){
-   					console.log("amministratore"+res)
    					THIS.datiAmministratore(res);
    				})
    				.fail(function(error) {
@@ -274,12 +252,10 @@ define(function(require) {
    		},
 
    		datiAmministratore: function(r){
-			console.log("CCCC");
 			var THIS = this;
 			if(r.length!=0){		    	
 			BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[0].idu+"'" })
 				.done(function(res) {
-				 	console.log("res ", res);
 				 	THIS.trigger("datiAmministratore", res);
 				})
 				.fail(function(error) {
@@ -291,13 +267,13 @@ define(function(require) {
 
    		//Per la funzione rimuoviAmministratore devo fare prima una query che mi ritorna l'id della riga
    		idRigaAmministratore: function(idu, idb){
+			var THIS=this;
 			BaasBox.loadCollection("Amministratore")
 
 				.done(function(res) {
-					console.log("res ", res);
 					for(var i=0; i<res.length; i++){
 						if(res[i].idu == idu && res[i].idb == idb){
-							console.log(res[i].id);
+							THIS.rimuoviAmministratore(res[i].id);
 						}
 					}
 				})
@@ -309,7 +285,7 @@ define(function(require) {
    		rimuoviAmministratore: function(idRiga){
    			BaasBox.deleteObject(idRiga, "Amministratore")
 				.done(function(res) {
-					console.log("res ", res);
+					THIS.trigger("rimossoAmministratore",res);
 				})
 				.fail(function(error) {
 					console.log("error ", error);
@@ -324,7 +300,6 @@ define(function(require) {
 			post.idb = idb;     
 			BaasBox.save(post, "Amministratore")
 				.done(function(res) {
-					console.log(res);
 					THIS.trigger("salvataggioAmministratore", true);
 				})
 				.fail(function(error) {
@@ -349,20 +324,16 @@ define(function(require) {
 
    		//aggiunge un array di 'responsabili' con id idu alla bacheca con id 'idb'
    		salvaResponsabili: function(r, idb){
-   			console.log("r"+r);
 		 	var THIS=this;
 	  		var c=0;
-	  		console.log(r);
 	  		for(var i=0; i<r.length; i++){
 				var post = new Object();
 				post.idu = r[i].idu;
 				post.idb = idb;   
-				console.log(post);  
 				BaasBox.save(post, "Responsabile")
 					.done(function(res) {
 						c++;
 						if(c == r.length){
-							console.log(r);
 							THIS.trigger("salvataggioResponsabili", true);
 						}
 					})
@@ -379,7 +350,6 @@ define(function(require) {
 		
 			BaasBox.loadCollectionWithParams("Responsabile", {where: "idb='"+idb+"'" })
 				.done(function(res) {
-					console.log("res ", res);
 					THIS.listaDatiResponsabiliDiUnaBacheca(res);
 
 				})
@@ -397,20 +367,17 @@ define(function(require) {
 				.done(function(res) {
 					for(var i=0; i<r.length; i++){
 						for(var j=0; j<res.length; j++){
-							console.log(r[i].idu+" "+res[j].id);
 							if(r[i].idu == res[j].id){
 								a[i] = res[j];
 								break;
 							}
 						}
 					}
-					console.log(a);
 					THIS.trigger("datiResponsabili", a);					
 
 				})
 				.fail(function(error2) {
-					console.log("error ", error2);
-					THIS.trigger("errorEventolistamembri", error);
+					THIS.trigger("errorEventolistamembri", error2);
 				})
 		},
 
@@ -422,11 +389,9 @@ define(function(require) {
  				var THIS=this;
             BaasBox.loadCollection("Responsabile") 
                 .done(function(res) { 
-                    console.log("res ", res); 
                     for(var i=0; i<r.length; i++){
                         for(var j=0; j<res.length; j++){ 
                             if(r[i].idu == res[j].idu && res[j].idb==idb){ 
-                                console.log(res[i].id);
                                 a[c++]=res[j]; 
                             }
                         } 
@@ -444,18 +409,12 @@ define(function(require) {
            rimuoviResponsabili: function(r){
            	var THIS=this;
            	var c=0;
-           	console.log(r);
             for(var i=0; i<r.length; i++){ 
-            		console.log(i);
                    BaasBox.deleteObject(r[i].id, "Responsabile") 
                     .done(function(res) {
                     	c++; 
-                    	console.log(c);
-                    	console.log(r.length);
                     	if (c==r.length){
-                    		console.log("eliminato");
                     		THIS.trigger("rimuoviResponsabili", true);
-                        	console.log("res ", res); 
                     	}
                     }) 
                     .fail(function(error) { 
@@ -471,11 +430,9 @@ define(function(require) {
  				var THIS=this;
             BaasBox.loadCollection("Bacheca_Utente") 
                 .done(function(res) { 
-                    console.log("res ", res); 
                     for(var i=0; i<r.length; i++){
                         for(var j=0; j<res.length; j++){ 
                             if(r[i].idu == res[j].idu && res[j].idb==idb){ 
-                                console.log(res[i].id);
                                 a[c++]=res[j]; 
                             }
                         } 
@@ -493,18 +450,13 @@ define(function(require) {
            rimuoviMembri: function(r){
            	var THIS=this;
            	var c=0;
-           	console.log(r);
             for(var i=0; i<r.length; i++){ 
-            		console.log(i);
                    BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
                     .done(function(res) {
                     	c++; 
-                    	console.log(c);
-                    	console.log(r.length);
                     	if (c==r.length){
                     		console.log("eliminato");
-                    		THIS.trigger("rimuoviMembri", true);
-                        	console.log("res ", res); 
+                    		THIS.trigger("rimuoviMembri", true); 
                     	}
                     }) 
                     .fail(function(error) { 

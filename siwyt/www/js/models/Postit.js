@@ -182,7 +182,21 @@ define(function(require) {
 				.fail(function(error) {
 					console.log("error ", error);
 				})
-   		}
+   		},
+   		 //restituisci il nome dell'autore del postit 
+        nomeaAutore: function(idu){ 
+        var THIS = this; 
+         
+            BaasBox.loadCollectionWithParams("Utente", {where: "id='"+idu+"'" }) 
+                .done(function(res) { 
+                    console.log("res ", res); 
+ 
+                    //THIS.trigger("eventoNomeAutore ", res.nome); 
+                }) 
+                .fail(function(error) { 
+                    console.log("errorElencopostits ", error); 
+                }) 
+        }
 		
 
 	});

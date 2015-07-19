@@ -254,8 +254,6 @@ define(function(require) {
       var c1=0;
       var c2=0;
       var input= document.getElementsByClassName('licence');
-      console.log("INPUT");
-      console.log(input);
       for (var i=0; i<input.length;i++){
         if(input[i].checked){
             o=new Object({idu: input[i].value});
@@ -273,11 +271,6 @@ define(function(require) {
       this.oldAdmins=JSON.parse(localStorage.getItem("oldAdmins"));
       this.oldUsers=JSON.parse(localStorage.getItem("oldUsers"));
 
-      console.log(this.responsabili);
-      console.log(this.utenti);
-
-      console.log(this.oldAdmins);
-      console.log(this.oldUsers);
       var adminsAggiungere=new Array();
       var caa=0;
       var adminsEliminare=new Array();
@@ -312,24 +305,19 @@ define(function(require) {
             }
           }
       }
-      console.log(usersAggiungere);
-      console.log(usersEliminare);
-      console.log(adminsAggiungere);
-      console.log(adminsEliminare);
-
 
       //controllo se i vecchi utenti ci sono ancora
       for (var i=0; i<this.oldUsers.length;i++){
           tr=false;
           o=new Object({idu: this.oldUsers[i].id});
           for(var j=0;j<this.utenti.length;j++){
-              if(this.oldUsers[i]==this.utenti[j]){
+              if(this.oldUsers[i].id==this.utenti[j].idu){
                 tr=true;
               }
           }
           if(!tr){
             for(var k=0; k<this.responsabili.length;k++){
-              if(this.oldUsers[i]==this.responsabili[k]){
+              if(this.oldUsers[i].id==this.responsabili[k].idu){
                   tr=true;
               }
             }
@@ -342,11 +330,8 @@ define(function(require) {
             }
           }
       }
-
-     console.log(usersAggiungere);
-      console.log(usersEliminare);
-      console.log(adminsAggiungere);
-      console.log(adminsEliminare);
+      
+      
       //controllo se i nuovi responsabili c'erano
       for (var i=0; i<this.responsabili.length;i++){
           tr=false;
@@ -371,11 +356,6 @@ define(function(require) {
             }
           }
       }
-
-      console.log(usersAggiungere);
-      console.log(usersEliminare);
-      console.log(adminsAggiungere);
-      console.log(adminsEliminare);
       //controllo se i nuovi utenti c'erano
       for (var i=0; i<this.utenti.length;i++){
           tr=false;
@@ -405,13 +385,7 @@ define(function(require) {
       this.usersEliminare=usersEliminare;
       this.adminsAggiungere=adminsAggiungere;
       this.adminsEliminare=adminsEliminare;
-      console.log(this.usersAggiungere);
-      console.log(this.usersEliminare);
-      console.log(this.adminsAggiungere);
-      console.log(this.adminsEliminare);
 
-
-      console.log("salvaResponsabili");
 
       if(this.adminsAggiungere.length!=0){
           console.log("query");
@@ -424,7 +398,6 @@ define(function(require) {
     },
 
     salvaMembri: function(res){
-      console.log("entrato");
       //utenti è la lista degli utenti non responsabili
       if (this.usersAggiungere.length!=0){
         this.bacheca.salvaUtenti(this.usersAggiungere, this.idb);  
@@ -434,7 +407,6 @@ define(function(require) {
       }
     },
     rimuoviResponsabili: function(res){
-      console.log("entrato");
       //utenti è la lista degli utenti non responsabili
       if (this.adminsEliminare.length!=0){
         this.bacheca.idRigheResponsabili(this.adminsEliminare, this.idb);  
@@ -445,7 +417,6 @@ define(function(require) {
     }
     ,
     rimuoviMembri: function(res){
-        console.log("entrato");
       //utenti è la lista degli utenti non responsabili
       if (this.usersEliminare.length!=0){
         this.bacheca.idRigheMembri(this.usersEliminare, this.idb);  
