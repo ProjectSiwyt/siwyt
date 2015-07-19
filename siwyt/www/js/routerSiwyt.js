@@ -112,6 +112,7 @@ define(function(require) {
       this.structureView.setActiveTabBarElement("contactsMenu");
       var page = new Contacts();
       this.changePage(page);
+      page.startQuery();
     },
 
     profile: function(){
@@ -129,6 +130,7 @@ define(function(require) {
         model: model
       });
       this.changePage(page);
+      page.startQuery();
     },
 
     create: function(){
