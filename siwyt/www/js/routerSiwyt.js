@@ -156,6 +156,7 @@ define(function(require) {
     showNoticeboard: function(idb){
         var page = new BachecaHome(idb);
         this.changePage(page);
+        page.manageCanvas();
         page.caricaDati();
 
     },
@@ -171,25 +172,6 @@ define(function(require) {
       this.changePage(page);
       page.caricaDati();
     }
-    /*
-    newBacheca: function(nome){
-      //aggiunge una nuova riga alla collezione "Bacheca"
-      var post = new Object();
-      post.nome = nome;
-      var THIS=this
-      //post.body = "Body of my post.";     
-      BaasBox.save(post, "Bacheca")
-        .done(function(res) {
-          console.log("res ", res);
-          Backbone.history.navigate("bacheca/"+res.id, {
-            trigger: true
-          });
-        })
-        .fail(function(error) {
-          console.log("error ", error);
-        })
-     }
-     */ 
   });
 
   return AppRouter;

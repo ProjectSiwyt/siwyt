@@ -13,7 +13,9 @@ define(function(require) {
 			altezza: "",
 			larghezza: "",
 			x: "",
-			y: ""
+			y: "",
+			colore:"",
+			font:""
 
 		},
 		constructorName: "Postit",
@@ -34,8 +36,7 @@ define(function(require) {
 		
 			BaasBox.loadCollectionWithParams("Postit", {where: "idb='"+idb+"'" })
 				.done(function(res) {
-					console.log("res ", res);
-
+					console.log(res);
 					THIS.trigger("elencopostits ", res);
 				})
 				.fail(function(error) {
@@ -49,9 +50,7 @@ define(function(require) {
 		
 			BaasBox.loadCollectionWithParams("Postit", {where: "idu='"+idu+"'" })
 				.done(function(res) {
-					console.log("res ", res);
-
-					//THIS.trigger("eventoElencopostits ", res);
+					THIS.trigger("eventoElencoPostitUtente ", res);
 				})
 				.fail(function(error) {
 					console.log("errorElencopostits ", error);
@@ -60,7 +59,7 @@ define(function(require) {
 
 
 		//aggiunge una nuova riga alla collezione Postit
-		aggiungiPostit: function(idb, contenuto, idu, altezza, larghezza, x, y){
+		aggiungiPostit: function(idb, contenuto, idu, altezza, larghezza, x, y, colore, font){
 
 			var THIS = this;
 
@@ -78,6 +77,8 @@ define(function(require) {
 			post.larghezza = larghezza;
 			post.x = x;
 			post.y = y;
+			post.colore = colore;
+			post.font = font;
 
 			BaasBox.save(post, "Postit")
 				.done(function(res) {
@@ -181,7 +182,30 @@ define(function(require) {
 				    THIS.trigger("errorSaveOra", false);
 				})
 		},
-
+		saveColore: function(idp, colore){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "colore", colore)
+				.done(function(res) {					
+					console.log("res ", res);
+					THIS.trigger("eventoSaveColore", true);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errorSaveColore", false);
+				})
+		},
+		saveFont: function(idp, font){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "font", font)
+				.done(function(res) {					
+					console.log("res ", res);
+					THIS.trigger("eventoSaveFont", true);
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("errorSaveFont", false);
+				})
+		},
 		//rimuove dalla tabella 'Postit' la riga con id idp
    		rimuoviPostit: function(idp){
    			BaasBox.deleteObject(idp, "Postit")
@@ -198,13 +222,34 @@ define(function(require) {
          
             BaasBox.loadCollectionWithParams("Utente", {where: "id='"+idu+"'" }) 
                 .done(function(res) { 
-                    console.log("res ", res); 
  
-                    THIS.trigger("datiAutore", res[0].nome+" "+res[0].cognome); 
+                    THIS.trigger("datiAutore", res[0].username); 
                 }) 
                 .fail(function(error) { 
                     console.log("errorElencopostits ", error); 
                 }) 
+        },
+       	//restituisci i nomi degli autori di postit 
+        nomeAutori: function(r){ 
+        var THIS = this; 
+        var c=0;
+        var a=new Array();
+         	for(var i=0; i<r.length; i++){
+		        BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[i].idu+"'" }) 
+		            .done(function(res) {
+		            	var o =new Object();
+		            	o.id=res[0].id;
+		            	o.username=res[0].username;
+		            	a[c]=o;
+		            	c++;
+		                if(c==r.length) {
+		                	THIS.trigger("eventoNomiAutori", a); 
+		                }   
+		            }) 
+		            .fail(function(error) { 
+		                console.log("error ", error); 
+		            }) 
+	        }
         }
 		
 

@@ -1,5 +1,5 @@
 {{#each this}}
-<div id="{{id}}" class="postit moveable block absolute center" style="top: {{y}}; left: {{x}}; height: {{altezza}}; width: {{larghezza}}">
+<div id="{{id}}" class="postit moveable block absolute center {{font}}" style="top: {{y}}; left: {{x}}; height: {altezza}};  width: {{larghezza}}; background-color: {{colore}}; font-family: {{font}}">
     <h3 class="postit-title">{{contenuto}}</h3>
     <div class="pull-left caption">{{idu}}</div>
     <div class="pull-right caption">{{data}}</div>
@@ -7,23 +7,23 @@
 </div>
 <div class="popup-screen overlay in hide" id="{{id}}RenameScreen"></div>
 <div class="postit-popup popup-container hide" id="{{id}}RenamePopup">
-    <textarea></textarea>
+    <textarea>{{contenuto}}</textarea>
     <input type="submit" value="Done" class="rename">
 </div>
 <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
 <!--Popup menu to manage postit-->
 <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
     <ul class="table-view border-table-view">
-        <li class="table-view-cell border-top media">New relation<span class="pull-right"><i class="fa fa-plus"></i></span></li>
-        <li class="table-view-cell media">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
-        <li class="table-view-cell media">Change Color:
-            <input type="color" value="#ff0000">
+        <li class="table-view-cell border-top media menuRelation">New relation<span class="pull-right"><i class="fa fa-plus"></i></span></li>
+        <li class="table-view-cell media menuRename">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
+        <li class="table-view-cell media menuColor">Change Color:
+            <input type="color" name="colorPicker" value="{{colore}}">
         </li>
-        <li class="table-view-cell media">Font:
+        <li class="table-view-cell media menuFont">Font:
             <select>
-                <option>Font 1</option>
-                <option>Font 2</option>
-                <option>Font 3</option>
+                <option value="helvetica">Helvetica</option>
+                <option value="arial">Arial</option>
+                <option value="tahoma">Tahoma</option>
             </select>
         </li>
         <li class="table-view-cell media">Font size:

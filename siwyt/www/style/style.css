@@ -411,7 +411,7 @@ color: #F4F4F4;
   border: 1px solid;
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em; 
-  overflow: auto;
+  overflow: hidden;
   background-color: #f4f4f4;
 }
 .postit-popup{
@@ -529,4 +529,10 @@ textarea:focus, input:focus {
 .fa-arrows{
     top:13%;
     left:27%;
+}
+.canvas{
+    left: 0;
+    right: 0;
+    top: 44px;
+    bottom: 0;
 }

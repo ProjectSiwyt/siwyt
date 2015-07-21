@@ -16,11 +16,17 @@ define(function(require) {
     initialize: function(idpage,idb) {
       this.returnpage=idpage;
       this.idb=idb;
-       document.getElementById("back").removeAttribute("style");
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureAddContacts;
       this.utente = new Utente();
       this.utente.on("listContacts",this.appendContacts, this);
+      // Si sostituisce l'id del back per poter gestire la memoria dei membri aggiunti
+      document.getElementById("header").classList.add('hide');
+      document.getElementById("navigation").classList.add('hide');
+      var settings = document.getElementById("settingsMenu");
+      if (settings.classList.contains('hide')){
+        settings.classList.remove('hide');
+      }
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -37,7 +43,8 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #submitAddContacts": "goToPage"
+      "tap #submitAddContacts": "goToPage",
+      "tap #backCreate": "goToPage"
     },
     loadData: function(){
         this.utente.listContacts(localStorage.getItem("idu"));
