@@ -2,7 +2,7 @@ define(function(require) {
 
   var Backbone = require("backbone");
   var Utente = require("models/Utente");
-  var Utenti = require("collections/Utenti");
+ // var Utenti = require("collections/Utenti");
   var Utils = require("utils");
 
 
@@ -27,7 +27,7 @@ define(function(require) {
     },
 
     id: "showlistmembers",
-    //className: "i-g page",
+    className: "table-view-cell",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
@@ -37,7 +37,8 @@ define(function(require) {
     },
 
     render: function() {
-      $(this.el).html(this.template(this.collection.toJSON()));
+      $(this.el).html(this.template(this.model.toJSON()));
+      console.log(this.model);
       return this;
     },
     goToBacheca: function(e){

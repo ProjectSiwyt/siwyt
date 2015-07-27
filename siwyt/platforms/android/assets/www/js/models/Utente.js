@@ -269,6 +269,73 @@ define(function(require) {
 				})
 		},
 
+		//1 - utente.cercaUtente(str) la funzione prende in input una stringa str e 
+   		//restituisce un array contenente oggetti utente i cui nome o cognome contengono str
+   		cercaUtente: function(str){
+   			var THIS = this;	
+			var trovato = false;
+			var a = new Array();
+			var c = 0;
+   			BaasBox.loadCollection("Utente")
+   				.done(function(res) {
+   					console.log("load search done");
+				    for (var i=0; i<res.length; i++){
+				    	var nome = (res[i].nome).toLowerCase();
+				    	var cognome = (res[i].cognome).toLowerCase();
+				    	if((nome.includes(str.toLowerCase())) || (cognome.includes(str.toLowerCase()))) {
+				    		a[c] = res[i];
+				    		c++;
+				    	}
+				    		
+
+				    	}
+				    	if(a.length>0) THIS.filtraRisultati(a);
+				    	else THIS.trigger("resultCercaUtente", false);
+				    
+				})
+				.fail(function(error) {
+			    	console.log("error ", error);
+				})
+   		},
+
+   		// funzione che filtra i risultati di ricerca in modo da non visalizzare gli utenti che sono già stati aggiunti ai contatti
+   		filtraRisultati: function(a){
+   			var exist = false;
+   			var c = new Array();
+   			var k =0;
+   			var THIS = this;
+   			var idu = localStorage.getItem("idu");
+   			BaasBox.loadCollection("Contatto")
+   				.done(function(res) {
+   					for (var i=0; i<a.length; i++){
+   						exist = false;
+   						for( var j=0; j< res.length; j++){
+   							if((a[i].id == res[j].id1 && res[j].id2==idu) || (a[i].id == res[j].id2 && res[j].id1==idu)){
+   								exist = true;
+   							}
+
+
+   						}
+   						if(!exist) c[k++]=a[i];
+   						else console.log("contatto presente");
+   					}
+
+   					if(c.length>0) {
+   						console.log(c);
+   						THIS.trigger("resultCercaUtente", c);
+   					}else{
+   						THIS.trigger("resultCercaUtente", false);
+   						console.log("nessun utente trovato");
+   					}
+
+
+   				})
+   				.fail(function(error) {
+			    	console.log("error filtraRisultati", error);
+				})
+   					
+   		},
+
 
 		//rimuove un 'Utente' con id=idu dalla tabella utente
    		rimuoviUtente: function(idu){

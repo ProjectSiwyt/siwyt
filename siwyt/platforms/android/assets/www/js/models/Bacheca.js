@@ -95,13 +95,9 @@ define(function(require) {
     		var a = new Array();
     		var THIS = this;
     		
-    		console.log(r);
-    		
     		BaasBox.loadCollection("Bacheca")
 				.done(function(res) {
-					console.log(r.length);
 					for(var i=0; i<r.length; i++){
-						console.log(i);
 						for(var j=0; j<res.length; j++){
 							if(r[i].idb == res[j].id){
 								a[i] = res[j];
@@ -155,7 +151,6 @@ define(function(require) {
 				.done(function(res) {
 					for(var i=0; i<r.length; i++){
 						for(var j=0; j<res.length; j++){
-							console.log(r[i].idu+" "+res[j].id);
 							if(r[i].idu == res[j].id){
 								a[i] = res[j];
 								break;
@@ -264,6 +259,16 @@ define(function(require) {
 				})
 			}       	
 		},
+		rimuoviBacheca: function(idb){
+   			var THIS=this;
+   			BaasBox.deleteObject(idb, "Bacheca")
+				.done(function(res) {
+					THIS.trigger("rimuoviBacheca", idb);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
 
    		//Per la funzione rimuoviAmministratore devo fare prima una query che mi ritorna l'id della riga
    		idRigaAmministratore: function(idu, idb){
@@ -422,7 +427,7 @@ define(function(require) {
                     })
             } 
            },
-           //Per la funzione rimuoviResponsabili devo fare prima una query che mi ritorna un array contenente gli id delle righe 
+           //Per la funzione rimuoviMembri devo fare prima una query che mi ritorna un array contenente gli id delle righe 
 
            idRigheMembri: function(r, idb){
             var a= new Array();
@@ -457,6 +462,105 @@ define(function(require) {
                     	if (c==r.length){
                     		console.log("eliminato");
                     		THIS.trigger("rimuoviMembri", true); 
+                    	}
+                    }) 
+                    .fail(function(error) { 
+                        console.log("error ", error); 
+                    })
+            } 
+           },
+           idRigheTuttiResponsabili: function(idb){
+	        var a= new Array();
+			var c =0;
+			var THIS=this;
+	        BaasBox.loadCollection("Responsabile") 
+	            .done(function(res) { 
+	                for(var j=0; j<res.length; j++){ 
+	                    if(idb == res[j].idb){ 
+	                        a[c++]=res[j]; 
+	                    }
+	                } 
+	                THIS.rimuoviTuttiResponsabili(a);
+	            }) 
+	            .fail(function(error) { 
+	                console.log("error ", error); 
+	            }) 
+	       },
+	       rimuoviTuttiResponsabili: function(r){
+           	var THIS=this;
+           	var c=0;
+            for(var i=0; i<r.length; i++){ 
+                   BaasBox.deleteObject(r[i].id, "Responsabile") 
+                    .done(function(res) {
+                    	c++; 
+                    	if (c==r.length){
+                    		THIS.trigger("rimuoviTuttiResponsabili", true);
+                    	}
+                    }) 
+                    .fail(function(error) { 
+                        console.log("error ", error); 
+                    })
+            } 
+           },
+           idRigheTuttiMembri: function(idb){
+	        var a= new Array();
+			var c =0;
+			var THIS=this;
+	        BaasBox.loadCollection("Bacheca_Utente") 
+	            .done(function(res) { 
+	                for(var j=0; j<res.length; j++){ 
+	                    if(idb == res[j].idb){ 
+	                        a[c++]=res[j]; 
+	                    }
+	                } 
+	                THIS.rimuoviTuttiMembri(a);
+	            }) 
+	            .fail(function(error) { 
+	                console.log("error ", error); 
+	            }) 
+	       },
+	       rimuoviTuttiMembri: function(r){
+           	var THIS=this;
+           	var c=0;
+            for(var i=0; i<r.length; i++){ 
+                   BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
+                    .done(function(res) {
+                    	c++; 
+                    	if (c==r.length){
+                    		THIS.trigger("rimuoviTuttiMembri", true);
+                    	}
+                    }) 
+                    .fail(function(error) { 
+                        console.log("error ", error); 
+                    })
+            } 
+           },
+           idRigheTuttiAmministratori: function(idb){
+	        var a= new Array();
+			var c =0;
+			var THIS=this;
+	        BaasBox.loadCollection("Amministratore") 
+	            .done(function(res) { 
+	                for(var j=0; j<res.length; j++){ 
+	                    if(idb == res[j].idb){ 
+	                        a[c++]=res[j]; 
+	                    }
+	                } 
+	                THIS.rimuoviTuttiAmministratori(a);
+	            }) 
+	            .fail(function(error) { 
+	                console.log("error ", error); 
+	            }) 
+	       },
+	       rimuoviTuttiAmministratori: function(r){
+           	var THIS=this;
+           	var c=0;
+            for(var i=0; i<r.length; i++){ 
+                   BaasBox.deleteObject(r[i].id, "Amministratore") 
+                    .done(function(res) {
+                    	c++; 
+                    	if (c==r.length){
+                    		THIS.trigger("rimuoviTuttiAmministratori", true);
                     	}
                     }) 
                     .fail(function(error) { 

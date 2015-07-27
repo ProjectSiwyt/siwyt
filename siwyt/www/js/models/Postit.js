@@ -59,7 +59,7 @@ define(function(require) {
 
 
 		//aggiunge una nuova riga alla collezione Postit
-		aggiungiPostit: function(idb, contenuto, idu, altezza, larghezza, x, y, colore, font){
+		aggiungiPostit: function(idb, contenuto, idu, altezza, larghezza, x, y, colore, font, dimensione){
 
 			var THIS = this;
 
@@ -79,6 +79,7 @@ define(function(require) {
 			post.y = y;
 			post.colore = colore;
 			post.font = font;
+			post.dimensione=dimensione;
 
 			BaasBox.save(post, "Postit")
 				.done(function(res) {
@@ -206,16 +207,69 @@ define(function(require) {
 				    THIS.trigger("errorSaveFont", false);
 				})
 		},
+		saveDimensionFont: function(idp, font){
+			var THIS = this;
+			BaasBox.updateField(idp, "Postit", "dimensione", font)
+				.done(function(res) {					
+					THIS.trigger("eventoSaveDimensionFont", true);
+				})
+				.fail(function(error) {
+				    THIS.trigger("errorSaveFont", false);
+				})
+		},
 		//rimuove dalla tabella 'Postit' la riga con id idp
    		rimuoviPostit: function(idp){
+   			var THIS=this;
    			BaasBox.deleteObject(idp, "Postit")
 				.done(function(res) {
-					console.log("res ", res);
+					THIS.trigger("rimuoviPostit", idp);
 				})
 				.fail(function(error) {
 					console.log("error ", error);
 				})
    		},
+
+		 //Per la funzione rimuoviPostit devo fare prima una query che mi ritorna un array contenente le righe da eliminare
+
+       idRighePostit: function(idb){
+        var a= new Array();
+				var c =0;
+				var THIS=this;
+        BaasBox.loadCollection("Postit") 
+            .done(function(res) { 
+                for(var j=0; j<res.length; j++){ 
+                    if(idb == res[j].idb){ 
+                        a[c++]=res[j]; 
+                    }
+                } 
+                THIS.rimuoviPostits(a);
+            }) 
+            .fail(function(error) { 
+                console.log("error ", error); 
+            }) 
+       },
+
+     
+       //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
+       rimuoviPostits: function(r){
+       	console.log(r);
+       	var THIS=this;
+       	var c=0;
+        for(var i=0; i<r.length; i++){ 
+               BaasBox.deleteObject(r[i].id, "Postit") 
+                .done(function(res) {
+                	c++; 
+                	if (c==r.length){
+                		console.log("eliminato");
+                		THIS.trigger("rimuoviPostits", r); 
+                	}
+                }) 
+                .fail(function(error) { 
+                    console.log("error ", error); 
+                })
+        } 
+       },
+
    		 //restituisci il nome dell'autore del postit 
         nomeAutore: function(idu){ 
         var THIS = this; 

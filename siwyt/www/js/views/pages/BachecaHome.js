@@ -154,7 +154,7 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4");
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
             //Gestione Salvataggio postit
 
         },

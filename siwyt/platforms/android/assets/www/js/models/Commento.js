@@ -44,7 +44,7 @@ define(function(require) {
 			
 			BaasBox.save(post, "Commento")
 				.done(function(res) {
-					THIS.trigger("aggiuntoCommento", res);
+					THIS.trigger("aggiuntoCommento", post);
 				})
 				.fail(function(error) {
 					THIS.trigger("error", error);
@@ -116,7 +116,70 @@ define(function(require) {
                 .fail(function(error) { 
                     console.log("errorElencopostits ", error); 
                 }) 
-        }
+        },
+         	//restituisci i nomi degli autori dei commenti 
+        nomeAutori: function(r){ 
+        console.log(r);
+        var THIS = this; 
+        var c=0;
+        var a=new Array();
+         	for(var i=0; i<r.length; i++){
+		        BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[i].idu+"'" }) 
+		            .done(function(res) {
+		            	var o =new Object();
+		            	o.id=res[0].id;
+		            	o.username=res[0].username;
+		            	a[c]=o;
+		            	c++;
+		                if(c==r.length) {
+		                	THIS.trigger("eventoNomiAutori", a); 
+		                }   
+		            }) 
+		            .fail(function(error) { 
+		                console.log("error ", error); 
+		            }) 
+	        }
+        },
+         //Per la funzione rimuoviPostit devo fare prima una query che mi ritorna un array contenente le righe da eliminare
+
+       idRigheCommenti: function(idp){
+        var a= new Array();
+				var c =0;
+				var THIS=this;
+        BaasBox.loadCollection("Commento") 
+            .done(function(res) { 
+                for(var j=0; j<res.length; j++){ 
+                    if(idp == res[j].idp){ 
+                        a[c++]=res[j]; 
+                    }
+                } 
+                THIS.rimuoviCommenti(a);
+            }) 
+            .fail(function(error) { 
+                console.log("error ", error); 
+            }) 
+       },
+
+     
+       //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
+       rimuoviCommenti: function(r){
+       	console.log(r);
+       	var THIS=this;
+       	var c=0;
+        for(var i=0; i<r.length; i++){ 
+               BaasBox.deleteObject(r[i].id, "Commento") 
+                .done(function(res) {
+                	c++; 
+                	if (c==r.length){
+                		console.log("eliminato");
+                		THIS.trigger("rimuoviCommenti", true); 
+                	}
+                }) 
+                .fail(function(error) { 
+                    console.log("error ", error); 
+                })
+        } 
+       },
 
 	});
 

@@ -38,11 +38,12 @@ define(function(require) {
             this.postits.on("elencopostits", this.appendItems, this);
             //Mi metto in ascolto di eventuali errori nel caricamento/salvataggio dei dati
             this.postits.on("error", this.error);
+            //Mi metto in ascolto dell'evento che mi ritora i nomi degli autori dei postit
+            this.postits.on("eventoNomiAutori", this.appendItems2, this);
             //Mi metto in ascolto della funzione che si occupa del salvataggio di nuovi postit
             this.postits.on("eventoAggiungiPostit", this.createPostit, this);
-            //chiama la funzion che calcola i dati che restituisce i dati della bacheca con id idb
-            
-
+            //Mi metto in ascolto della funzione che ritorna i dati dell'autore del postit creato
+            this.postits.on("datiAutore", this.createPostit2, this);
         },
 
         id: "bachecahome",
@@ -66,18 +67,18 @@ define(function(require) {
         events: {
             "tap #goToHome": "goToHome",
             "tap #boardManagement": "goToBoardManagement",
-            "tap .postit": "manageAction",//"goToComments",
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
             "tap #backBoard": "goBack",
+            "tap .postit": "manageAction",
             "tap .rename": "rename",
             "longTap .postit": "enableIcons",
             "touchstart .fa-arrows": "startDrag",
             "touchmove .fa-arrows": "drag",
             "touchend .fa-arrows": "endDrag",
-            "tap .overlay": "hideElements"
-
+            "tap .overlay": "hideElements",
+            "tap .menuRename" : "renameManagement"          
         },
         caricaDati:function(){
             this.bacheca.noticeboardData(this.idb);
@@ -88,11 +89,6 @@ define(function(require) {
         error: function() {
             //document.getElementById("queryError").classList.remove('hide');
         },
-
-        //chiama la funzione che calcola i dati dei postits della bacheca
-        getPostits: function(idb) {
-            this.postits.elencoPostitBacheca(idb);
-        },
         //inserisce il titolo della bacheca nella pagina
         appendTitle: function(result) {
             console.log(result[0].nome);
@@ -100,32 +96,44 @@ define(function(require) {
             document.getElementById("titleBacheca").innerHTML = result[0].nome;
 
             //chiamo la funzione per prendere i postit
-            this.getPostits(result[0].id);
+            this.postits.elencoPostitBacheca(this.idb);
         },
-        appendItems: function(result) {
-            console.log(result);
+        appendItems: function(res) {
+            this.result=res;
+            this.postits.nomeAutori(res);
+        },
+        appendItems2: function(res){
             var b = new Postits();
-            for (var i = 0; i < result.length; i++) {
-                b.add(result[i]);
-                console.log(result[i]);
+            for (var i = 0; i < this.result.length; i++) {
+                for(var j=0; j<res.length;j++){
+                    if (this.result[i].idu==res[j].id){
+                        this.result[i].idu=res[j].username;
+                        break;
+                    }
+                }
             }
+
+            b.add(this.result);
             this.subView = (new ShowPostitsNoticeboard({
                 collection: b
             })).render().el;
-            console.log(this.subView);
             //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
             //$('#boardContent').append(this.subView);
             document.getElementById("boardContent").appendChild(this.subView);
         },
         render: function() {
-            $(this.el).html(this.template());
+            $(this.el).html(this.template());            
             return this;
         },
-
+        manageCanvas:function(){
+            var ctx = document.getElementById('boardCanvas');
+            ctx.width  = window.innerWidth;
+            ctx.height = window.innerHeight-44;
+        },
         manageAction: function(e) {
             var obj = e.target;
             if(obj.classList.contains("fa-pencil")){
-                this.showPopup(e);
+                this.showPopup(e.currentTarget.id);
             }
             else{
                 this.goToComments(e);
@@ -146,135 +154,26 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", (this.postit * 10) + 50)+"px";
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
             //Gestione Salvataggio postit
 
         },
-        //Funzione che si occupa della creazione di nuovi postit
-        createPostit: function(res) {
-            console.log(res);
-            var boardContent = document.getElementById("boardContent");
-            //Creazione postit
-            //Contenitore postit
-            var postit = document.createElement("div");
-            postit.id = res.id;
-            postit.style.left = res.x;
-            postit.style.top = res.y;
-            postit.style.heigth=res.altezza;
-            postit.style.width=res.larghezza;
-            //Elementi del corpo del postit            
-            var h3 = document.createElement("h3");
-            var autore = document.createElement("div");
-            var data = document.createElement("div");
-            var link = document.createElement("a");
-            var pencil = document.createElement("i");
-            h3.classList.add("postit-title");
-            h3.innerHTML = res.contenuto;
-            autore.classList.add("pull-left", "caption");
-            autore.innerHTML = localStorage.getItem('nameLogged');
-            data.classList.add("pull-right", "caption");
-            data.innerHTML = res.data;
-            link.id = res.id + "Link";
-            link.classList.add("popup");
-            pencil.classList.add("fa", "fa-pencil");
-            link.appendChild(pencil);
-            postit.appendChild(h3);
-            postit.appendChild(autore);
-            postit.appendChild(data);
-            postit.appendChild(link);
-            postit.classList.add("postit", "moveable", "block", "absolute", "center");
-            boardContent.appendChild(postit);
-            // Fine creazione postit
-            // Creazione dialog per il rename
-            var layerDialog = document.createElement("div");
-            layerDialog.id = res.id + "RenameScreen";
-            layerDialog.classList.add("popup-screen", "overlay", "in", "hide");
-            var dialog = document.createElement("div");
-            dialog.id = res.id + "RenamePopup";
-            dialog.classList.add("postit-popup", "popup-container", "hide");
-            var textarea = document.createElement("textarea");
-            var submit = document.createElement("input");
-            submit.type = "submit";
-            submit.value = "Done";
-            submit.classList.add("rename");
-            dialog.appendChild(textarea);
-            dialog.appendChild(submit);
-            boardContent.appendChild(layerDialog);
-            boardContent.appendChild(dialog);
-            // Creazione popup menu
-            var layerPopup = document.createElement("div");
-            layerPopup.id = res.id + "LinkScreen";
-            layerPopup.classList.add("popup-screen", "overlay", "in", "hide");
-            var popup = document.createElement("div");
-            popup.id = res.id + "LinkPopup";
-            popup.classList.add("postit-popup", "popup-container", "hide");
-            //Menu del popup
-            var ul = document.createElement("ul");
-            ul.classList.add("table-view", "border-table-view");
-            //Nuova Relazione
-            var li = document.createElement("li");
-            li.classList.add("table-view-cell", "border-top", "media");
-            li.innerHTML = "New relation";
-            var span = document.createElement("span");
-            span.classList.add("pull-right");
-            var icon = document.createElement("i");
-            icon.classList.add("fa","fa-plus");
-            span.appendChild(icon);
-            li.appendChild(span);
-            ul.appendChild(li);
-            // Rinomina
-            li = document.createElement("li");
-            li.classList.add("table-view-cell", "media");
-            li.innerHTML = "Rename";
-            span = document.createElement("span");
-            span.classList.add("pull-right");
-            icon = document.createElement("i");
-            icon.classList.add("fa","fa-pencil");
-            span.appendChild(icon);
-            li.appendChild(span);
-            ul.appendChild(li);
-            // Cambia Colore
-            li = document.createElement("li");
-            li.classList.add("table-view-cell", "media");
-            li.innerHTML = "Change Color:";
-            var color = document.createElement("input");
-            color.type = "color";
-            color.value = "#ff0000";
-            li.appendChild(color);
-            ul.appendChild(li);
-            // Cambia font
-            li = document.createElement("li");
-            li.classList.add("table-view-cell", "media");
-            li.innerHTML = "Font:";
-            var font = document.createElement("select");
-            li.appendChild(font);
-            ul.appendChild(li);
-            // Cambia font size
-            li = document.createElement("li");
-            li.classList.add("table-view-cell", "media");
-            li.innerHTML = "Font size:";
-            var size = document.createElement("input");
-            size.type = "number";
-            size.value = "12";
-            li.appendChild(size);
-            ul.appendChild(li);
-            // Cancella Postit
-            li = document.createElement("li");
-            li.classList.add("table-view-cell", "media");
-            li.innerHTML = "Delete Postit";
-            span = document.createElement("span");
-            span.classList.add("pull-right");
-            icon = document.createElement("i");
-            icon.classList.add("fa","fa-trash-o");
-            span.appendChild(icon);
-            li.appendChild(span);
-            ul.appendChild(li);
-
-            popup.appendChild(ul);
-            boardContent.appendChild(layerPopup);
-            boardContent.appendChild(popup);
-            this.showDialog(res.id);
+        createPostit: function(result){
+            this.resultpostit=result;
+            this.postits.nomeAutore(result.idu);
+            console.log(result.idu)
         },
+        createPostit2: function(result){
+            console.log(result);
+            this.resultpostit.idu=result;
+            var post=new Postits();
+            post.add(this.resultpostit);
+            this.subView = (new ShowPostitsNoticeboard({collection: post})).render().el;
+            console.log(this.subView);
+            document.getElementById("boardContent").appendChild(this.subView);
+            this.showDialog(this.resultpostit.id);
+        },
+        
         //Funzione che gestisce la visibilità del dialog di rinomina postit
         showDialog: function(idp) {
             console.log("showDialog");
@@ -287,11 +186,10 @@ define(function(require) {
         rename: function(e) {
             console.log("rename");
             var obj = e.currentTarget.parentNode;
-            debugger;
             var postit = document.getElementById(obj.id.replace("RenamePopup", ""));
-            if (obj.firstChild.value != "") {
-                postit.firstChild.innerHTML = obj.firstChild.value;
-                this.postits.saveContenuto(obj.id.replace("RenamePopup", ""),obj.firstChild.value);
+            if (obj.childNodes[1].value != "") {
+                postit.childNodes[1].innerHTML = obj.childNodes[1].value;
+                this.postits.saveContenuto(obj.id.replace("RenamePopup", ""),obj.childNodes[1].value);
             }
             this.showDialog(obj.id.replace("RenamePopup", ""));
             //this.postits.aggiungiPostit(this.idb, postit.firstChild.innerHTML, localStorage.getItem("idu"), "", "", x, y);            
@@ -302,9 +200,9 @@ define(function(require) {
             console.log("BENE!!!!!");
             this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("nameLogged"), 80, 123, (this.postit * 10), (this.postit * 10) + 50);
         },
-        showPopup: function(e){        
-            var popScreen = document.getElementById(e.currentTarget.id + "LinkScreen");
-            var popPopup = document.getElementById(e.currentTarget.id + "LinkPopup");
+        showPopup: function(idp){       
+            var popScreen = document.getElementById(idp + "LinkScreen");
+            var popPopup = document.getElementById(idp + "LinkPopup");
             popScreen.classList.toggle('hide');
             popPopup.classList.toggle('hide');
         },
@@ -424,6 +322,11 @@ define(function(require) {
                 x: 0,
                 y: 0
             }
+        },
+        renameManagement:function(e){
+            var idPopup = e.target.parentNode.parentNode.id;
+            this.showDialog(idPopup.replace("LinkPopup",""));
+            this.showPopup(idPopup.replace("LinkPopup",""));
         },
         //Funzioni di cambio pagina
         goToHome: function(e) {

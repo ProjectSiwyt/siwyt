@@ -16,11 +16,17 @@ define(function(require) {
     initialize: function(idpage,idb) {
       this.returnpage=idpage;
       this.idb=idb;
-       document.getElementById("back").removeAttribute("style");
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureAddContacts;
       this.utente = new Utente();
       this.utente.on("listContacts",this.appendContacts, this);
+      // Si sostituisce l'id del back per poter gestire la memoria dei membri aggiunti
+      document.getElementById("header").classList.add('hide');
+      document.getElementById("navigation").classList.add('hide');
+      var settings = document.getElementById("settingsMenu");
+      if (settings.classList.contains('hide')){
+        settings.classList.remove('hide');
+      }
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -37,13 +43,13 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap #submitAddContacts": "goToPage"
+      "tap #submitAddContacts": "goToPage",
+      "tap #backCreate": "goToPage"
     },
     loadData: function(){
         this.utente.listContacts(localStorage.getItem("idu"));
     },
     appendContacts: function(result){
-      console.log(result);
       var b = new Utenti();
       var users= localStorage.getItem("utenti");
       var admins=localStorage.getItem("responsabili");
@@ -79,7 +85,6 @@ define(function(require) {
               }
               this.addMembers=array;
               this.returnResult=array2;
-              console.log(this.returnResult);
         }
         else{
           var array=new Array();
@@ -105,9 +110,7 @@ define(function(require) {
           }
           this.addMembers=array;
           this.returnResult=array2;
-          console.log(this.returnResult);
         }
-        console.log(this.addMembers);
       }
       else{
         if (admins!=null){
@@ -134,10 +137,8 @@ define(function(require) {
             }
             this.addMembers=array;
             this.returnResult=array2;
-            console.log(this.returnResult);
         }
         else{
-          console.log(result);
           b.add(result);
           this.addMembers=result;
         }
@@ -145,13 +146,8 @@ define(function(require) {
       if (this.addMembers[0]==undefined){
           this.returnResult=result;
       }
-      console.log(this.returnResult);
-      console.log(this.addMembers);
-      console.log(b);
       this.subView = (new ShowListAddContacts({collection: b})).render().el;
-      console.log(this.subView);
-        //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
-      //$('#boardContent').append(this.subView);
+      //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
       document.getElementById("contactsContent").appendChild(this.subView);
     },
 
@@ -164,46 +160,37 @@ define(function(require) {
     //torna alla pagina da cui si proviene
     goToPage: function(e) {
       //var c=new Utenti();
-     var c= new Array();
+      var c= new Array();
       var j=0;
-      console.log(this.addMembers);
       if (this.addMembers[0]!=undefined){
         for (var i=0; i<this.addMembers.length;i++){
           if (document.getElementById(""+this.addMembers[i].id).classList.contains("fa-user-times")){
               c[j++]=this.addMembers[i];
-              console.log(this.addMembers[i]);
           }
         }
       }
       else{
         var collection=new Utenti();
         collection.add(this.returnResult);
-        console.log(collection);
         localStorage.setItem("utenti", JSON.stringify(collection));
-        console.log(localStorage.getItem("utenti"));
       }
 
       if(c.length!=0 && c!=undefined){
-        console.log(this.returnResult);
         if (this.returnResult!=undefined){
           var collection=new Utenti();
           collection.add(this.returnResult);
-          console.log(collection);
           collection.add(c);
-          console.log(collection);
         }
         else{
           var collection= new Utenti();
           collection.add(c);
         }
         localStorage.setItem("utenti", JSON.stringify(collection));
-        console.log(localStorage.getItem("utenti"));
       }
       else{
         var collection= new Utenti();
         collection.add(this.returnResult);
         localStorage.setItem("utenti", JSON.stringify(collection));
-        console.log(localStorage.getItem("utenti"));
       }
       
       if (this.returnpage=="noticeboardManagement"){

@@ -85,7 +85,7 @@ define(function(require) {
       var b=new Utenti();
       b.add(a);*/
       var b = new Utente({
-      //nome:localStorage.getItem('nameLogged'),
+      nome:localStorage.getItem('nameLogged'),
       cognome:localStorage.getItem('surnameLogged')
     });
       console.log(b);

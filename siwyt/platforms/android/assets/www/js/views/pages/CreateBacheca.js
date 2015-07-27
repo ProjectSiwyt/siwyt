@@ -23,12 +23,16 @@ define(function(require) {
       document.getElementById("navigation").classList.add('hide');
       var header= document.getElementById("header");
       var back= document.getElementById("back");
+      var settings = document.getElementById("settingsMenu");
       if (header.classList.contains('hide')){
         header.classList.remove('hide');
       } 
       if (back.classList.contains('hide')){
         back.classList.remove('hide');
       } 
+      if (settings.classList.contains('hide')){
+        settings.classList.remove('hide');
+      }
       document.getElementById("title").innerHTML="Create Noticeboard"
       this.bacheca=new Bacheca();
       //mi metto in ascolto dell'evento che mi ritorna l'esito del salvataggio dei dati della bacheca
@@ -73,16 +77,19 @@ define(function(require) {
           document.getElementById("nomeBacheca").value=titolo;
       }
       console.log("caricaMembri");
-      var o1=new Object();
+      /*var o1=new Object();
       o1.nome=localStorage.getItem('nameLogged');
       o1.cognome=localStorage.getItem('surnameLogged');
       var a = new Array();
       a[0]=o1;
       var b=new Utenti();
-      b.add(a);
-
+      b.add(a);*/
+      var b = new Utente({
+      nome:localStorage.getItem('nameLogged'),
+      cognome:localStorage.getItem('surnameLogged')
+    });
       console.log(b);
-      this.subview1=(new ShowListMembers({collection: b})).render().el;
+      this.subview1=(new ShowListMembers({model: b})).render().el;
       document.getElementById("membri").appendChild(this.subview1);
       
       var us = localStorage.getItem('utenti');

@@ -16,12 +16,21 @@ define(function(require) {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.profile;
       console.log("initialize template profile");
-      //nascondo o visualizzo elementi 
-      $("#navigation").removeAttr("style");
-      $("#header").removeAttr("style");
-      $("#settingsMenu").removeAttr("style");
+      var navigation= document.getElementById("navigation");
+      var header= document.getElementById("header");
+      var settings = document.getElementById("settingsMenu");
+      if (header.classList.contains('hide')){
+        header.classList.remove('hide');
+      }
+      if (navigation.classList.contains('hide')){
+        navigation.classList.remove('hide');
+      };
+      if (settings.classList.contains('hide')){
+        settings.classList.remove('hide');
+      };
+      document.getElementById("back").classList.add('hide');
+      spinner.spin();
       document.getElementById("title").innerHTML="Profile";
-      document.getElementById("back").style.display="none";
       
 
       // here we can register to inTheDOM or removing events

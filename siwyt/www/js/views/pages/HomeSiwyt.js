@@ -20,6 +20,7 @@ define(function(require) {
       var navigation= document.getElementById("navigation");
       var header= document.getElementById("header");
       var settings = document.getElementById("settingsMenu");
+      var title = document.getElementById("title");
       if (header.classList.contains('hide')){
         header.classList.remove('hide');
       }
@@ -29,6 +30,9 @@ define(function(require) {
       if (settings.classList.contains('hide')){
         settings.classList.remove('hide');
       };
+      if (title.classList.contains('hide')){
+        title.classList.remove('hide');
+      }
       document.getElementById("back").classList.add('hide');
       spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"

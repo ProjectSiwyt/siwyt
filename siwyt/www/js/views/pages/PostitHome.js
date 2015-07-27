@@ -40,7 +40,8 @@ define(function(require) {
       spinner.spin();
       this.commento=new Commento();
       this.commento.on("elencoCommenti", this.appendComments, this);
-      this.commento.on("aggiuntoCommento", this.appendComments, this);
+      this.commento.on("aggiuntoCommento", this.appendComment, this);
+      this.commento.on("eventoNomiAutori", this.appendComments2, this);
       this.postit=new Postit();      
       this.postit.on("datiPostit", this.loadPostit, this);
       this.postit.on("datiAutore", this.loadPostit2, this)
@@ -76,15 +77,36 @@ define(function(require) {
         this.commento.elencoCommentiPostit(this.idp);
     },
     appendComments: function(result){
+        console.log(result);
+        this.comments=result;
+        this.commento.nomeAutori(result);
+    },
+    appendComments2: function(res){
+        var commenti = new Commenti();
+        for (var i = 0; i < this.comments.length; i++) {
+            for(var j=0; j<res.length;j++){
+                if (this.comments[i].idu==res[j].id){
+                    this.comments[i].idu=res[j].username;
+                    break;
+                }
+            }
+        }
 
-        var commenti=new Commenti();
-        commenti.add(result);
-        this.subView = (new ShowListComments({collection: commenti})).render().el;
-        console.log(this.subView);
+        commenti.add(this.comments);
+        this.subView = (new ShowListComments({
+            collection: commenti
+        })).render().el;
         document.getElementById("postitContent").appendChild(this.subView);
     },
     submit: function(e){
       this.commento.aggiungiCommento(this.idp, document.getElementById("textComment").value, localStorage.getItem("idu"));
+      document.getElementById("textComment").value="";
+    },
+    appendComment: function(res){
+      var a =new Array();
+      a[0]=res;
+      this.comments=a;
+      this.commento.nomeAutori(a);
     },
     render: function() {
       spinner.stop();

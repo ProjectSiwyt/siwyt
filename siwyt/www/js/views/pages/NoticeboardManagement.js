@@ -5,6 +5,8 @@ define(function(require) {
     var Utils = require("utils");
     var Utente = require("models/Utente");
     var Utenti = require("collections/Utenti");
+    var Postit= require("models/Postit");
+    var Commento= require("models/Commento");
     var ShowListMembers = require("views/pages/ShowListMembers");
     var ShowListAdmins = require("views/pages/ShowListAdmins");
     var ShowListUsers = require("views/pages/ShowListUsers");
@@ -38,6 +40,9 @@ define(function(require) {
             // load the precompiled template
 
             this.bacheca = new Bacheca();
+            this.postit=new Postit();
+            this.commento=new Commento();
+
 
             //mi metto in ascolto dell'evento che mi ritorna l'esito della query di salvataggio del titolo
             this.bacheca.on("eventomodificaTitolo", this.salvaResponsabili, this);
@@ -57,7 +62,10 @@ define(function(require) {
             this.bacheca.on("rimuoviResponsabili", this.rimuoviMembri, this);
             //mi metto in ascolto dell'evento che mi ritorna l'esito della rimozione degli users
             this.bacheca.on("rimuoviMembri", this.goToBacheca, this);
-
+            //mi metto in ascolto dell'evento che mi ritorna l'esito della query di eliminazione della bacheca
+            this.bacheca.on("rimuoviBacheca", this.rimuoviElementiBacheca, this);
+            //mi metto in ascolto dell'evento che mi ritorna l'elenco dei postit eliminati
+            this.postit.on("rimuoviPostits", this.rimuoviCommentiPostitBacheca, this)
             //this.bacheca.idAmministratore(this.idb);
 
             // here we can register to inTheDOM or removing events
@@ -73,8 +81,12 @@ define(function(require) {
 
         id: "noticeboardManagement",
         className: "i-g page",
+        events: {
+            "tap #submitUpdate": "update",
+            "tap #addMembers": "goToAddContacts",
+            "tap #deleteNoticeboard": "deleteNoticeboard"
+        },
         caricaMembriDaHome: function(e) {
-            console.log("caricaMembri");
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
                 cognome: localStorage.getItem('surnameLogged')
@@ -99,7 +111,6 @@ define(function(require) {
                 model: b
             })).render().el;
             document.getElementById("membri").appendChild(this.subview1);
-            this.bacheca.listaIdResponsabiliDiUnaBacheca(this.idb);
             var us = localStorage.getItem('utenti');
             var re = localStorage.getItem('responsabili');
             if (us != null) {
@@ -111,9 +122,6 @@ define(function(require) {
                     for (var i = 0; i < users.length; i++) {
                         var tr = false;
                         for (var j = 0; j < admins.length; j++) {
-                            console.log(users[i].id);
-                            console.log(admins[j].id);
-
                             if (users[i].id == admins[j].idu) {
                                 tr = true;
                             }
@@ -124,8 +132,6 @@ define(function(require) {
                             u.add(users[i]);
                         }
                     }
-                    console.log(r);
-                    console.log(u);
                     this.subview2 = (new ShowListAdmins({
                         collection: r
                     })).render().el;
@@ -144,10 +150,6 @@ define(function(require) {
             }
         },
 
-
-
-
-
         //la funzione carica il titolo salvato nel localStorage nel campo di input
         //altrimenti fa la query per ottenerlo
         caricaDati: function() {
@@ -162,31 +164,23 @@ define(function(require) {
             document.getElementById("titleBacheca").value = res[0].nome;
         },
         appendAdmins: function(result) {
-            console.log(result);
             localStorage.setItem("oldAdmins", JSON.stringify(result));
             var b = new Utenti();
             b.add(result);
             this.subView = (new ShowListAdmins({
                 collection: b
             })).render().el;
-            console.log(this.subView);
             document.getElementById("membri").appendChild(this.subView);
             this.bacheca.listaIdMembriDiUnaBacheca(this.idb);
         },
         appendUsers: function(result) {
-            console.log(result);
             localStorage.setItem("oldUsers", JSON.stringify(result));
             var b = new Utenti();
             b.add(result);
             this.subView = (new ShowListUsers({
                 collection: b
             })).render().el;
-            console.log(this.subView);
             document.getElementById("membri").appendChild(this.subView);
-        },
-        events: {
-            "tap #submitUpdate": "update",
-            "tap #addMembers": "goToAddContacts"
         },
         goToAddContacts: function() {
             var a = new Array();
@@ -201,7 +195,6 @@ define(function(require) {
                     var o = new Object({
                         idu: input[i].value
                     });
-                    console.log(o);
                     if (input[i].classList.contains('admin')) {
                         a[ca++] = o;
                     } else {
@@ -224,8 +217,6 @@ define(function(require) {
                     localStorage.removeItem("utenti");
                 }
             }
-
-            console.log(a);
             if (a[0] != undefined && a.length != 0) {
                 localStorage.setItem("responsabili", JSON.stringify(a));
             } else {
@@ -233,8 +224,6 @@ define(function(require) {
             }
 
             localStorage.setItem("titolo", document.getElementById("titleBacheca").value);
-
-            console.log("entrato");
             Backbone.history.navigate("addContacts/" + this.id + "/" + this.idb, {
                 trigger: true
             });
@@ -257,7 +246,6 @@ define(function(require) {
                     o = new Object({
                         idu: input[i].value
                     });
-                    console.log(o);
                     if (input[i].classList.contains('admin')) {
                         a1[c1++] = o;
                     } else if (input[i].classList.contains('simple-user')) {
@@ -391,10 +379,8 @@ define(function(require) {
 
 
             if (this.adminsAggiungere.length != 0) {
-                console.log("query");
                 this.bacheca.salvaResponsabili(this.adminsAggiungere, this.idb);
             } else {
-                console.log("vai a salvaMembri");
                 this.salvaMembri();
             }
         },
@@ -423,7 +409,30 @@ define(function(require) {
                 this.goToBacheca();
             }
         },
-        goToBacheca: function(res) {
+        deleteNoticeboard: function(e){
+            this.bacheca.rimuoviBacheca(this.idb);
+        },
+        rimuoviElementiBacheca: function(e){
+            this.postit.idRighePostit(this.idb);
+        },
+        rimuoviCommentiPostitBacheca: function(res){
+            for (var i=0; i<res.length;i++){
+                this.commento.idRigheCommenti(res[i].id);
+            }
+            this.bacheca.idRigheTuttiAmministratori(this.idb);
+            this.bacheca.idRigheTuttiResponsabili(this.idb);
+            this.bacheca.idRigheTuttiMembri(this.idb);
+            this.goToHome();
+        },
+        goToHome: function(){
+            localStorage.removeItem("responsabili");
+            localStorage.removeItem("utenti");
+            Backbone.history.navigate("homeSiwyt", {
+                trigger: true
+            });
+        },
+
+        goToBacheca: function() {
             localStorage.removeItem("responsabili");
             localStorage.removeItem("utenti");
             Backbone.history.navigate("bacheca/" + this.idb, {
