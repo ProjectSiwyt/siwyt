@@ -29,6 +29,7 @@ define(function(require) {
                     return new Handlebars.SafeString(obj);   
                 }
             });
+
             // load the precompiled template
             this.template = Utils.templates.contentListPostits;
             this.postit = new Postit();
@@ -55,7 +56,6 @@ define(function(require) {
         },
 
         render: function() {
-            console.log(this.collection);
             $(this.el).html(this.template(this.collection.toJSON()));
             return this;
         },

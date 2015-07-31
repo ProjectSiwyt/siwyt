@@ -16,8 +16,10 @@ define(function(require) {
 
         model: Bacheca,
 
-        initialize: function(idb) {
+        initialize: function(idb, ruolo) {
             this.idb = idb;
+            console.log(ruolo);
+            this.ruolo=ruolo;
             // load the precompiled template
             this.template = Utils.templates.structureBoard;
 
@@ -80,6 +82,17 @@ define(function(require) {
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement"          
         },
+        verificaRuolo:function(){
+            var management=document.getElementById('boardManagement');
+            if(this.ruolo=='manager'){
+                if(management.classList.contains('hide')){
+                    management.classList.remove('hide');
+                }
+            }
+            else{
+                management.classList.add('hide');
+            }  
+        },
         caricaDati:function(){
             this.bacheca.noticeboardData(this.idb);
         },
@@ -119,10 +132,18 @@ define(function(require) {
             })).render().el;
             //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
             //$('#boardContent').append(this.subView);
+            var elements = this.subView.getElementsByClassName('menuPostit');
+            for (var i=0; i< elements.length;i++){
+                if(elements[i].getAttribute("data-autore")!=localStorage.getItem('usernameLogged')){
+                    if(this.ruolo=='user'){
+                        elements[i].classList.add('hide');
+                    }
+                }
+            }
             document.getElementById("boardContent").appendChild(this.subView);
         },
         render: function() {
-            $(this.el).html(this.template());            
+            $(this.el).html(this.template());          
             return this;
         },
         manageCanvas:function(){

@@ -17,10 +17,11 @@ define(function(require) {
         model: Bacheca,
         idb: null,
 
-        initialize: function(idb, idpage) {
+        initialize: function(idb, ruolo) {
             this.template = Utils.templates.structureBoardManagement;
             //copio l'id della bacheca che si sta gestendo
             this.idb = idb;
+            this.ruolo=ruolo;
 
             document.getElementById("title").innerHTML = "Board Management";
             var header = document.getElementById("header");
@@ -280,17 +281,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    for (var k = 0; k < this.utenti.length; k++) {
-                        if (this.oldAdmins[i].id == this.utenti[k].idu) {
-                            tr = true;
-                        }
-                    }
-                    if (tr) {
-                        adminsEliminare[cae++] = o;
-                        usersAggiungere[cua++] = o;
-                    } else {
-                        adminsEliminare[cae++] = o;
-                    }
+                    adminsEliminare[cae++]=o;
                 }
             }
 
@@ -306,17 +297,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    for (var k = 0; k < this.responsabili.length; k++) {
-                        if (this.oldUsers[i].id == this.responsabili[k].idu) {
-                            tr = true;
-                        }
-                    }
-                    if (tr) {
-                        usersEliminare[cue++] = o;
-                        adminsAggiungere[cua++] = o;
-                    } else {
-                        usersEliminare[cue++] = o;
-                    }
+                    usersEliminare[cue++]=o;
                 }
             }
 
@@ -333,17 +314,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    for (var k = 0; k < this.oldUsers.length; k++) {
-                        if (this.responsabili[i].idu == this.oldUsers[k].id) {
-                            tr = true;
-                        }
-                    }
-                    if (tr) {
-                        adminsAggiungere[caa++] = o;
-                        usersEliminare[cue++] = o;
-                    } else {
-                        adminsAggiungere[caa++] = o;
-                    }
+                    adminsAggiungere[caa++]=o;
                 }
             }
             //controllo se i nuovi utenti c'erano
@@ -358,17 +329,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    for (var k = 0; k < this.oldAdmins.length; k++) {
-                        if (this.utenti[i].idu == this.oldAdmins[k].id) {
-                            tr = true;
-                        }
-                    }
-                    if (tr) {
-                        usersAggiungere[cua++] = o;
-                        adminsEliminare[cae++] = o;
-                    } else {
-                        usersAggiungere[cua++] = o;
-                    }
+                    usersAggiungere[cua++]=o;
                 }
             }
 
@@ -388,6 +349,7 @@ define(function(require) {
         salvaMembri: function(res) {
             //utenti è la lista degli utenti non responsabili
             if (this.usersAggiungere.length != 0) {
+                console.log(this.usersAggiungere);
                 this.bacheca.salvaUtenti(this.usersAggiungere, this.idb);
             } else {
                 this.rimuoviResponsabili();
@@ -433,9 +395,10 @@ define(function(require) {
         },
 
         goToBacheca: function() {
+            console.log("BBBBBBBBBBBBBBBBBBBBBB");
             localStorage.removeItem("responsabili");
             localStorage.removeItem("utenti");
-            Backbone.history.navigate("bacheca/" + this.idb, {
+            Backbone.history.navigate("bacheca/" + this.idb+"/manager", {
                 trigger: true
             });
         },

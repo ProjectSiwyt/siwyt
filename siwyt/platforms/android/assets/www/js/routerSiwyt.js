@@ -35,7 +35,7 @@ define(function(require) {
       "profile": "profile",
       "contacts": "contacts",
       "settings": "settings",
-      "bacheca/:id": "showNoticeboard",
+      "bacheca/:id/:ruolo": "showNoticeboard",
       "createBacheca": "create",
       "addContacts/:idpage/:idb": "addContacts",
       "newBacheca/:nome": "newBacheca",
@@ -153,9 +153,10 @@ define(function(require) {
       this.navigate(this.firstView, {trigger: true});
     },
 
-    showNoticeboard: function(idb){
-        var page = new BachecaHome(idb);
+    showNoticeboard: function(idb, ruolo){
+        var page = new BachecaHome(idb, ruolo);
         this.changePage(page);
+        page.verificaRuolo();
         page.manageCanvas();
         page.caricaDati();
 

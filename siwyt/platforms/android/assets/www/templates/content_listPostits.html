@@ -15,18 +15,18 @@
 <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
     <ul class="table-view border-table-view">
         <li class="table-view-cell border-top media menuRelation">New relation<span class="pull-right"><i class="fa fa-plus"></i></span></li>
-        <li class="table-view-cell media menuRename">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
-        <li class="table-view-cell media menuColor">Change Color:
+        <li class="table-view-cell media menuRename menuPostit" data-autore="{{idu}}">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
+        <li class="table-view-cell media menuColor menuPostit" data-autore="{{idu}}">Change Color:
             <input type="color" name="colorPicker" value="{{colore}}">
         </li>
-        <li class="table-view-cell media menuFont">Font:
+        <li class="table-view-cell media menuFont menuPostit" data-autore="{{idu}}">Font:
             {{#xif this.font}}
             {{/xif}}
         </li>
-        <li class="table-view-cell media menuDimension">Font size:
+        <li class="table-view-cell media menuDimension menuPostit" data-autore="{{idu}}">Font size:
             <input type="number" value="{{dimensione}}" />
         </li>
-        <li class="table-view-cell media menuDelete">Delete Postit<span class="pull-right"><i class="fa fa-trash-o"></i></span></li>
+        <li class="table-view-cell media menuDelete menuPostit" data-autore="{{idu}}">Delete Postit<span class="pull-right"><i class="fa fa-trash-o"></i></span></li>
     </ul>
 </div>
 {{/each}}

@@ -61,7 +61,7 @@ define(function(require) {
       console.log(b);
       b.add(result);
       console.log(b);
-      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      this.subView = (new ShowListNoticeboards({collection: b},'user')).render().el;
       console.log(this.subView);
       document.getElementById("noticeboardsList").appendChild(this.subView);
     },
@@ -71,7 +71,7 @@ define(function(require) {
       var b= new Bacheche();
       b.add(result);
       console.log(b);
-      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      this.subView = (new ShowListNoticeboards({collection: b},'admin')).render().el;
       console.log(this.subView);
       document.getElementById("noticeboardsList").appendChild(this.subView);
       this.bacheca.listaIdBachecheUtente();
@@ -82,7 +82,7 @@ define(function(require) {
       var b= new Bacheche();
       b.add(result);
       console.log(b);
-      this.subView = (new ShowListNoticeboards({collection: b})).render().el;
+      this.subView = (new ShowListNoticeboards({collection: b}, 'manager')).render().el;
       console.log(this.subView);
       document.getElementById("noticeboardsList").appendChild(this.subView);
       this.bacheca.listaIdBachecheResponsabile();
