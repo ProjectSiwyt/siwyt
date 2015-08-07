@@ -76,19 +76,10 @@ define(function(require) {
       if (titolo!= null){
           document.getElementById("nomeBacheca").value=titolo;
       }
-      console.log("caricaMembri");
-      /*var o1=new Object();
-      o1.nome=localStorage.getItem('nameLogged');
-      o1.cognome=localStorage.getItem('surnameLogged');
-      var a = new Array();
-      a[0]=o1;
-      var b=new Utenti();
-      b.add(a);*/
       var b = new Utente({
       nome:localStorage.getItem('nameLogged'),
       cognome:localStorage.getItem('surnameLogged')
     });
-      console.log(b);
       this.subview1=(new ShowListMembers({model: b})).render().el;
       document.getElementById("membri").appendChild(this.subview1);
       
@@ -131,6 +122,7 @@ define(function(require) {
             document.getElementById("membri").appendChild(this.subview2); 
           }
       }
+      this.trigger("stop");
     },
     //chiama la query che si occupa del salvataggio dei dati della bacheca
     //se nella form non è stato inserito un titolo ne viene dato uno di default
@@ -214,7 +206,7 @@ define(function(require) {
       localStorage.removeItem("utenti");
       localStorage.removeItem("responsabili");
       localStorage.removeItem("titolo");
-      Backbone.history.navigate("bacheca/"+this.idb, {
+      Backbone.history.navigate("bacheca/"+this.idb+"/manager", {
         trigger: true
       });
     },

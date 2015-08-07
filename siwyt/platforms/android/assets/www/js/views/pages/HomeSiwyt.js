@@ -34,15 +34,11 @@ define(function(require) {
         title.classList.remove('hide');
       }
       document.getElementById("back").classList.add('hide');
-      spinner.spin();
       document.getElementById("title").innerHTML="Noticeboards"
       this.bacheca=new Bacheca();
       this.bacheca.on("bachecheutente", this.appendNoticeboardsUsers,this);
       this.bacheca.on("bachecheamministratore", this.appendNoticeboardsManager,this);
       this.bacheca.on("bachecheresponsabile", this.appendNoticeboardsAdmins,this);
-      this.bacheca.listaIdBachecheAmministratore();
-
-
     },
 
     id: "homeSiwyt",
@@ -55,6 +51,9 @@ define(function(require) {
       "swipeLeft": "goToProfile",
       "swipeRight": "goToContacts"
     },
+    caricaDati: function(){
+      this.bacheca.listaIdBachecheAmministratore();
+    },
     appendNoticeboardsUsers: function(result){
       console.log(result);
       var b= new Bacheche();
@@ -64,6 +63,7 @@ define(function(require) {
       this.subView = (new ShowListNoticeboards({collection: b},'user')).render().el;
       console.log(this.subView);
       document.getElementById("noticeboardsList").appendChild(this.subView);
+      this.trigger("stop");
     },
      appendNoticeboardsAdmins: function(result){
       console.log("noticeboardadmin");
@@ -88,7 +88,6 @@ define(function(require) {
       this.bacheca.listaIdBachecheResponsabile();
     },
     render: function() {
-      spinner.stop();
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 

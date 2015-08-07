@@ -35,7 +35,6 @@ define(function(require) {
         navigation.classList.remove('hide');
       };
       document.getElementById("back").classList.add('hide');
-      spinner.spin(); 
       document.getElementById("title").innerHTML="Contacts";
       this.contatto = new Contatto();
       this.utente = new Utente();

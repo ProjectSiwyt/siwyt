@@ -26,7 +26,7 @@ define(function(require) {
             document.getElementById("header").classList.add('hide');
             document.getElementById("navigation").classList.add('hide');
             //document.getElementById("queryError").classList.add("hide");
-            spinner.stop();
+            //spinner.stop();
 
             this.bacheca = new Bacheca();
             this.postits = new Postit();
@@ -112,8 +112,13 @@ define(function(require) {
             this.postits.elencoPostitBacheca(this.idb);
         },
         appendItems: function(res) {
-            this.result=res;
-            this.postits.nomeAutori(res);
+            if(res.length!=0){
+                this.result=res;
+                this.postits.nomeAutori(res);      
+            }
+            else{
+                this.trigger("stop");
+            }
         },
         appendItems2: function(res){
             var b = new Postits();
@@ -141,6 +146,7 @@ define(function(require) {
                 }
             }
             document.getElementById("boardContent").appendChild(this.subView);
+            this.trigger("stop");
         },
         render: function() {
             $(this.el).html(this.template());          

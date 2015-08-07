@@ -149,6 +149,7 @@ define(function(require) {
                     document.getElementById("membri").appendChild(this.subview2);
                 }
             }
+            this.trigger("stop");
         },
 
         //la funzione carica il titolo salvato nel localStorage nel campo di input
@@ -157,12 +158,14 @@ define(function(require) {
             var titolo = localStorage.getItem("titolo");
             if (titolo != null) {
                 document.getElementById("titleBacheca").value = titolo;
+                this.caricaMembriDaHome();
             } else {
                 this.bacheca.noticeboardData(this.idb);
             }
         },
         setTitle: function(res) {
             document.getElementById("titleBacheca").value = res[0].nome;
+            this.caricaMembriDaHome();
         },
         appendAdmins: function(result) {
             localStorage.setItem("oldAdmins", JSON.stringify(result));
@@ -182,6 +185,7 @@ define(function(require) {
                 collection: b
             })).render().el;
             document.getElementById("membri").appendChild(this.subView);
+            this.trigger("stop");
         },
         goToAddContacts: function() {
             var a = new Array();

@@ -24,6 +24,7 @@ define(function(require) {
   var Register = require("views/pages/Register");
   var NoticeboardManagement = require("views/pages/NoticeboardManagement");
   var PostitHome = require("views/pages/PostitHome");
+  var Spinner= require("spin");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -71,14 +72,42 @@ define(function(require) {
           .fail(function (err) {
             console.log("error ", err);
       });
-
+      var opts = {
+          lines: 13 // The number of lines to draw
+          , length: 28 // The length of each line
+          , width: 14 // The line thickness
+          , radius: 42 // The radius of the inner circle
+          , scale: 1 // Scales overall size of the spinner
+          , corners: 1 // Corner roundness (0..1)
+          , color: '#000' // #rgb or #rrggbb or array of colors
+          , opacity: 0.25 // Opacity of the lines
+          , rotate: 0 // The rotation offset
+          , direction: 1 // 1: clockwise, -1: counterclockwise
+          , speed: 1 // Rounds per second
+          , trail: 60 // Afterglow percentage
+          , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+          , zIndex: 2e9 // The z-index (defaults to 2000000000)
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , top: '50%' // Top position relative to parent
+          , left: '50%' // Left position relative to parent
+          , shadow: false // Whether to render a shadow
+          , hwaccel: false // Whether to use hardware acceleration
+          , position: 'absolute' // Element positioning
+      }
+      
+      this.spinner = new Spinner(opts);
+      //console.log(this.el);
     },
-
     homeSiwyt: function() {
+      var THIS=this;
       // highlight the nav1 tab bar element as the current one
       this.structureView.setActiveTabBarElement("homeMenu");
       var page= new HomeSiwyt();
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      this.spinner.spin(document.body);
+      page.caricaDati();
+
 
      },
 
@@ -96,12 +125,14 @@ define(function(require) {
       this.changePage(page);
     },
     boardManagement: function(idb,idpage){
-      console.log("ciao2");
+      var THIS=this;
       var page= new NoticeboardManagement(idb);
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      this.spinner.spin(document.body);
       if(idpage=='bachecahome'){
         page.caricaDati();
-        page.caricaMembriDaHome();  
+        //page.caricaMembriDaHome();  
       }
       else{
         page.caricaMembriDaContacts();
@@ -129,13 +160,17 @@ define(function(require) {
       var page = new Profile({
         model: model
       });
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
       page.startQuery();
     },
 
     create: function(){
+      var THIS=this;
       var page = new CreateBacheca();
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      this.spinner.spin(document.body);
       page.caricaDati();
     },
 
@@ -154,8 +189,11 @@ define(function(require) {
     },
 
     showNoticeboard: function(idb, ruolo){
+        var THIS=this;
         var page = new BachecaHome(idb, ruolo);
+        page.on('stop', function(){THIS.spinner.stop();});
         this.changePage(page);
+        this.spinner.spin(document.body);
         page.verificaRuolo();
         page.manageCanvas();
         page.caricaDati();
@@ -163,14 +201,19 @@ define(function(require) {
     },
 
     addContacts: function(idpage,idb){
-      
+      var THIS=this;
       var page = new AddContacts(idpage, idb);
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      this.spinner.spin(document.body);
       page.loadData();
     },
     postit: function(idp, idb){
+      var THIS=this;
       var page = new PostitHome(idp,idb);
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      this.spinner.spin(document.body);
       page.caricaDati();
     }
   });

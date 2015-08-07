@@ -3,7 +3,7 @@ define(function(require) {
   var $ = require("jquery");
   var Backbone = require("backbone");
   var Utils = require("utils");
-  var Spinner= require("spin");
+  
 
   var StructureViewSiwyt = Backbone.View.extend({
 
@@ -23,11 +23,11 @@ define(function(require) {
     initialize: function(options) {
       // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureSiwyt;
-      
+      /*
       $(document).ajaxStart(function(){
           document.getElementById("spinner");
       });
-      
+      */
       //this.on("inTheDOM", this.rendered);
       // bind the back event to the goBack function
       //document.getElementById("back").addEventListener("back", this.goBack(), false);
@@ -36,9 +36,7 @@ define(function(require) {
     render: function() {
       // load the template
       this.el.innerHTML = this.template({});
-      spinner = new Spinner().spin();
-      this.el.appendChild(spinner.el);
-      spinner.stop();
+      
 
       // cache a reference to the content element
       this.contentElement = this.$el.find('#content')[0];

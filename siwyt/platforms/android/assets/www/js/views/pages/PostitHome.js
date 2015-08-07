@@ -36,8 +36,6 @@ define(function(require) {
       if(back.classList.contains('hide')){
         back.classList.remove('hide');
       }
-     
-      spinner.spin();
       this.commento=new Commento();
       this.commento.on("elencoCommenti", this.appendComments, this);
       this.commento.on("aggiuntoCommento", this.appendComment, this);
@@ -78,8 +76,13 @@ define(function(require) {
     },
     appendComments: function(result){
         console.log(result);
-        this.comments=result;
-        this.commento.nomeAutori(result);
+        if (result.length!=0){
+          this.comments=result;
+          this.commento.nomeAutori(result);  
+        }
+        else {
+          this.trigger("stop");
+        }
     },
     appendComments2: function(res){
         var commenti = new Commenti();
@@ -97,6 +100,7 @@ define(function(require) {
             collection: commenti
         })).render().el;
         document.getElementById("postitContent").appendChild(this.subView);
+        this.trigger("stop");
     },
     submit: function(e){
       this.commento.aggiungiCommento(this.idp, document.getElementById("textComment").value, localStorage.getItem("idu"));
@@ -109,7 +113,6 @@ define(function(require) {
       this.commento.nomeAutori(a);
     },
     render: function() {
-      spinner.stop();
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
 

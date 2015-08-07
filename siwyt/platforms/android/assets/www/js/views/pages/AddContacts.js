@@ -149,6 +149,7 @@ define(function(require) {
       this.subView = (new ShowListAddContacts({collection: b})).render().el;
       //quando i dati vengono caricati faccio la render della pagina contenente la lista delle bacheche
       document.getElementById("contactsContent").appendChild(this.subView);
+      this.trigger("stop");
     },
 
     render: function() {

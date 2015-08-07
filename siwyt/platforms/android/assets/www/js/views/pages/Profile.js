@@ -29,7 +29,6 @@ define(function(require) {
         settings.classList.remove('hide');
       };
       document.getElementById("back").classList.add('hide');
-      spinner.spin();
       document.getElementById("title").innerHTML="Profile";
       
 
