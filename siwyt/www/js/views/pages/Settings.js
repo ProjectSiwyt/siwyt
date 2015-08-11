@@ -4,8 +4,6 @@ define(function(require) {
   var MyModel = require("models/MyModel");
   var Utente = require("models/Utente");
   var Utils = require("utils");
-  var $ = require("jquery");
-
 
   var Settings = Utils.Page.extend({
 
@@ -15,7 +13,19 @@ define(function(require) {
 
     initialize: function() {
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
-      this.template = Utils.templates.settings;
+      this.template = Utils.templates.appSettings;
+      console.log("inzialize settings");
+      var header = document.getElementById("header");
+      if (header.classList.contains('hide')){
+        header.classList.remove('hide');
+      }
+      document.getElementById("navigation").classList.add('hide');
+      document.getElementById("settingsMenu").classList.add('hide');
+      document.getElementById("title").innerHTML="Settings";
+      var back=document.getElementById("back");
+      if (back.classList.contains('hide')){
+        back.classList.remove('hide');
+      }
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -32,20 +42,34 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "swipeRight": "goBack"
+      //"swipeRight": "goBack",
+      "tap #logout": "logOut",
+      "tap #notification": "notification"
+      
     },
 
     render: function() {
-      $("#back").attr("style","display:block");
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
       return this;
     },
 
-     goBack: function() {
-       $("#back").attr("style","display:none");
-      window.history.back();
+    notification: function(e){
+      alert("hjvkjhv");
     },
+
+    logOut: function(e){
+      //localStorage.removeItem("idu");
+      localStorage.clear();
+      Backbone.history.navigate("login",{
+        trigger: true
+      });
+    },
+
+
+    goBack: function() {
+      window.history.back();
+    }
 
   });
 

@@ -5,14 +5,17 @@ define(function(require) {
 	var Responsabile = Backbone.Model.extend({
 		defaults: {
 			id: "Not specified",
-			nome: "Not specified",
-			cognome: "Not specified",
-			mail: "Not specified",
-			username: "Not specified",
-			password: "Not specified",
-			confermato: false
+			idu: "Not specified",
+			idb: "Not specified"
 		},
-		constructorName: "Responsabile"
+		
+		constructorName: "Responsabile",
+
+		parse: function(response) {
+        	//unwrap the response from the server....
+        	if (response.data) return response.data;
+        	return response;
+    	}
 	});
 
 	return Responsabile;

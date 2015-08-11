@@ -1,19 +1,30 @@
 define(function(require) {
 
   var $ = require("jquery");
+  var _= require("underscore");
   var Backbone = require("backbone");
+  var Baasbox=require("baasbox");
   var Bacheca = require("models/Bacheca");
   var Utente = require("models/Utente");
   var Utenti = require("collections/Utenti");
   var MyModel = require("models/MyModel");
   var StructureViewSiwyt = require("views/structureViewSiwyt");
   var HomeSiwyt = require("views/pages/HomeSiwyt");
-  var MyView = require("views/pages/MyView");
-  var MapView = require("views/pages/MapView");
   var Contacts = require("views/pages/Contacts");
   var Profile = require("views/pages/Profile");
   var Settings = require("views/pages/Settings");
   var Bacheche = require("collections/Bacheche");
+  var BachecaHome = require("views/pages/BachecaHome");
+  var CreateBacheca = require("views/pages/CreateBacheca");
+  var AddContacts = require("views/pages/AddContacts");
+  var Postit = require("models/Postit");
+  var Postits = require("collections/Postits");
+  var ShowListNoticeboards = require("views/pages/ShowListNoticeboards");
+  var Login = require("views/pages/Login");
+  var Register = require("views/pages/Register");
+  var NoticeboardManagement = require("views/pages/NoticeboardManagement");
+  var PostitHome = require("views/pages/PostitHome");
+  var Spinner= require("spin");
 
   var AppRouter = Backbone.Router.extend({
     constructorName: "AppRouter",
@@ -24,118 +35,146 @@ define(function(require) {
       "homeSiwyt": "homeSiwyt",
       "profile": "profile",
       "contacts": "contacts",
-      "settings": "settings"
+      "settings": "settings",
+      "bacheca/:id/:ruolo": "showNoticeboard",
+      "createBacheca": "create",
+      "addContacts/:idpage/:idb": "addContacts",
+      "newBacheca/:nome": "newBacheca",
+      "login":"login",
+      "register":"register",
+      "boardManagement/:idb/:idpage":"boardManagement",
+      "postit/:idp/:idb": "postit"
     },
 
-    firstView: "homeSiwyt",
+    BAASBOX_URL : "http://localhost:9000",
+    BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
       this.currentView = undefined;
-    },
 
+      if(localStorage.getItem("idu")==null){
+          this.firstView="login";
+      }
+      else{
+        this.firstView="homeSiwyt";
+      }
+        //initialize BaasBox
+      BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
+      BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
+      
+      //at the moment we log in as admin  
+      BaasBox.login("admin", "admin")
+          .done(function (user) {
+              console.log("Logged in ", user);
+              //once we are logged in, let's start backbone
+              Backbone.history.start();
+      })
+          .fail(function (err) {
+            console.log("error ", err);
+      });
+      var opts = {
+          lines: 13 // The number of lines to draw
+          , length: 28 // The length of each line
+          , width: 14 // The line thickness
+          , radius: 42 // The radius of the inner circle
+          , scale: 1 // Scales overall size of the spinner
+          , corners: 1 // Corner roundness (0..1)
+          , color: '#000' // #rgb or #rrggbb or array of colors
+          , opacity: 0.25 // Opacity of the lines
+          , rotate: 0 // The rotation offset
+          , direction: 1 // 1: clockwise, -1: counterclockwise
+          , speed: 1 // Rounds per second
+          , trail: 60 // Afterglow percentage
+          , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+          , zIndex: 2e9 // The z-index (defaults to 2000000000)
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , top: '50%' // Top position relative to parent
+          , left: '50%' // Left position relative to parent
+          , shadow: false // Whether to render a shadow
+          , hwaccel: false // Whether to use hardware acceleration
+          , position: 'absolute' // Element positioning
+      }
+      
+      this.spinner = new Spinner(opts);
+      //console.log(this.el);
+    },
     homeSiwyt: function() {
+      var THIS=this;
       // highlight the nav1 tab bar element as the current one
-      //this.structureView.setActiveTabBarElement("nav1");
-      // create a model with an arbitrary attribute for testing the template engine
-      var model = new Bacheca({
-        id: "1",
-        nome: "Prova"
-      });
-      var model2 = new Bacheca({
-        id: "2",
-        nome: "Prova2"
-      });
-      var collection = new Bacheche();
-
-      collection.add(model);
-      collection.add(model2);
-      // create the view
-      var page = new HomeSiwyt({
-        model: collection
-      });
-      // show the view
+      this.structureView.setActiveTabBarElement("homeMenu");
+      var page= new HomeSiwyt();
+      var signal=false;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;});
       this.changePage(page);
-    },
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+      page.caricaDati();
+
+
+     },
 
     settings: function(){
       var page = new Settings();
       this.changePage(page);
     },
-
-    contacts: function() {
-      this.structureView.setActiveTabBarElement("nav1");
-      var model= new Utente({
-        id:"2",
-        nome: "Luca",
-        cognome: "Di Chiro",
-        mail: "luca.dichiro@student.univaq.it",
-        username: "bosco",
-        password: "bosco"
-      });
-      var model2= new Utente({
-        id:"3",
-        nome: "Nicholas",
-        cognome: "Angelucci",
-        mail: "nicholas.angelucci@student.univaq.it",
-        username: "richolas",
-        password: "richolas"
-      });
-      var model3= new Utente({
-        id:"4",
-        nome: "Vincenzo",
-        cognome: "Lanzieri",
-        mail: "vincenzo.lanzieri@student.univaq.it",
-        username: "vinzenio",
-        password: "vinzenio"
-      });
-      var collection= new Utenti();
-      collection.add(model);
-      collection.add(model2);
-      collection.add(model3);
-      var page = new Contacts({
-        model: collection
-      });
-      console.log(page);
+    
+    login: function(){
+      var page= new Login();
       this.changePage(page);
+    },
+    register: function(){
+      var page= new Register();
+      this.changePage(page);
+    },
+    boardManagement: function(idb,idpage){
+      var THIS=this;
+      var page= new NoticeboardManagement(idb);
+      var signal=false;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;});
+      this.changePage(page);
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+      if(idpage=='bachecahome'){
+        page.caricaDati();
+        //page.caricaMembriDaHome();  
+      }
+      else{
+        page.caricaMembriDaContacts();
+      }
+      
+    },
+    contacts: function() {
+      this.structureView.setActiveTabBarElement("contactsMenu");
+      var page = new Contacts();
+      this.changePage(page);
+      page.startQuery();
     },
 
     profile: function(){
+      this.structureView.setActiveTabBarElement("profileMenu");
       var model= new Utente({
-        id:"1",
-        nome: "Luca",
-        cognome: "Mangifesta",
-        mail: "luca.mangifesta@student.univaq.it",
-        username: "luca__91",
-        password: "luca__91"
+        nome: localStorage.getItem("nameLogged"),
+        cognome:localStorage.getItem("surnameLogged"),
+        mail: localStorage.getItem("emailLogged"),
+        username: localStorage.getItem("usernameLogged"),
+        password: localStorage.getItem("passwordLogged")
         //confermato non lo inserisco tanto è false di defaulta
       });
+      console.log(model);
       var page = new Profile({
         model: model
       });
+      page.on('stop', function(){THIS.spinner.stop();});
       this.changePage(page);
+      page.startQuery();
     },
 
-    myView: function() {
-      // highlight the nav1 tab bar element as the current one
-      this.structureView.setActiveTabBarElement("nav1");
-      // create a model with an arbitrary attribute for testing the template engine
-      var model = new MyModel({
-        key: "testValue"
-      });
-      // create the view
-      var page = new MyView({
-        model: model
-      });
-      // show the view
+    create: function(){
+      var THIS=this;
+      var page = new CreateBacheca();
+      var signal=false;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;});
       this.changePage(page);
-    },
-
-    map: function() {
-      // highlight the nav2 tab bar element as the current one
-      this.structureView.setActiveTabBarElement("nav2");
-      // create the view and show it
-      var page = new MapView();
-      this.changePage(page);
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+      page.caricaDati();
     },
 
     // load the structure view
@@ -152,6 +191,37 @@ define(function(require) {
       this.navigate(this.firstView, {trigger: true});
     },
 
+    showNoticeboard: function(idb, ruolo){
+        var THIS=this;
+        var page = new BachecaHome(idb, ruolo);
+        var signal=false;
+        page.on('stop', function(){THIS.spinner.stop(); signal=true;});
+        this.changePage(page);
+        setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+        page.verificaRuolo();
+        page.manageCanvas();
+        page.caricaDati();
+
+    },
+
+    addContacts: function(idpage,idb){
+      var THIS=this;
+      var page = new AddContacts(idpage, idb);
+      var signal=false;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;});
+      this.changePage(page);
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+      page.loadData();
+    },
+    postit: function(idp, idb){
+      var THIS=this;
+      var page = new PostitHome(idp,idb);
+      var signal=false;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;});
+      this.changePage(page);
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
+      page.caricaDati();
+    }
   });
 
   return AppRouter;

@@ -9,14 +9,28 @@
 //  - key: the name of the template as it must be referenced by the Backbone view
 //  - value: the path of the html file containing the HTML fragment of the template
 define({
-    structure: "templates/structure.html",
-    myview: "templates/myview.html",
-    structureSiwyt: "templates/structureSiwyt.html",
-    homeSiwyt: "templates/homeSiwyt.html",
-    contacts: "templates/contacts.html",
-    profile: "templates/profile.html",
-    create: "templates/createBacheca.html",
-    login: "templates/login.html",
+    structureSiwyt: "templates/structure_siwyt.html",
+    structureHomeSiwyt: "templates/structure_homeSiwyt.html",
+    structurePostit: "templates/structure_postit.html",
+    structureCreateBoard: "templates/structure_createBoard.html",
+    structureBoard: "templates/structure_board.html",
+    structureAddContacts: "templates/structure_addContacts.html",
+    structureContacts: "templates/structure_contacts.html",
+    structureBoardManagement: "templates/structure_boardManagement.html",
+    contentListPostits: "templates/content_listPostits.html",
+    contentListMembers: "templates/content_listMembers.html",
+    contentListBoardsContacts: "templates/content_listBoardsContacts.html",
+    contentListComments: "templates/content_listComments.html",
+    contentListContacts: "templates/content_listContacts.html",
+    contentListContactsSearch: "templates/content_listContactsSearch.html",
+    contentListAddContacts: "templates/content_listAddContacts.html",
+    contentListBoards: "templates/content_listBoards.html",
+    contentListUsers: "templates/content_listUsers.html",
+    contentListAdmins: "templates/content_listAdmins.html",
     register: "templates/register.html",
-    settings: "templates/appSettings.html"
+    login: "templates/login.html",
+    profile: "templates/profile.html",
+    appSettings: "templates/appSettings.html",
+    contentPostit: "templates/content_postit.html"
+    
 });

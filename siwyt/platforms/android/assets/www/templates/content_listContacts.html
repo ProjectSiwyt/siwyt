@@ -1,0 +1,13 @@
+<ul class="table-view">
+    {{#each this}}
+    <li id="{{id}}" class="table-view-cell">
+        {{nome}} {{cognome}}
+        <span class="absolute second-icon removeContact"><i class="pull-right fa fa-user-times fa-2x"></i></span>
+        <span id="{{id}}Link" class="absolute first-icon popup addToBoard"><i class="pull-right fa fa-plus fa-2x"></i></span>
+    </li>
+    
+    <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
+    
+    </div>
+    {{/each}}
+</ul>

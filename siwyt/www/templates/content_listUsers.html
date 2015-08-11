@@ -1,0 +1,16 @@
+{{#each this}}
+<li class="table-view-cell close-member" id="toggle{{id}}">
+    <a class="navigate-right rigamembro" id="{{id}}">
+        {{nome}} {{cognome}}
+        </a>
+    <div class="relative margin-t">Licences:
+        <div class="margin-l">
+            <input type="radio" name="licence{{id}}" class="admin licence" value="{{id}}"> Admin</div>
+        <div class="margin-l">
+            <input type="radio" name="licence{{id}}" class="simple-user licence" value="{{id}}" checked="checked"> Simple User</div>
+        <div class="absolute right center"><i class="fa fa-user-times fa-3x  removeUser" id="remove{{id}}" data-id="{{id}}"></i>
+            <div class="c-icon">Remove</div>
+        </div>
+    </div>
+</li>
+{{/each}}

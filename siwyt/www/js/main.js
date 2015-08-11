@@ -12,7 +12,8 @@ require.config({
     leaflet: '../lib/leaflet/leaflet',
     spin: '../lib/spin/spin.min',
     preloader: '../lib/preloader/pre-loader',
-    utils: '../lib/utils/utils'
+    utils: '../lib/utils/utils',
+    baasbox: '../lib/baasbox/baasbox'
   },
   shim: {
     'jquery': {

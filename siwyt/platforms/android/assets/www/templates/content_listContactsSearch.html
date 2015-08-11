@@ -1,0 +1,12 @@
+<ul class="table-view" id="searchContacts">
+    {{#each this}}
+    <li id="{{id}}" class="table-view-cell">
+        {{nome}} {{cognome}}
+        <span class="absolute second-icon-search addContact"><i class="pull-right fa fa-user-plus fa-2x"></i></span>
+    </li>
+    <!-- <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
+    <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
+    
+    </div> -->
+    {{/each}}
+</ul>
