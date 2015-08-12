@@ -230,7 +230,12 @@ define(function(require) {
                         a[c++]=res[j]; 
                     }
                 } 
-                THIS.rimuoviPostits(a);
+                if(a.length!=0){
+                	THIS.rimuoviPostits(a);
+                }
+                else{
+                	THIS.trigger("rimuoviPostits",a);
+                }
             }) 
             .fail(function(error) { 
                 console.log("error ", error); 

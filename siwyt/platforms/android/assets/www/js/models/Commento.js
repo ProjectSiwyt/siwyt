@@ -153,7 +153,12 @@ define(function(require) {
                         a[c++]=res[j]; 
                     }
                 } 
-                THIS.rimuoviCommenti(a);
+                if(a.length!=0){
+	                THIS.rimuoviCommenti(a,idp);	
+                }
+                else{
+                	THIS.trigger("rimuoviCommenti", true);
+                }
             }) 
             .fail(function(error) { 
                 console.log("error ", error); 
@@ -162,7 +167,7 @@ define(function(require) {
 
      
        //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
-       rimuoviCommenti: function(r){
+       rimuoviCommenti: function(r,idp){
        	console.log(r);
        	var THIS=this;
        	var c=0;
@@ -172,7 +177,7 @@ define(function(require) {
                 	c++; 
                 	if (c==r.length){
                 		console.log("eliminato");
-                		THIS.trigger("rimuoviCommenti", true); 
+                		THIS.trigger("rimuoviCommenti", idp); 
                 	}
                 }) 
                 .fail(function(error) { 

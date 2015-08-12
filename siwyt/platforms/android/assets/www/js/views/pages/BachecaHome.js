@@ -5,6 +5,7 @@ define(function(require) {
     var Utils = require("utils");
     var Postit = require("models/Postit");
     var Postits = require("collections/Postits");
+    var Commento= require("models/Commento");
     var Relazione = require("models/Relazione");
     var Baasbox = require("baasbox");
     var ShowPostitsNoticeboard = require("views/pages/ShowPostitsNoticeboard");
@@ -32,6 +33,7 @@ define(function(require) {
             this.bacheca = new Bacheca();
             this.postits = new Postit();
             this.relazione = new Relazione();
+            this.commento = new Commento();
 
             //Mi metto in ascolto dell'evento che mi ritorna i dati di una bacheca
             this.bacheca.on("datiBacheca", this.appendTitle, this);
@@ -48,7 +50,16 @@ define(function(require) {
             this.postits.on("eventoAggiungiPostit", this.createPostit, this);
             //Mi metto in ascolto della funzione che ritorna i dati dell'autore del postit creato
             this.postits.on("datiAutore", this.createPostit2, this);
+            //Mi metto in ascolto del risulato della query di eliminazione del postit
+            this.postits.on("rimuoviPostit", this.deleteComments, this);
+            //Mi metto in ascolto del risutato della query di eliminazione dei commenti del postit eliminato
+            this.commento.on("rimuoviCommenti", this.deleteRelations, this);
+
+            this.relazione.on("eliminateRelazioniPostit", this.updateRelations, this);
+            //Mi metto n asclto del risultato della query che restituisce l'elenco delle relazioni
             this.relazione.on("elencorelazioni", this.appendRelations, this);
+
+            this.relazione.on("eventoAggiungiRelazione", this.aggiungiRelazione,this);
         },
 
         id: "bachecahome",
@@ -86,7 +97,34 @@ define(function(require) {
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
             "tap .menuRelation" : "reltionManagement",
-            "tap .relation": "selectedPostitRelation"          
+            "tap .relation": "selectedPostitRelation",
+            "tap .menuDelete" : "deletePostit",
+            "touchstart #boardCanvas" : "manageDeleteRelation"         
+        },
+        manageDeleteRelation: function(e){
+            var p=this.getTapPos(e);
+            console.log(p);
+            for (var i=0; i<this.rel.length;i++){
+                var postitpartenza= document.getElementById(this.rel[i].idp1);
+                var postitarrivo = document.getElementById(this.rel[i].idp2);
+                var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
+                var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2;
+                //Destinazione 44 è l'altezza della navigation bar
+                var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
+                var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2;
+                console.log((p.y-py)/(ay-py));
+                    console.log((p.x-px)/(ax-px));
+                //controllo che il touch sia sulla relazione verificando l'equazione della retta con un margine di errore
+                var eq=(p.y-py)/(ay-py)-(p.x-px)/(ax-px);
+                if(eq>-0.05 && eq<0.05){
+                    console.log("INSERIRE MENU RELAZIONE PER ELIMINARLA");
+                    console.log(this.rel[i].id);
+                    console.log("AL TAP SU ELIMINA")
+                    this.rel.splice(i,1);
+                    this.appendRelations(this.rel);
+                }
+
+            }
         },
         verificaRuolo:function(){
             var management=document.getElementById('boardManagement');
@@ -155,24 +193,29 @@ define(function(require) {
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){
-            console.log("ciao");
-            var canvas = document.getElementById('boardCanvas');
+            this.rel=res;
+            $("#boardCanvas").remove();
+            var el = document.createElement("canvas");
+            el.classList.add("absolute");
+            el.classList.add("canvas");
+            el.width  = window.innerWidth;
+            el.height = window.innerHeight-44;
+            el.id="boardCanvas";
+            document.getElementById("canvas").appendChild(el);
+            var canvas=el;
             var ctx = canvas.getContext('2d');
             for (var i=0; i< res.length; i++){
                 //Inizio del disegno
                 ctx.beginPath();
                 //Origine 44 è l'altezza della navigation bar
-                console.log(res[i]);
                 var postitpartenza= document.getElementById(res[i].idp1);
                 var postitarrivo = document.getElementById(res[i].idp2);
                 var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
                 var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
-                console.log(px+" "+py);
                 ctx.moveTo(px,py);
                 //Destinazione 44 è l'altezza della navigation bar
                 var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
                 var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2-44;
-                console.log(ax+" "+ay);
                 ctx.lineTo(ax, ay);
                 //Visualizza il disegno
                 ctx.stroke();
@@ -280,6 +323,38 @@ define(function(require) {
         saveEvent: function(e){
             this.event=e;
         },
+        deletePostit: function(e){
+            this.obj = e.target;
+            console.log(this.obj);
+            this.idp = this.obj.parentNode.parentNode.id.replace('LinkPopup',''); 
+            console.log(this.idp);
+            this.postits.rimuoviPostit(this.idp);
+        },
+        deleteComments: function(res){
+            $("#"+res).remove();
+            $("#"+res+"LinkPopup").remove();
+            $("#"+res+"RenameScreen").remove();
+            $("#"+res+"RenamePopup").remove();
+            $("#"+res+"LinkScreen").remove();
+            this.commento.idRigheCommenti(this.idp);
+        },
+        deleteRelations:function(res){
+            this.relazione.rimuoviRelazioniPostit(this.idp);
+        },
+        updateRelations:function(res){
+            for (var i=0;i<res.length;i++){
+                for(var j=0; j<this.rel.length;j++){
+                    if(res[i].id==this.rel[j]){
+                        this.rel.splice(j,1);
+                    }
+                }
+            }
+            this.relazione.elencoRelazioniBacheca(this.idb);
+        },
+        aggiungiRelazione: function(res){
+            //aggiungo all'insieme delle relazioni
+            this.rel[this.rel.length]=res;
+        },
         startDrag: function(e) {
             console.log("start");
             e.preventDefault();
@@ -349,6 +424,7 @@ define(function(require) {
                         drag_object.style.left = newX + "px";
                         drag_object.style.top = newY + "px";
                     }
+                    this.appendRelations(this.rel);
                     break;
                     //ridimensionamento
                     //resize

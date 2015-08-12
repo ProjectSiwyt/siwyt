@@ -480,7 +480,12 @@ define(function(require) {
 	                        a[c++]=res[j]; 
 	                    }
 	                } 
-	                THIS.rimuoviTuttiResponsabili(a);
+	                if (a.length!=0){
+	                	THIS.rimuoviTuttiResponsabili(a);
+	                }
+	                else{
+	                	THIS.trigger("rimuoviTuttiResponsabili", a)
+	                }
 	            }) 
 	            .fail(function(error) { 
 	                console.log("error ", error); 
@@ -494,7 +499,7 @@ define(function(require) {
                     .done(function(res) {
                     	c++; 
                     	if (c==r.length){
-                    		THIS.trigger("rimuoviTuttiResponsabili", true);
+                    		THIS.trigger("rimuoviTuttiResponsabili", r);
                     	}
                     }) 
                     .fail(function(error) { 
@@ -512,8 +517,13 @@ define(function(require) {
 	                    if(idb == res[j].idb){ 
 	                        a[c++]=res[j]; 
 	                    }
-	                } 
-	                THIS.rimuoviTuttiMembri(a);
+	                }
+	                if(a.length!=0){	
+		                THIS.rimuoviTuttiMembri(a);
+	                }
+	                else{
+	                	THIS.trigger("rimuoviTuttiMembri", a);
+	                }
 	            }) 
 	            .fail(function(error) { 
 	                console.log("error ", error); 
@@ -527,7 +537,7 @@ define(function(require) {
                     .done(function(res) {
                     	c++; 
                     	if (c==r.length){
-                    		THIS.trigger("rimuoviTuttiMembri", true);
+                    		THIS.trigger("rimuoviTuttiMembri", r);
                     	}
                     }) 
                     .fail(function(error) { 
@@ -546,7 +556,12 @@ define(function(require) {
 	                        a[c++]=res[j]; 
 	                    }
 	                } 
-	                THIS.rimuoviTuttiAmministratori(a);
+	                if (a.length!=0){
+	                	THIS.rimuoviTuttiAmministratori(a);
+	                }
+	                else{
+	                	THIS.trigger("rimuoviTuttiAmministratori", a)
+	                }
 	            }) 
 	            .fail(function(error) { 
 	                console.log("error ", error); 
@@ -560,7 +575,7 @@ define(function(require) {
                     .done(function(res) {
                     	c++; 
                     	if (c==r.length){
-                    		THIS.trigger("rimuoviTuttiAmministratori", true);
+                    		THIS.trigger("rimuoviTuttiAmministratori", r);
                     	}
                     }) 
                     .fail(function(error) { 

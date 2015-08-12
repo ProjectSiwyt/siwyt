@@ -38,8 +38,8 @@ define(function(require) {
 			
 			BaasBox.save(post, "Relazione")
 				.done(function(res) {
-					console.log("ok");
-					THIS.trigger("eventoAggiungiRelazione", post);
+					console.log("res");
+					THIS.trigger("eventoAggiungiRelazione", res);
 				})
 				.fail(function(error) {
 					console.log("errore");
@@ -55,7 +55,7 @@ define(function(require) {
 					THIS.trigger("eventoModificaEtichetta", true);
 				})
 				.fail(function(error) {
-				   	console.log("error ", error);
+				   	console.log("error ");
 				    THIS.trigger("errorModificaEtichetta", false);
 				})
 		},
@@ -69,21 +69,91 @@ define(function(require) {
 					//THIS.trigger("eventoModificaPosizione", true);
 				})
 				.fail(function(error) {
-				   	console.log("error ", error);
+				   	console.log("error ");
 				    THIS.trigger("errorModificaPosizione", false);
 				})
 		},
 
-		//rimuove dalla tabella 'Relazione' la riga con id idr
-   		rimuoviRelazione: function(idr){
-   			BaasBox.deleteObject(idr, "Relazione")
-				.done(function(res) {
-					console.log("res ", res);
-				})
-				.fail(function(error) {
-					console.log("error ", error);
-				})
-   		}
+		//rimuove dalla tabella 'Relazione' le relazioni con il postit eliminato
+   		rimuoviRelazioniPostit: function(idp){
+   			var a= new Array();
+   			var c=0;
+   			var THIS=this;
+   			BaasBox.loadCollection("Relazione")
+   				.done(function(res){
+   					for(var i=0; i<res.length;i++){
+   						if (res[i].idp1==idp || res[i].idp2==idp){
+   							a[c++]=res[i];
+   						}
+   					}
+   					if (a.length!=0){
+   						THIS.rimuoviRelPostit(a);
+   					}
+   					else{
+   						THIS.trigger("eliminateRelazioniPostit",a);
+   					}
+   				})
+   				.fail(function(error){
+   					console.log("error");
+   				})
+   			
+   		},
+   		rimuoviRelPostit: function(a){
+   			var c=0;
+   			var THIS=this
+   			for (var i=0; i<a.length;i++){
+   				BaasBox.deleteObject(a[i].id, "Relazione")
+					.done(function(res) {
+						c++;
+						if(c==a.length){
+							THIS.trigger("eliminateRelazioniPostit", a);
+						}
+					})
+					.fail(function(error) {
+						console.log("error ");
+					})
+   			}
+   		},
+
+   		//Per la funzione rimuoviRelazioni devo fare prima una query che mi ritorna un array contenente le righe da eliminare
+
+       idRigheRelazioni: function(idb){
+        var a= new Array();
+		var c =0;
+		var THIS=this;
+        BaasBox.loadCollection("Relazione") 
+            .done(function(res) { 
+                for(var j=0; j<res.length; j++){ 
+                    if(idb == res[j].idb){ 
+                        a[c++]=res[j]; 
+                    }
+                } 
+                THIS.rimuoviRelazioni(a);
+            }) 
+            .fail(function(error) { 
+                console.log("error ", error); 
+            }) 
+       },
+
+     
+       //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
+       rimuoviRelazioni: function(r){
+       	console.log(r);
+       	var THIS=this;
+       	var c=0;
+        for(var i=0; i<r.length; i++){ 
+               BaasBox.deleteObject(r[i].id, "Relazione") 
+                .done(function(res) {
+                	c++; 
+                	if (c==r.length){
+                		THIS.trigger("rimuoviRelazioni", r); 
+                	}
+                }) 
+                .fail(function(error) { 
+                    console.log("error ", error); 
+                })
+        } 
+       },
 
 
 	});

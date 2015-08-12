@@ -7,6 +7,7 @@ define(function(require) {
     var Utenti = require("collections/Utenti");
     var Postit= require("models/Postit");
     var Commento= require("models/Commento");
+    var Relazione=require("models/Relazione");
     var ShowListMembers = require("views/pages/ShowListMembers");
     var ShowListAdmins = require("views/pages/ShowListAdmins");
     var ShowListUsers = require("views/pages/ShowListUsers");
@@ -43,6 +44,7 @@ define(function(require) {
             this.bacheca = new Bacheca();
             this.postit=new Postit();
             this.commento=new Commento();
+            this.relazione=new Relazione();
 
 
             //mi metto in ascolto dell'evento che mi ritorna l'esito della query di salvataggio del titolo
@@ -67,6 +69,8 @@ define(function(require) {
             this.bacheca.on("rimuoviBacheca", this.rimuoviElementiBacheca, this);
             //mi metto in ascolto dell'evento che mi ritorna l'elenco dei postit eliminati
             this.postit.on("rimuoviPostits", this.rimuoviCommentiPostitBacheca, this)
+
+            this.bacheca.on("rimuoviTuttiAmministratori", this.rimuoviResto, this);
             //this.bacheca.idAmministratore(this.idb);
 
             // here we can register to inTheDOM or removing events
@@ -378,16 +382,22 @@ define(function(require) {
         deleteNoticeboard: function(e){
             this.bacheca.rimuoviBacheca(this.idb);
         },
-        rimuoviElementiBacheca: function(e){
+        rimuoviElementiBacheca: function(res){
             this.postit.idRighePostit(this.idb);
         },
         rimuoviCommentiPostitBacheca: function(res){
+            console.log(res);
             for (var i=0; i<res.length;i++){
                 this.commento.idRigheCommenti(res[i].id);
             }
-            this.bacheca.idRigheTuttiAmministratori(this.idb);
+            //rimuovo subito gli amministratori altrimenti ho problemi quando torno nella home
+            this.bacheca.idRigheTuttiAmministratori(this.idb); 
+        },
+        rimuoviResto: function(res){
+            console.log("resto");
             this.bacheca.idRigheTuttiResponsabili(this.idb);
             this.bacheca.idRigheTuttiMembri(this.idb);
+            this.relazione.idRigheRelazioni(this.idb);
             this.goToHome();
         },
         goToHome: function(){
