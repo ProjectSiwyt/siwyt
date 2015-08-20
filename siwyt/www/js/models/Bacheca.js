@@ -230,6 +230,22 @@ define(function(require) {
 			}
 		},
 
+		aggiungiUtenteBacheca: function(idu, idb){
+	 		var THIS=this;
+	  		
+			var post = new Object();
+			post.idu = idu;
+			post.idb = idb;     
+			BaasBox.save(post, "Bacheca_Utente")
+				.done(function(res) {
+					THIS.trigger("utenteAggiunto", idu);
+				})
+				.fail(function(error) {
+					THIS.trigger("errorAggiungiUtente", idu);
+				})
+			
+		},
+
 
    		//PER NICHOLAS fare rimuovi responsabili che prende un idu dell'amministratore -> cosa vuol dire?!??!
 

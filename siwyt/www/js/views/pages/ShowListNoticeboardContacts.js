@@ -44,13 +44,14 @@ define(function(require) {
 
     addContactToBacheca: function(e){
       var idb = e.currentTarget.getAttribute("data-id");
+      console.log(idb);
       var idu = sessionStorage.getItem("idUserToAdd");
       /*console.log(idb);
       console.log(idu);*/
       //this.bacheca.aggiungiMembro();
-      var a = new Array();
-      a[0]= idu;
-      this.bacheca.salvaUtenti(a, idb);
+      /*var a = new Array();
+      a[0]= idu;*/
+      this.bacheca.aggiungiUtenteBacheca(idu, idb);
       
 
       //});

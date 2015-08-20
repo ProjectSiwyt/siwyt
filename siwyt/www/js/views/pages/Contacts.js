@@ -87,7 +87,7 @@ define(function(require) {
       /*console.log("subview " +this.subView);*/
        console.log(this.subViewContacts); 
       document.getElementById("contactsContent").appendChild(this.subViewContacts);
-      document.getElementById("search").addEventListener("keyup", this.startSearch(document.getElementById("search").value));
+      //document.getElementById("search").addEventListener("keyup", this.startSearch(document.getElementById("search").value));
 
     },
 
@@ -127,7 +127,7 @@ define(function(require) {
     startQuery: function(e){
       this.bacheca.listaIdBachecheAmministratore();
       this.utente.listContacts(localStorage.getItem("idu"));
-      this.startListenerSearch();
+      //this.startListenerSearch();
     },
 
     chiudiPopup: function(e){
@@ -209,11 +209,11 @@ define(function(require) {
       });
     },
 
-    startListenerSearch: function(e){
+/*    startListenerSearch: function(e){
       console.log(document.getElementById("search"));
       document.getElementById("search").addEventListener("keyup", this.startSearch(document.getElementById("search").value));
       
-    },
+    },*/
 
     startSearch:function(){
       $("#searchContacts").remove();
