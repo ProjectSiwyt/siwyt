@@ -119,7 +119,9 @@ define(function(require) {
                 if(eq>-0.05 && eq<0.05){
                     console.log("INSERIRE MENU RELAZIONE PER ELIMINARLA");
                     console.log(this.rel[i].id);
-                    console.log("AL TAP SU ELIMINA")
+                    console.log("AL TAP SU ELIMINA");
+                    console.log("CHIMARE QUERY CHE ELIMINA");
+                    this.relazione.rimuoviRelazione(this.rel[i].id);
                     this.rel.splice(i,1);
                     this.appendRelations(this.rel);
                 }

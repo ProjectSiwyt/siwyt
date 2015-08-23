@@ -131,10 +131,19 @@ define(function(require) {
                 THIS.rimuoviRelazioni(a);
             }) 
             .fail(function(error) { 
-                console.log("error ", error); 
+                console.log("error "); 
             }) 
        },
-
+       rimuoviRelazione: function(id){
+       		var THIS=this;
+       		BaasBox.deleteObject(id,"Relazione")
+       			.done(function(res){
+       				THIS.trigger("rimuoviRelazione",id);
+       			})
+       			.fail(function(error){
+       				console.log("error");
+       			})
+       },
      
        //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
        rimuoviRelazioni: function(r){
@@ -150,7 +159,7 @@ define(function(require) {
                 	}
                 }) 
                 .fail(function(error) { 
-                    console.log("error ", error); 
+                    console.log("error "); 
                 })
         } 
        },
