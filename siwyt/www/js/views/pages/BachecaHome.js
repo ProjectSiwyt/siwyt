@@ -86,7 +86,7 @@ define(function(require) {
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
-            "tap #backBoard": "goBack",
+            "tap #backBoard": "goToHome",
             "tap .postit": "manageAction",
             "tap .rename": "rename",
             "touchstart .postit": "saveEvent",

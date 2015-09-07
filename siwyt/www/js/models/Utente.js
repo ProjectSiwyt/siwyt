@@ -86,7 +86,7 @@ define(function(require) {
 
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente
 		login: function(username, password){
-
+			console.log("login da",username, password);
 			var THIS = this;
 			BaasBox.login(username, password)
 				.done(function (user) {
