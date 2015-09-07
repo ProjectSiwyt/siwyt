@@ -57,14 +57,16 @@ define(function(require) {
       return this;
     },
 
+
     // quando la registrazione va a buon fine viene inviata una mail di conferma all email specificata
     sendMail: function(result){
-      console.log(result);
+      console.log("registrazione", result);
       this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
       Backbone.history.navigate("login",{
         trigger: true
       });
     },
+
 
     // se lo username scelto è disponibile e valido viene effettuata la registrazinoe
     doRegistration: function(result) {
@@ -75,8 +77,6 @@ define(function(require) {
         $("#errUsernameExist").removeAttr("style");
         this.utente.register(result.name, result.surname, result.username, result.email, result.password);
       }
-
-
     },
 
     // viene verificata la validità dei dati immessi nella form di registrazione

@@ -16,6 +16,8 @@ define(function(require) {
       this.bacheca = new Bacheca();
       this.template = Utils.templates.contentListBoardsContacts;
 
+      this.bacheca.on("utenteAggiunto", this.showChecked);
+
       
      // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -41,9 +43,22 @@ define(function(require) {
       return this;
     },
 
+    showChecked: function(result){
+      if(result){
+
+        var item = document.getElementsByClassName("current");
+        console.log("cpntattoAggiunto");
+        console.log(item);
+        debugger
+        var i = span.firstChild;
+        i.classList.toggle('fa-user-plus');
+        i.classList.toggle('fa-check');
+      }
+    },
 
     addContactToBacheca: function(e){
       var idb = e.currentTarget.getAttribute("data-id");
+      e.currentTarget.classList.toggle("current");
       console.log(idb);
       var idu = sessionStorage.getItem("idUserToAdd");
       /*console.log(idb);
@@ -55,6 +70,8 @@ define(function(require) {
       
 
       //});
+
+    
     }
   });
 

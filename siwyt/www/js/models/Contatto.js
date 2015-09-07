@@ -20,13 +20,26 @@ define(function(require) {
 			BaasBox.save(post, "Contatto")
 				.done(function(res) {
 					console.log("contatto aggiunto");
-					THIS.trigger("resultAggiungiContatto", post.id2);
+					THIS.setPermission(res);
 				})
 				.fail(function(error) {
 					console.log("error aggiungiContatto");
 					THIS.trigger("resultAggiungiContatto", false);
 				})
 
+		},
+
+		setPermission: function(result){
+			var THIS = this;
+			console.log("result contatto", result, result.id);
+			BaasBox.grantRoleAccessToObject("Contatto",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);
+			    THIS.trigger("resultAggiungiContatto", res.id2);
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
 		},
 
 		aggiungiContattoConNotifica: function(id1, id2){

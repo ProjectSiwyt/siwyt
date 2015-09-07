@@ -82,12 +82,28 @@ define(function(require) {
 
 			BaasBox.save(post, "Postit")
 				.done(function(res) {
-					THIS.trigger("eventoAggiungiPostit", res);
+					THIS.setPermissionAggiungiPostit(res);
 				})
 				.fail(function(error) {
 					THIS.trigger("errorAggiungiPostit", error);
 				})
 		},
+
+		setPermissionAggiungiPostit: function(result){
+			var THIS = this;
+			console.log("result setPermissionSalvaBacheca", result, result.id);
+			BaasBox.grantRoleAccessToObject("Postit",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log(" aggiungiPostit ", res);
+			    THIS.trigger("eventoAggiungiPostit", result);
+			  })
+			  .fail(function(error) {
+			    console.log("error permessi postit", error);
+			  })
+		},
+
+
+
 
 		//funzione che cambia il contenuto del postit con id idp
 		saveContenuto: function(idp, contenuto){

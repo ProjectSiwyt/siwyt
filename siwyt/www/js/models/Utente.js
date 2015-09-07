@@ -86,11 +86,26 @@ define(function(require) {
 
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente
 		login: function(username, password){
+
+			var THIS = this;
+			BaasBox.login(username, password)
+				.done(function (user) {
+					console.log("User Login done", user);
+					THIS.loadData(username, password);
+				})
+				.fail(function (err) {
+					console.log("error ", err);
+					THIS.trigger("resultLogin", null);
+
+				})
+		},
+
+		loadData: function(username, password){
 			var THIS = this;	
 			var trovato = false;
 			BaasBox.loadCollection("Utente")
 				.done(function(res) {
-				    console.log("res ", res);
+				    console.log("Risultatto loadCollection Utente: ", res);
 				    for (var i=0; i<res.length; i++){
 				    	//vedere se true deve essere una stringa o va bene booleano -> se si, cambiare nel database
 	            		if( res[i].username == username && res[i].password == password ){//&& res[i].confermato == true){
@@ -114,6 +129,18 @@ define(function(require) {
 				})
 		},
 
+		logout: function(){
+			var THIS = this;
+			BaasBox.logout()
+				  .done(function (res) {
+				    console.log("logout done");
+				    THIS.trigger("baasboxLogout", true);
+				  })
+				  .fail(function (error) {
+				    console.log("error ", error);
+  })
+		},
+
 		//conta le bacheche di cui l'utente con id=idu fa parte
     	//CONTROLLARE
     	contaBacheche: function(){
@@ -129,7 +156,7 @@ define(function(require) {
 				})
     	},
 
-
+    	//che fa que??????????????? da unauthorized a queste informazioni
 		checkUsername: function(name, surname, username, email, password ){
 			var post = new Object();
 
@@ -162,7 +189,21 @@ define(function(require) {
 
 		//aggiunge una nuova riga alla collezione "Utente"
 		register: function(nome, cognome, username, mail, password){
-						
+			var THIS = this;
+			//{"visibleByRegisteredUsers": {"mail": mail , "nome": nome, "cognome": cognome}}
+			BaasBox.signup(username, password)
+				.done(function (res) {
+					console.log("signup ", res);
+					THIS.registerData(nome, cognome, username, mail, password);
+
+				})
+				.fail(function (error) {
+					console.log("error ", error);
+				})
+
+		},
+
+		registerData: function(nome, cognome, username, mail, password){
 			var post = new Object();
 
 			post.nome = nome;
@@ -175,14 +216,27 @@ define(function(require) {
 			
 			BaasBox.save(post, "Utente")
 						.done(function(res) {
-							console.log("res ", res);
-							THIS.trigger("eventoRegister ", res); //se la registrazione è andata bene torna res con i dati
+							console.log("res registerData ", res);
+							THIS.setPermission(res);
 						})
 						.fail(function(error) {
 							console.log("inserimentoError ", error);
 							THIS.trigger("inserimentoError ", 0); //in caso la registrazione non è andata bene ritorna 0
 						})			
 				
+		},
+
+		setPermission: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);
+			    THIS.trigger("eventoRegister ", result); //se la registrazione è andata bene torna res con i dati
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
 		},
 		//chiamare quando la funzione di sopra torna true
 		inviaMail: function(nome, cognome, username, mail, password){
@@ -278,7 +332,7 @@ define(function(require) {
 			var c = 0;
    			BaasBox.loadCollection("Utente")
    				.done(function(res) {
-   					console.log("load search done");
+   					console.log("load search done", res);
 				    for (var i=0; i<res.length; i++){
 				    	var nome = (res[i].nome).toLowerCase();
 				    	var cognome = (res[i].cognome).toLowerCase();
@@ -298,6 +352,29 @@ define(function(require) {
 				})
    		},
 
+   		cercaUtente2: function(str){
+   			var THS = this;
+   			BaasBox.fetchUsers()
+			  .done(function(res) {
+			    console.log("res ", res['data']);
+			    for (var i=0; i<res.length; i++){
+				    	var nome = (res[i].nome).toLowerCase();
+				    	var cognome = (res[i].cognome).toLowerCase();
+				    	if((nome.includes(str.toLowerCase())) || (cognome.includes(str.toLowerCase()))) {
+				    		a[c] = res[i];
+				    		c++;
+				    	}
+				    		
+
+				    	}
+				    	if(a.length>0) THIS.filtraRisultati(a);
+				    	else THIS.trigger("resultCercaUtente", false);
+			  })
+			  .fail(function(error) {
+			    console.log("error ", error);
+  			})
+   		},
+
    		// funzione che filtra i risultati di ricerca in modo da non visalizzare gli utenti che sono già stati aggiunti ai contatti
    		filtraRisultati: function(a){
    			var exist = false;
@@ -310,7 +387,7 @@ define(function(require) {
    					for (var i=0; i<a.length; i++){
    						exist = false;
    						for( var j=0; j< res.length; j++){
-   							if((a[i].id == res[j].id1 && res[j].id2==idu) || (a[i].id == res[j].id2 && res[j].id1==idu)){
+   							if((a[i].id == res[j].id1 && res[j].id2==idu) || (a[i].id == res[j].id2 && res[j].id1==idu) || (a[i].id==idu)){
    								exist = true;
    							}
 

@@ -63,19 +63,19 @@ define(function(require) {
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
       
       //at the moment we log in as admin  
-      BaasBox.login("admin", "admin")
+     /* BaasBox.login("admin", "admin")
           .done(function (user) {
               console.log("Logged in ", user);
               //once we are logged in, let's start backbone
-              Backbone.history.start();
+              //Backbone.history.start();
       })
           .fail(function (err) {
             console.log("error ", err);
-      });
+      });*/
       var opts = {
           lines: 13 // The number of lines to draw
-          , length: 28 // The length of each line
-          , width: 14 // The line thickness
+          , length: 8 // The length of each line
+          , width: 8 // The line thickness
           , radius: 42 // The radius of the inner circle
           , scale: 1 // Scales overall size of the spinner
           , corners: 1 // Corner roundness (0..1)

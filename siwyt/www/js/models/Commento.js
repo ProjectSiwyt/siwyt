@@ -44,11 +44,24 @@ define(function(require) {
 			
 			BaasBox.save(post, "Commento")
 				.done(function(res) {
-					THIS.trigger("aggiuntoCommento", post);
+					THIS.setPermissionAggiungiCommento(res);
 				})
 				.fail(function(error) {
 					THIS.trigger("error", error);
 				})
+		},
+
+		setPermissionAggiungiCommento: function(result){
+			var THIS = this;
+			console.log("result setPermissionAggiungiCommento", result, result.id);
+			BaasBox.grantRoleAccessToObject("Commento",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log(" setPermissionAggiungiCommento ", res);
+			    THIS.trigger("aggiuntoCommento", res);
+			  })
+			  .fail(function(error) {
+			    console.log("error setPermissionAggiungiCommento", error);
+			  })
 		},
 
 		//funzione che cambia il contenuto del 'Commento' con id idc
