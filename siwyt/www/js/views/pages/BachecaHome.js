@@ -96,7 +96,7 @@ define(function(require) {
             "touchend .fa-arrows": "endDrag",
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
-            "tap .menuRelation" : "reltionManagement",
+            "tap .menuRelation" : "relationManagement",
             "tap .relation": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
             "touchstart #boardCanvas" : "manageDeleteRelation"         
@@ -476,7 +476,7 @@ define(function(require) {
             this.showDialog(idPopup.replace("LinkPopup",""));
             this.showPopup(idPopup.replace("LinkPopup",""));
         },
-        reltionManagement:function(e){
+        relationManagement:function(e){
             console.log(e.target.parentNode.parentNode);
             var idp = e.target.parentNode.parentNode;
             document.getElementById(idp.id).classList.add('hide');
