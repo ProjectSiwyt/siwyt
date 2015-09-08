@@ -1,3 +1,4 @@
+{{#if this}}
 <ul class="table-view">
     {{#each this}}
     	<li class="table-view-cell rigabacheca" data-id="{{id}}">
@@ -6,3 +7,10 @@
     	</li>
     {{/each}}
 </ul>
+{{else}}
+<ul class="table-view">
+    	<li class="table-view-cell rigabacheca" data-id="{{id}}">
+    		Crea una Bacheca per aggiungere un amico
+    	</li>
+</ul>
+{{/if}}

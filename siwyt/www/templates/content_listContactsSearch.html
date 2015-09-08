@@ -1,7 +1,9 @@
 <ul class="table-view" id="searchContacts">
+risultati ricerca:
+{{#if this}}
     {{#each this}}
     <li id="{{id}}" class="table-view-cell">
-        {{nome}} {{cognome}}
+        {{nome}} {{cognome}} 
         <span class="absolute second-icon-search addContact"><i class="pull-right fa fa-user-plus fa-2x"></i></span>
     </li>
     <!-- <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
@@ -9,4 +11,11 @@
     
     </div> -->
     {{/each}}
+{{else}}
+
+		<li class="table-view-cell">
+	        Nessus risultato
+	    </li>
+
+{{/if}}
 </ul>

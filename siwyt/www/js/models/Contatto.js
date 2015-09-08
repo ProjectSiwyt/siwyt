@@ -35,7 +35,7 @@ define(function(require) {
 			BaasBox.grantRoleAccessToObject("Contatto",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
 			    console.log("res ", res);
-			    THIS.trigger("resultAggiungiContatto", res.id2);
+			    THIS.trigger("resultAggiungiContatto", result.id2);
 			  })
 			  .fail(function(error) {
 			    console.log("error permission", error);

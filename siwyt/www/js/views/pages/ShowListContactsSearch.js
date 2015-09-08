@@ -17,6 +17,7 @@ define(function(require) {
       // load the precompiled template
       this.template = Utils.templates.contentListContactsSearch;
       this.contatto = new Contatto();
+      this.utente = new Utente();
       this.contatto.on("resultAggiungiContatto", this.showDone, this);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -57,12 +58,13 @@ define(function(require) {
 
     showDone: function(result){
       if(result){
+        console.log("showDone");
         var item = document.getElementById(result);
         var span = item.childNodes[1];
         var i = span.firstChild;
-        console.log(item);
-        console.log(span);
-        console.log(i);
+        /*console.log("item ",item);
+        console.log("span ",span);
+        console.log("i --> ",i);*/
         span.classList.toggle('addContact');
         i.classList.toggle('fa-user-plus');
         i.classList.toggle('fa-check');
