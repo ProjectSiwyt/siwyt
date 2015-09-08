@@ -30,6 +30,7 @@ define(function(require) {
       };
       document.getElementById("back").classList.add('hide');
       document.getElementById("title").innerHTML="Profile";
+      $(".profile-img").attr("src",localStorage.getItem("imgProfile"));
       
 
       // here we can register to inTheDOM or removing events
@@ -43,7 +44,7 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
       var idUtente = localStorage.getItem('idu');
       this.utente = new Utente();
-      this.utente.contaBacheche();
+      
 
       this.utente.on("eventoContaBacheche", this.showNumBacheche, this);
       this.utente.on("accountDeleted", this.goOut, this);
@@ -70,7 +71,8 @@ define(function(require) {
       "tap #saveData": "validateEditedData",
       "tap #deleteData": "cancellChanges",
       "tap #savePassword": "validateChangePassword",
-      "tap #cancellChangePass": "cancellChangePass"
+      "tap #cancellChangePass": "cancellChangePass",
+      "tap #changeImg": "changeImg"
     },
 
     render: function() {
@@ -97,6 +99,22 @@ define(function(require) {
       }
     },
 
+    startQuery: function(e){
+      this.utente.contaBacheche();
+      $("#uploadForm").submit(function(e) {
+        e.preventDefault();
+        var formObj = $(this);
+        var formData = new FormData(this);
+        BaasBox.uploadFile(formData)
+          .done(function(res) {
+            console.log("res ", res);
+          })
+          .fail(function(error) {
+            console.log("error ", error);
+          })
+      });
+    },
+
 
     showNumBacheche: function(result){
       console.log("num bacheche "+result);
@@ -112,6 +130,101 @@ define(function(require) {
           this.utente.deleteAccount(localStorage.getItem("idu"));
     
     },
+
+    changeImg: function(e){
+     
+
+      var THIS= this;
+      console.log(THIS , "changeImg");
+        navigator.notification.confirm(
+        'Select source',  // message
+        THIS.getImg,                  // callback to invoke
+        'Change Image',            // title
+        'Camera,Photo Gallery'             // buttonLabels
+        );
+    },
+
+    getImg: function(e){
+        var THIS = this;
+        console.log(THIS , "getImg");
+        // caricamento dell immagine dalla collezione di immagini
+        if(e==3){
+          console.log("PHOTOLIBRARY"); 
+         navigator.camera.getPicture(saveImgAlbum, onFail, 
+          { quality: 50, 
+           targetWidth: 160,
+           targetHeight: 160,
+           encodingType: Camera.EncodingType.JPEG,
+           destinationType: Camera.DestinationType.DATA_URL,
+           sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM });
+
+            function saveImgAlbum(img){
+              console.log(img);
+              localStorage.setItem("imgProfile",img);
+              $(".profile-img").attr("src",img);
+              console.log("save image gallery");
+
+
+              var myBlob = new Blob([img], {type: "imgProfile"});
+     
+              var reader = new FileReader();
+               
+              reader.onload = function(event) {
+                  /*var URL = event.target.result;
+                  document.getElementById("lnkDownload").href = URL;*/
+              };
+              var i = new File(); 
+              i = reader.readAsDataURL(myBlob);
+
+               BaasBox.uploadFile(i)
+                  .done(function(res) {
+                    console.log("res ", res);
+                  })
+                  .fail(function(error) {
+                    console.log("error ", error);
+                  })
+            }
+
+            function onFail(e){
+              console.log("save image gallery failed");
+            }
+          }
+
+        // caricamento dell immagine direttamente dalla camera
+        else{
+          if (e==2){
+            console.log("Camera"); 
+            navigator.camera.getPicture(saveImgCamera, onFail, 
+              { quality: 50, 
+               targetWidth: 160,
+               targetHeight: 160,
+               destinationType: Camera.DestinationType.NATIVE_URI,
+               sourceType: Camera.PictureSourceType.CAMERA});
+
+              function saveImgCamera(DATA_URL){
+                  console.log("save img camera")
+                  console.log(DATA_URL);
+              }
+              
+              function onFail(f){
+                  console.log("save img camera failed");
+              }
+
+
+          }
+
+        }
+
+    },
+
+   saveImg: function(DATA_URL){
+        console.log(DATA_URL);
+    },
+    
+    onFail: function(f){
+        console.log("change image failed");
+    },
+
 
     editData: function(e){
       console.log("editing profile");

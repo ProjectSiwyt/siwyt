@@ -51,39 +51,43 @@ define(function(require) {
 
     initialize: function(options) {
       this.currentView = undefined;
+        //initialize BaasBox
+      BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
+      BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
+      
 
       if(localStorage.getItem("idu")==null){
           this.firstView="login";
       }
       else{
+        var utente = new Utente();
+        //utente.logout();
+
+        utente.login(localStorage.getItem("usernameLogged"), localStorage.getItem("passwordLogged"));
         this.firstView="homeSiwyt";
       }
-        //initialize BaasBox
-      BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
-      BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
-      
       //at the moment we log in as admin  
-      BaasBox.login("admin", "admin")
+     /* BaasBox.login("admin", "admin")
           .done(function (user) {
               console.log("Logged in ", user);
               //once we are logged in, let's start backbone
-              Backbone.history.start();
+              //Backbone.history.start();
       })
           .fail(function (err) {
             console.log("error ", err);
-      });
+      });*/
       var opts = {
           lines: 13 // The number of lines to draw
-          , length: 28 // The length of each line
-          , width: 14 // The line thickness
-          , radius: 42 // The radius of the inner circle
+          , length: 11 // The length of each line
+          , width: 7 // The line thickness
+          , radius: 26 // The radius of the inner circle
           , scale: 1 // Scales overall size of the spinner
           , corners: 1 // Corner roundness (0..1)
           , color: '#000' // #rgb or #rrggbb or array of colors
           , opacity: 0.25 // Opacity of the lines
           , rotate: 0 // The rotation offset
           , direction: 1 // 1: clockwise, -1: counterclockwise
-          , speed: 1 // Rounds per second
+          , speed: 2 // Rounds per second
           , trail: 60 // Afterglow percentage
           , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
           , zIndex: 2e9 // The z-index (defaults to 2000000000)

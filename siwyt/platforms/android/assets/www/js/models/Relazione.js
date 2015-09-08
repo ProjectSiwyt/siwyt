@@ -39,11 +39,25 @@ define(function(require) {
 			BaasBox.save(post, "Relazione")
 				.done(function(res) {
 					console.log("res");
-					THIS.trigger("eventoAggiungiRelazione", res);
+					THIS.setPermissionAggiungiRelazione(res);
+
 				})
 				.fail(function(error) {
 					console.log("errore");
 				})
+		},
+
+		setPermissionAggiungiRelazione: function(result){
+			var THIS = this;
+			console.log("result relazioni", result, result.id);
+			BaasBox.grantRoleAccessToObject("Relazione", result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log(" aggiungiRelazione ", res);
+			    THIS.trigger("eventoAggiungiRelazione", result);
+			  })
+			  .fail(function(error) {
+			    console.log("error permessi Relazione", error);
+			  })
 		},
 
 		//funzione che cambia l'etichetta della 'Relazione' con id idr
@@ -135,6 +149,17 @@ define(function(require) {
             }) 
        },
 
+       rimuoviRelazione: function(id){
+       		var THIS=this;
+       		BaasBox.deleteObject(id,"Relazione")
+       			.done(function(res){
+       				THIS.trigger("rimuoviRelazione",id);
+       			})
+       			.fail(function(error){
+       				console.log("error");
+       			})
+       },
+
      
        //rimuove dalla tabella 'Postit' l'elenco dei postit passati nell'array passato come parametro 
        rimuoviRelazioni: function(r){
@@ -153,7 +178,7 @@ define(function(require) {
                     console.log("error ", error); 
                 })
         } 
-       },
+       }
 
 
 	});

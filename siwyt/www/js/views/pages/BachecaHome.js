@@ -70,10 +70,10 @@ define(function(require) {
                 x: 0,
                 y: 0
             },
-            drag_start_size:{
-              w: 0,
-              h:0
-            },
+        drag_start_size:{
+          w: 0,
+          h:0
+        },
         drag_start_tap_pos: {
           x: 0,
           y: 0
@@ -86,17 +86,16 @@ define(function(require) {
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
-            "tap #backBoard": "goToHome",
+            "tap #backBoard": "goBack",
             "tap .postit": "manageAction",
             "tap .rename": "rename",
             "touchstart .postit": "saveEvent",
-            "longTap .postit": "enableIcons",
-            "touchstart .fa-arrows": "startDrag",
-            "touchmove .fa-arrows": "drag",
-            "touchend .fa-arrows": "endDrag",
+            "longTap .postit": "enableMove",
+            "touchmove .moveable": "drag",
+            "touchend .moveable": "endDrag",
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
-            "tap .menuRelation" : "relationManagement",
+            "tap .menuRelation" : "reltionManagement",
             "tap .relation": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
             "touchstart #boardCanvas" : "manageDeleteRelation"         
@@ -121,9 +120,34 @@ define(function(require) {
                     console.log(this.rel[i].id);
                     console.log("AL TAP SU ELIMINA");
                     console.log("CHIMARE QUERY CHE ELIMINA");
-                    this.relazione.rimuoviRelazione(this.rel[i].id);
-                    this.rel.splice(i,1);
-                    this.appendRelations(this.rel);
+                    if (px<ax && py<ay){
+                        if (p.x>px &&p.x<ax && p.y>py && p.y<ay){
+                            this.relazione.rimuoviRelazione(this.rel[i].id);
+                            this.rel.splice(i,1);
+                            this.appendRelations(this.rel);
+                        }
+                    }
+                    if (px<ax && ay<py){
+                        if(p.x>px &&p.x<ax && p.y>ay && p.y<py){
+                            this.relazione.rimuoviRelazione(this.rel[i].id);
+                            this.rel.splice(i,1);
+                            this.appendRelations(this.rel);
+                        }
+                    }
+                    if (ax<px && ay<py){
+                        if(p.x>ax &&p.x<px && p.y>ay && p.y<py){
+                            this.relazione.rimuoviRelazione(this.rel[i].id);
+                            this.rel.splice(i,1);
+                            this.appendRelations(this.rel);
+                        }
+                    }
+                    if (ax<px && py<ay){
+                        if(p.x>ax &&p.x<px && p.y>py && p.y<ay){
+                            this.relazione.rimuoviRelazione(this.rel[i].id);
+                            this.rel.splice(i,1);
+                            this.appendRelations(this.rel);
+                        }
+                    }
                 }
 
             }
@@ -314,13 +338,10 @@ define(function(require) {
             popPopup.classList.toggle('hide');
             obj.classList.toggle('hide');
         },
-        enableIcons: function(e) {
-            var obj = e.currentTarget;
-            obj.classList.add("fa-arrows");
+        enableMove: function(e) {
+            console.log("Moveble",this.obj);
+            e.currentTarget.classList.add("moveable");
             this.startDrag(this.event);
-            //var move = document.createElement("i");
-            //move.classList.add("fa", "fa-arrows", "fa-4x", "absolute","icons-postit");
-            //obj.appendChild(move);
         },
         saveEvent: function(e){
             this.event=e;
@@ -358,12 +379,10 @@ define(function(require) {
             this.rel[this.rel.length]=res;
         },
         startDrag: function(e) {
-            console.log("start");
             e.preventDefault();
             e.stopPropagation();
 
             var drag_object = e.currentTarget;
-            //var drag_object = e.currentTarget.parentNode;
             
             //posizione iniziale del mouse
             //initial mouse psition
@@ -399,7 +418,6 @@ define(function(require) {
             }
         },
         drag: function(e) {
-            //console.log("move");
             //posizione corrente del mouse
             //current mouse position
             
@@ -408,12 +426,11 @@ define(function(require) {
 
 
             var drag_current_tap_pos = this.getTapPos(e);
-            //var mode = parseInt(this.dragmode);
+            
             switch (this.dragmode) {
                 //spostamento
                 //move
                 case 1:
-                    //console.log("moveIt!");
                     //calcoliamo la nuova posizione dell'oggetto misurando lo spostamento del mouse dalla sua posizione iniziale
                     //calculate the new object position using the mouse distance from its initial position
                     var newX = this.drag_start_pos.x + (drag_current_tap_pos.x - this.drag_start_tap_pos.x);
@@ -447,11 +464,16 @@ define(function(require) {
         endDrag: function(e) {
             console.log("end");
             var drag_object = e.currentTarget;
-            //var drag_object = e.currentTarget.parentNode;
+            drag_object.classList.remove("moveable");
             drag_object.style.cursor = "auto";
-            drag_object.classList.remove("fa-arrows");
-            //drag_object.removeChild(drag_object.lastChild);
-            this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
+            switch (this.dragmode) {
+                case 1: 
+                    this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
+                    break;
+                case 2:
+                    this.postits.saveHW(drag_object.id, drag_object.style.height, drag_object.style.width);
+            }
+
         },
         getTapPos: function(e) {
             if (e.originalEvent.touches[0].pageX || e.originalEvent.touches[0].pageY) {
@@ -476,7 +498,7 @@ define(function(require) {
             this.showDialog(idPopup.replace("LinkPopup",""));
             this.showPopup(idPopup.replace("LinkPopup",""));
         },
-        relationManagement:function(e){
+        reltionManagement:function(e){
             console.log(e.target.parentNode.parentNode);
             var idp = e.target.parentNode.parentNode;
             document.getElementById(idp.id).classList.add('hide');

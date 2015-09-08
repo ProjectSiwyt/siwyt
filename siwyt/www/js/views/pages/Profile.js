@@ -101,6 +101,18 @@ define(function(require) {
 
     startQuery: function(e){
       this.utente.contaBacheche();
+      $("#uploadForm").submit(function(e) {
+        e.preventDefault();
+        var formObj = $(this);
+        var formData = new FormData(this);
+        BaasBox.uploadFile(formData)
+          .done(function(res) {
+            console.log("res ", res);
+          })
+          .fail(function(error) {
+            console.log("error ", error);
+          })
+      });
     },
 
 

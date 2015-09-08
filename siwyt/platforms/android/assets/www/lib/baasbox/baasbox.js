@@ -1,1 +1,637 @@
-var BaasBox=function(){function i(){var e=new Object("I am the BaasBox instance");return e}function s(e){if(e===null){return}this.user=e;if(window.Zepto&&window.localStorage){window.localStorage.setItem(r,JSON.stringify(this.user))}else{$.cookie(r,JSON.stringify(this.user))}}function o(){if(window.Zepto&&window.localStorage){if(localStorage.getItem(r)){this.user=JSON.parse(localStorage.getItem(r))}}else{if($.cookie(r)){this.user=JSON.parse($.cookie(r))}}return this.user}function u(){var e=new $.Deferred;var t={};t.success=function(e){t.then(function(t){e(t)});return t};t.error=function(e){t.then(null,function(t){e(t)});return t};e.promise(t);return e}var e;var t;var n;var r="baasbox-cookie";if(window.Zepto){$.ajaxSettings.global=true;$.ajaxSettings.beforeSend=function(e,t){if(BaasBox.getCurrentUser()){e.setRequestHeader("X-BB-SESSION",BaasBox.getCurrentUser().token)}e.setRequestHeader("X-BAASBOX-APPCODE",BaasBox.appcode)}}else{$.ajaxSetup({global:true,beforeSend:function(e,t){if(BaasBox.getCurrentUser()){e.setRequestHeader("X-BB-SESSION",BaasBox.getCurrentUser().token)}e.setRequestHeader("X-BAASBOX-APPCODE",BaasBox.appcode)}})}return{appcode:"",pagelength:50,timeout:2e4,version:"0.9.0",READ_PERMISSION:"read",DELETE_PERMISSION:"delete",UPDATE_PERMISSION:"update",ALL_PERMISSION:"all",ANONYMOUS_ROLE:"anonymous",REGISTERED_ROLE:"registered",ADMINISTRATOR_ROLE:"administrator",isEmpty:function(e){for(var t in e){return false}return true},getInstance:function(){if(!e){e=i()}return e},setEndPoint:function(e){var t=/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;if(t.test(e)){this.endPoint=e}else{alert(e+" is not a valid URL")}},endPoint:function(){return this.endPoint},login:function(e,t){var n=u();var r=BaasBox.endPoint+"/login";var i=$.post(r,{username:e,password:t,appcode:BaasBox.appcode}).done(function(e){var t=[];$(e.data.user.roles).each(function(e,n){t.push(n.name)});s({username:e.data.user.name,token:e.data["X-BB-SESSION"],roles:t,visibleByAnonymousUsers:e.data["visibleByAnonymousUsers"],visibleByTheUser:e.data["visibleByTheUser"],visibleByFriends:e.data["visibleByFriends"],visibleByRegisteredUsers:e.data["visibleByRegisteredUsers"]});n.resolve(o())}).fail(function(e){n.reject(e)});return n.promise()},logout:function(e){var t=u();var n=o();if(n===null){return t.reject({data:"ok",message:"User already logged out"})}var i=BaasBox.endPoint+"/logout";var a=$.post(i,{}).done(function(e){if(window.Zepto&&window.localStorage){window.localStorage.removeItem(r)}else{$.cookie(r,null)}s(null);t.resolve({data:"ok",message:"User logged out"}).fail(function(e){t.reject(e)})});return t.promise()},signup:function(e,t,n){var r=u();var i=BaasBox.endPoint+"/user";var a={username:e,password:t};if(n!==undefined||!this.isEmpty(n)){var f=Object.getOwnPropertyNames(n);for(prop in n){a[prop]=n[prop]}}var l=$.ajax({url:i,method:"POST",contentType:"application/json",data:JSON.stringify(a)}).done(function(e){var t=[];$(e.data.user.roles).each(function(e,n){t.push(n.name)});s({username:e.data.user.name,token:e.data["X-BB-SESSION"],roles:t,visibleByAnonymousUsers:e.data["visibleByAnonymousUsers"],visibleByTheUser:e.data["visibleByTheUser"],visibleByFriends:e.data["visibleByFriends"],visibleByRegisteredUsers:e.data["visibleByRegisteredUsers"]});r.resolve(o())}).fail(function(e){r.reject(e)});return r.promise()},getCurrentUser:function(){return o()},fetchCurrentUser:function(){return $.get(BaasBox.endPoint+"/me")},createCollection:function(e){return $.post(BaasBox.endPoint+"/admin/collection/"+e)},deleteCollection:function(e){return $.ajax({url:BaasBox.endPoint+"/admin/collection/"+e,method:"DELETE"})},loadCollectionWithParams:function(e,t){var n=u();var r=BaasBox.endPoint+"/document/"+e;var i=$.ajax({url:r,method:"GET",timeout:BaasBox.timeout,dataType:"json",data:t}).done(function(e){n.resolve(e["data"])}).fail(function(e){n.reject(e)});return n.promise()},loadCollection:function(e){return BaasBox.loadCollectionWithParams(e,{page:0,recordsPerPage:BaasBox.pagelength})},loadObject:function(e,t){return $.get(BaasBox.endPoint+"/document/"+e+"/"+t)},save:function(e,t){var n=u();var r="POST";var i=BaasBox.endPoint+"/document/"+t;if(e.id){r="PUT";i=BaasBox.endPoint+"/document/"+t+"/"+e.id}json=JSON.stringify(e);var s=$.ajax({url:i,type:r,contentType:"application/json",dataType:"json",data:json}).done(function(e){n.resolve(e["data"])}).fail(function(e){n.reject(e)});return n.promise()},updateField:function(e,t,n,r){var i=u();url=BaasBox.endPoint+"/document/"+t+"/"+e+"/."+n;var s=JSON.stringify({data:r});var o=$.ajax({url:url,type:"PUT",contentType:"application/json",dataType:"json",data:s}).done(function(e){i.resolve(e["data"])}).fail(function(e){i.reject(e)});return i.promise()},deleteObject:function(e,t){return $.ajax({url:BaasBox.endPoint+"/document/"+t+"/"+e,method:"DELETE"})},fetchObjectsCount:function(e){return $.get(BaasBox.endPoint+"/document/"+e+"/count")},grantUserAccessToObject:function(e,t,n,r){return $.ajax({url:BaasBox.endPoint+"/document/"+e+"/"+t+"/"+n+"/user/"+r,method:"PUT"})},revokeUserAccessToObject:function(e,t,n,r){return $.ajax({url:BaasBox.endPoint+"/document/"+e+"/"+t+"/"+n+"/user/"+r,method:"DELETE"})},grantRoleAccessToObject:function(e,t,n,r){return $.ajax({url:BaasBox.endPoint+"/document/"+e+"/"+t+"/"+n+"/role/"+r,method:"PUT"})},revokeRoleAccessToObject:function(e,t,n,r){return $.ajax({url:BaasBox.endPoint+"/document/"+e+"/"+t+"/"+n+"/role/"+r,method:"DELETE"})},loadAssetData:function(e){var t=u();var n=BaasBox.endPoint+"/asset/"+e+"/data";var r=$.ajax({url:n,method:"GET",contentType:"application/json",dataType:"json"}).done(function(e){t.resolve(e["data"])}).fail(function(e){t.reject(e)});return t.promise()},getImageURI:function(e,t){var n=u();var r=BaasBox.endPoint+"/asset/"+e;var i;if(t===null||this.isEmpty(t)){return n.resolve({data:r+"?X-BAASBOX-APPCODE="+BaasBox.appcode})}for(var s in t){var o=[];o.push(s);o.push(t[s]);i=o.join("/")}r=r.concat("/");r=r.concat(i);p={};p["X-BAASBOX-APPCODE"]=BaasBox.appcode;var a=$.get(r,p).done(function(e){n.resolve({data:this.url})}).fail(function(e){e});return n.promise()},fetchUserProfile:function(e){return $.get(BaasBox.endPoint+"/user/"+e)},fetchUsers:function(e){return $.ajax({url:BaasBox.endPoint+"/users",method:"GET",data:e})},updateUserProfile:function(e){return $.ajax({url:BaasBox.endPoint+"/me",method:"PUT",contentType:"application/json",data:JSON.stringify(e)})},changePassword:function(e,t){return $.ajax({url:BaasBox.endPoint+"/me/password",method:"PUT",contentType:"application/json",data:JSON.stringify({old:e,"new":t})})},resetPassword:function(){var e=o();return $.get(BaasBox.endPoint+"/user/"+e.username+"/password/reset")},followUser:function(e){return $.post(BaasBox.endPoint+"/follow/"+e)},unfollowUser:function(e){return $.ajax({url:BaasBox.endPoint+"/follow/"+e,method:"DELETE"})},fetchFollowers:function(e){return $.get(BaasBox.endPoint+"/followers/"+e)},fetchFollowing:function(e){return $.get(BaasBox.endPoint+"/following/"+e)},sendPushNotification:function(e){return $.ajax({url:BaasBox.endPoint+"/push/message",method:"POST",contentType:"application/json",data:JSON.stringify(e)})},uploadFile:function(e){return $.ajax({url:BaasBox.endPoint+"/file",type:"POST",data:e,mimeType:"multipart/form-data",contentType:false,cache:false,processData:false})},fetchFile:function(e){return $.get(BaasBox.endPoint+"/file/"+e+"?X-BB-SESSION="+BaasBox.getCurrentUser().token)},deleteFile:function(e){return $.ajax({url:BaasBox.endPoint+"/file/"+e,method:"DELETE"})},fetchFileDetails:function(e){return $.get(BaasBox.endPoint+"/file/details/"+e)},grantUserAccessToFile:function(e,t,n){return $.ajax({url:BaasBox.endPoint+"/file/"+e+"/"+t+"/user/"+n,method:"PUT"})},revokeUserAccessToFile:function(e,t,n){return $.ajax({url:BaasBox.endPoint+"/file/"+e+"/"+t+"/user/"+n,method:"DELETE"})},grantRoleAccessToFile:function(e,t,n){return $.ajax({url:BaasBox.endPoint+"/file/"+e+"/"+t+"/role/"+n,method:"PUT"})},revokeRoleAccessToFile:function(e,t,n){return $.ajax({url:BaasBox.endPoint+"/file/"+e+"/"+t+"/role/"+n,method:"DELETE"})}}}();(function(e){if(typeof define==="function"&&define.amd){define(["jquery"],e)}else{e(jQuery)}})(function(e){function n(e){return u.raw?e:encodeURIComponent(e)}function r(e){return u.raw?e:decodeURIComponent(e)}function i(e){return n(u.json?JSON.stringify(e):String(e))}function s(e){if(e.indexOf('"')===0){e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\")}try{e=decodeURIComponent(e.replace(t," "));return u.json?JSON.parse(e):e}catch(n){}}function o(t,n){var r=u.raw?t:s(t);return e.isFunction(n)?n(r):r}var t=/\+/g;var u=e.cookie=function(t,s,a){if(s!==undefined&&!e.isFunction(s)){a=e.extend({},u.defaults,a);if(typeof a.expires==="number"){var f=a.expires,l=a.expires=new Date;l.setDate(l.getDate()+f)}return document.cookie=[n(t),"=",i(s),a.expires?"; expires="+a.expires.toUTCString():"",a.path?"; path="+a.path:"",a.domain?"; domain="+a.domain:"",a.secure?"; secure":""].join("")}var c=t?undefined:{};var h=document.cookie?document.cookie.split("; "):[];for(var p=0,d=h.length;p<d;p++){var v=h[p].split("=");var m=r(v.shift());var g=v.join("=");if(t&&t===m){c=o(g,s);break}if(!t&&(g=o(g))!==undefined){c[m]=g}}return c};u.defaults={};e.removeCookie=function(t,n){if(e.cookie(t)===undefined){return false}e.cookie(t,"",e.extend({},n,{expires:-1}));return!e.cookie(t)}})
+/*!
+ * BaasBox SDK 0.8.4
+ * https://github.com/baasbox/JS-SDK
+ *
+ * Released under the Apache license
+ */
+
+var BaasBox = (function() {
+
+    var instance;
+    var user;
+    var endPoint;
+    var COOKIE_KEY = "baasbox-cookie";
+
+    // check if the user is using Zepto, otherwise the standard jQuery ajaxSetup function is executed
+    if (window.Zepto) {
+      $.ajaxSettings.global = true;
+      $.ajaxSettings.beforeSend = function(r, settings) {
+      if (BaasBox.getCurrentUser()) {
+        r.setRequestHeader('X-BB-SESSION', BaasBox.getCurrentUser().token);
+      }
+        r.setRequestHeader('X-BAASBOX-APPCODE', BaasBox.appcode);
+      };
+    } else {
+      $.ajaxSetup({
+         global: true,
+         beforeSend: function(r, settings) {
+           if (BaasBox.getCurrentUser()) {
+             r.setRequestHeader('X-BB-SESSION', BaasBox.getCurrentUser().token);
+           }
+           r.setRequestHeader('X-BAASBOX-APPCODE', BaasBox.appcode);
+         }
+      });
+    }
+
+    function createInstance() {
+      var object = new Object("I am the BaasBox instance");
+      return object;
+    }
+
+    function setCurrentUser(userObject) {
+      if (userObject === null) {
+        return;
+      }
+      this.user = userObject;
+      // if the user is using Zepto, then local storage must be used (if supported by the current browser)
+      if (window.Zepto && window.localStorage) {
+        window.localStorage.setItem(COOKIE_KEY, JSON.stringify(this.user));
+      } else {
+        $.cookie(COOKIE_KEY, JSON.stringify(this.user));
+      }
+    }
+
+    function getCurrentUser() {
+      // if the user is using Zepto, then local storage must be used (if supported by the current browser)
+      if (window.Zepto && window.localStorage) {
+        if (localStorage.getItem(COOKIE_KEY)) {
+          this.user = JSON.parse(localStorage.getItem(COOKIE_KEY));
+        }
+      } else {
+        if ($.cookie(COOKIE_KEY)) {
+          this.user = JSON.parse($.cookie(COOKIE_KEY));
+        }
+      }
+      return this.user;
+    }
+
+    function buildDeferred() {
+      var dfd = new $.Deferred();
+      var promise = {};   
+      promise.success = function(fn) {
+        promise.then(function(data) {
+          fn(data);
+        });
+        return promise;
+      };
+      promise.error = function(fn) {
+        promise.then(null, function(error) {
+          fn(error);
+        });
+        return promise;
+      };
+
+      dfd.promise(promise)
+      return dfd;
+    }
+
+    return {
+      appcode: "",
+      pagelength: 50,
+      timeout: 20000,
+      version: "0.9.0",
+      // permission constants
+      READ_PERMISSION: "read",
+      DELETE_PERMISSION: "delete",
+      UPDATE_PERMISSION: "update",
+      ALL_PERMISSION: "all",
+
+      // role constants, by default in the BaasBox back end
+      ANONYMOUS_ROLE: "anonymous",
+      REGISTERED_ROLE: "registered",
+      ADMINISTRATOR_ROLE: "administrator",
+
+      isEmpty: function(ob) {
+          for (var i in ob) {
+            return false;
+          }
+          return true;
+      },
+
+      getInstance: function() {
+        if (!instance) {
+          instance = createInstance();
+        }
+        return instance;
+      },
+
+      setEndPoint: function(endPointURL) {
+        var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        if (regexp.test(endPointURL)) {
+          this.endPoint = endPointURL;
+        } else {
+          alert(endPointURL + " is not a valid URL");
+        }
+      },
+
+      endPoint: function() {
+          return this.endPoint;
+      },
+
+      login: function(user, pass) {
+        var deferred = buildDeferred();
+        var url = BaasBox.endPoint + '/login';
+        var loginRequest = $.post(url, {
+          username: user,
+          password: pass,
+          appcode: BaasBox.appcode
+        })
+        .done(function(res) {
+          var roles = [];
+          $(res.data.user.roles).each(function(idx, r) {
+              roles.push(r.name);
+          });
+          setCurrentUser({
+            "username": res.data.user.name,
+            "token": res.data['X-BB-SESSION'],
+            "roles": roles,
+            "visibleByAnonymousUsers": res.data["visibleByAnonymousUsers"],
+            "visibleByTheUser": res.data["visibleByTheUser"],
+            "visibleByFriends": res.data["visibleByFriends"],
+            "visibleByRegisteredUsers": res.data["visibleByRegisteredUsers"],
+          });
+          deferred.resolve(getCurrentUser());
+        })
+        .fail(function(error) {
+          deferred.reject(error);
+        });
+        return deferred.promise();
+      },
+
+      logout: function(cb) {
+        var deferred = buildDeferred();
+        var u = getCurrentUser();
+        if (u === null) {
+          return deferred.reject({"data" : "ok", "message" : "User already logged out"})
+        }
+        var url = BaasBox.endPoint + '/logout';
+        var req = $.post(url, {})
+          .done(function (res) {
+            if(window.Zepto && window.localStorage) {
+              window.localStorage.removeItem(COOKIE_KEY);
+            } else {
+              $.cookie(COOKIE_KEY, null);
+            }
+            setCurrentUser(null);
+            deferred.resolve({"data": "ok","message": "User logged out"})
+          .fail(function (error) {
+              deferred.reject(error)
+           })
+        });
+        return deferred.promise();
+      },
+
+      signup: function(user, pass, acl) {
+        var deferred = buildDeferred();
+        var url = BaasBox.endPoint + '/user';
+        var postData = {username: user, password: pass}
+        if (acl !== undefined || !this.isEmpty(acl)) {
+          var visibilityProperties = Object.getOwnPropertyNames(acl)
+          for (prop in acl) {
+            postData[prop] = acl[prop]
+          }
+        }
+        var req = $.ajax({
+          url: url,
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(postData)
+        })
+          .done(function (res) {
+            var roles = [];
+            $(res.data.user.roles).each(function(idx, r) {
+              roles.push(r.name);
+            });
+            setCurrentUser({
+              "username": res.data.user.name,
+              "token": res.data['X-BB-SESSION'],
+              "roles": roles,
+              "visibleByAnonymousUsers": res.data["visibleByAnonymousUsers"],
+              "visibleByTheUser": res.data["visibleByTheUser"],
+              "visibleByFriends": res.data["visibleByFriends"],
+              "visibleByRegisteredUsers": res.data["visibleByRegisteredUsers"],
+            });
+            deferred.resolve(getCurrentUser());
+          })
+          .fail(function(error) {
+            deferred.reject(error)
+          })
+        return deferred.promise();
+      },
+
+      getCurrentUser: function() {
+          return getCurrentUser();
+      },
+
+      fetchCurrentUser: function () {
+        return $.get(BaasBox.endPoint + '/me')
+      },
+
+      createCollection: function(collection) {
+        return $.post(BaasBox.endPoint + '/admin/collection/' + collection)
+      },
+
+      deleteCollection: function(collection) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/admin/collection/' + collection,
+          method: 'DELETE'
+        })
+      },
+
+      loadCollectionWithParams: function(collection, params) {
+        var deferred = buildDeferred();
+        var url = BaasBox.endPoint + '/document/' + collection;
+        var req = $.ajax({
+            url: url,
+            method: 'GET',
+            timeout: BaasBox.timeout,
+            dataType: 'json',
+            data: params
+        })
+          .done(function(res) {
+            deferred.resolve(res['data']);
+          })
+          .fail(function(error) {
+            deferred.reject(error);
+          })
+        return deferred.promise();
+      },
+
+      loadCollection: function(collection) {
+        return BaasBox.loadCollectionWithParams(collection, {page: 0, recordsPerPage: BaasBox.pagelength});
+      },
+
+      loadObject: function (collection, objectId) {
+        return $.get(BaasBox.endPoint + '/document/' + collection + '/' + objectId)
+      },
+
+      save: function(object, collection) {
+        var deferred = buildDeferred();
+        var method = 'POST';
+        var url = BaasBox.endPoint + '/document/' + collection;
+        if (object.id) {
+          method = 'PUT';
+          url = BaasBox.endPoint + '/document/' + collection + '/' + object.id;
+        }
+        json = JSON.stringify(object);
+        var req = $.ajax({
+          url: url,
+          type: method,
+          contentType: 'application/json',
+          dataType: 'json',
+          data: json
+        })
+          .done(function(res) {
+            deferred.resolve(res['data']);
+          })
+          .fail(function(error) {
+            deferred.reject(error);
+          })
+        return deferred.promise();
+      },
+
+      updateField: function(objectId, collection, fieldName, newValue) {
+        var deferred = buildDeferred();
+        url = BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/.' + fieldName;
+        var json = JSON.stringify({
+            "data": newValue
+        });
+        var req = $.ajax({
+          url: url,
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: json
+        })
+          .done(function(res) {
+            deferred.resolve(res['data']);
+          })
+          .fail(function(error) {
+            deferred.reject(error);
+          })
+        return deferred.promise();
+      },
+
+      deleteObject: function(objectId, collection) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/document/' + collection + '/' + objectId,
+          method: 'DELETE'
+        });
+      },
+
+      fetchObjectsCount: function (collection) {
+        return $.get(BaasBox.endPoint + '/document/' + collection + '/count');
+      },
+
+      grantUserAccessToObject: function (collection, objectId, permission, username) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/' + permission + '/user/' + username,
+            method: 'PUT'
+        });
+      },
+
+      revokeUserAccessToObject: function (collection, objectId, permission, username) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/' + permission + '/user/' + username,
+            method: 'DELETE'
+        });
+      },
+
+      grantRoleAccessToObject: function (collection, objectId, permission, role) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/' + permission + '/role/' + role,
+            method: 'PUT'
+        });
+      },
+
+      revokeRoleAccessToObject: function (collection, objectId, permission, role) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/' + permission + '/role/' + role,
+            method: 'DELETE'
+        });
+      },
+
+      // only for json assets
+      loadAssetData: function(assetName) {
+        var deferred = buildDeferred();
+        var url = BaasBox.endPoint + '/asset/' + assetName + '/data';
+        var req = $.ajax({
+          url: url,
+          method: 'GET',
+          contentType: 'application/json',
+          dataType: 'json'
+        })
+          .done(function(res) {
+            deferred.resolve(res['data']);
+          })
+          .fail(function(error) {
+            deferred.reject(error);
+          })
+        return deferred.promise();
+      },
+
+      getImageURI: function(name, params) {
+        var deferred = buildDeferred();
+        var uri = BaasBox.endPoint + '/asset/' + name;
+        var r;
+        if (params === null || this.isEmpty(params)) {
+          return deferred.resolve({"data": uri + "?X-BAASBOX-APPCODE=" + BaasBox.appcode})
+        }
+        for (var prop in params) {
+          var a = [];
+          a.push(prop);
+          a.push(params[prop]);
+          r = a.join('/');
+        }
+        uri = uri.concat('/');
+        uri = uri.concat(r);
+        p = {};
+        p['X-BAASBOX-APPCODE'] = BaasBox.appcode;
+        var req = $.get(uri, p)
+          .done(function(res) {
+            deferred.resolve({"data": this.url});
+          })
+          .fail(function(error) {
+            (error);
+          });
+        return deferred.promise();
+      },
+
+      fetchUserProfile: function (username) {
+        return $.get(BaasBox.endPoint + '/user/' + username)
+      },
+
+      fetchUsers: function (params) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/users',
+            method: 'GET',
+            data: params
+        });
+      },
+
+      updateUserProfile: function (params) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/me',
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(params)          
+        });
+      },
+
+      changePassword: function (oldPassword, newPassword) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/me/password',
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({old: oldPassword, new: newPassword})            
+        });
+      },
+
+      resetPassword: function() {
+        var user = getCurrentUser();
+        return $.get(BaasBox.endPoint + '/user/' + user.username + '/password/reset');
+      },
+
+      followUser: function (username) {
+        return $.post(BaasBox.endPoint + '/follow/' + username);
+      },
+
+      unfollowUser: function (username) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/follow/' + username,
+          method : 'DELETE'
+        });
+      },
+
+      fetchFollowers: function (username) {
+        return $.get(BaasBox.endPoint + '/followers/' + username);
+      },
+
+      fetchFollowing: function (username) {
+        return $.get(BaasBox.endPoint + '/following/' + username);
+      },
+
+	    sendPushNotification: function(params) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/push/message', 
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(params)  
+        })
+      },
+
+      uploadFile: function(formData) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/file',
+          type: 'POST',
+          data:  formData,
+          mimeType: "multipart/form-data",
+          contentType: false,
+          cache: false,
+          processData:false       
+        })
+      },
+
+      fetchFile: function(fileId) {
+        return $.get(BaasBox.endPoint + '/file/' + fileId + "?X-BB-SESSION=" + BaasBox.getCurrentUser().token)
+      },
+
+      deleteFile: function(fileId) {
+        return $.ajax({
+          url: BaasBox.endPoint + '/file/' + fileId,
+          method : 'DELETE'
+        });
+      },
+
+      fetchFileDetails: function(fileId) {
+        return $.get(BaasBox.endPoint + '/file/details/' + fileId)
+      },
+
+      grantUserAccessToFile: function (fileId, permission, username) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/file/' + fileId + '/' + permission + '/user/' + username,
+            method: 'PUT'
+        });
+      },
+
+      revokeUserAccessToFile: function (fileId, permission, username) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/file/' + fileId + '/' + permission + '/user/' + username,
+            method: 'DELETE'
+        });
+      },
+
+      grantRoleAccessToFile: function (fileId, permission, rolename) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/file/' + fileId + '/' + permission + '/role/' + rolename,
+            method: 'PUT'
+        });
+      },
+
+      revokeRoleAccessToFile: function (fileId, permission, rolename) {
+        return $.ajax({
+            url: BaasBox.endPoint + '/file/' + fileId + '/' + permission + '/role/' + rolename,
+            method: 'DELETE'
+        });
+      },
+
+    };
+})();
+
+/*!
+ * jQuery Cookie Plugin v1.4.0
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+
+(function(factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as anonymous module.
+        define(['jquery'], factory);
+    } else {
+        // Browser globals.
+        factory(jQuery);
+    }
+}(function($) {
+
+    var pluses = /\+/g;
+
+    function encode(s) {
+        return config.raw ? s : encodeURIComponent(s);
+    }
+
+    function decode(s) {
+        return config.raw ? s : decodeURIComponent(s);
+    }
+
+    function stringifyCookieValue(value) {
+        return encode(config.json ? JSON.stringify(value) : String(value));
+    }
+
+    function parseCookieValue(s) {
+        if (s.indexOf('"') === 0) {
+            // This is a quoted cookie as according to RFC2068, unescape...
+            s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        }
+
+        try {
+            // Replace server-side written pluses with spaces.
+            // If we can't decode the cookie, ignore it, it's unusable.
+            // If we can't parse the cookie, ignore it, it's unusable.
+            s = decodeURIComponent(s.replace(pluses, ' '));
+            return config.json ? JSON.parse(s) : s;
+        } catch (e) {}
+    }
+
+    function read(s, converter) {
+        var value = config.raw ? s : parseCookieValue(s);
+        return $.isFunction(converter) ? converter(value) : value;
+    }
+
+    var config = $.cookie = function(key, value, options) {
+
+        // Write
+        if (value !== undefined && !$.isFunction(value)) {
+            options = $.extend({}, config.defaults, options);
+
+            if (typeof options.expires === 'number') {
+                var days = options.expires,
+                    t = options.expires = new Date();
+                t.setDate(t.getDate() + days);
+            }
+
+            return (document.cookie = [
+                encode(key), '=', stringifyCookieValue(value),
+                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                options.path ? '; path=' + options.path : '',
+                options.domain ? '; domain=' + options.domain : '',
+                options.secure ? '; secure' : ''
+            ].join(''));
+        }
+
+        // Read
+
+        var result = key ? undefined : {};
+
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all. Also prevents odd result when
+        // calling $.cookie().
+        var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+        for (var i = 0, l = cookies.length; i < l; i++) {
+            var parts = cookies[i].split('=');
+            var name = decode(parts.shift());
+            var cookie = parts.join('=');
+
+            if (key && key === name) {
+                // If second argument (value) is a function it's a converter...
+                result = read(cookie, value);
+                break;
+            }
+
+            // Prevent storing a cookie that we couldn't decode.
+            if (!key && (cookie = read(cookie)) !== undefined) {
+                result[name] = cookie;
+            }
+        }
+
+        return result;
+    };
+
+    config.defaults = {};
+
+    $.removeCookie = function(key, options) {
+        if ($.cookie(key) === undefined) {
+            return false;
+        }
+
+        // Must not alter options, thus extending a fresh object...
+        $.cookie(key, '', $.extend({}, options, {
+            expires: -1
+        }));
+        return !$.cookie(key);
+    };
+
+}));

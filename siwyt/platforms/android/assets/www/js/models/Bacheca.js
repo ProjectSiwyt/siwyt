@@ -166,7 +166,18 @@ define(function(require) {
 				})
 		},
 
-		
+		setPermission: function(result,document_name, trigger_nome, trigger_value){
+   			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject(document_name,result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);
+			    THIS.trigger('"'+trigger_nome+'"', trigger_value); 
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
+   		},
 
 		//FUNZIONA MA HO SCRITTO IO PER PROVARE PER NICHOLAS
 		salvaBacheca: function(nome){
@@ -175,19 +186,34 @@ define(function(require) {
 			post.nome = nome;   
 			BaasBox.save(post, "Bacheca")
 				.done(function(res) {
-					THIS.trigger("salvataggiobacheca", res);
+					THIS.setPermissionSalvaBacheca(res);
 				})
 				.fail(function(error) {
 					THIS.trigger("erroresalvataggiobacheca", true);
 				})
 		},
 
+		setPermissionSalvaBacheca: function(result){
+			var THIS = this;
+			console.log("result setPermissionSalvaBacheca", result, result.id);
+			BaasBox.grantRoleAccessToObject("Bacheca",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log(" setPermissionSalvaBacheca ", res);
+			    THIS.trigger("salvataggiobacheca", result);
+			  })
+			  .fail(function(error) {
+			    console.log("error setPermissionSalvaBacheca", error);
+			  })
+		},
+
 
   		//restituisce i dati relativi alla bacheca con id uguale a quello passato come parametro
     	noticeboardData: function(idb){
     		var THIS=this;
+    		console.log("noticeboardData idb: ", idb);
 			BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+idb+"'" })
 			 .done(function(res) {
+			 	console.log("dati bacheca", res);
 			 	THIS.trigger("datiBacheca", res);
 			 })
 			 .fail(function(error) {
@@ -220,6 +246,7 @@ define(function(require) {
 				BaasBox.save(post, "Bacheca_Utente")
 					.done(function(res) {
 						c++;
+						THIS.setPermissionSalvaUtenti(res);
 						if(c == r.length){
 							THIS.trigger("salvataggioUtenti", res);
 						}
@@ -228,6 +255,49 @@ define(function(require) {
 						THIS.trigger("errorAggiungiUtenti", error);
 					})
 			}
+		},
+
+		setPermissionSalvaUtenti: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Bacheca_Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res setPermissionSalvaUtenti ", res);
+			  })
+			  .fail(function(error) {
+			    console.log("error permission salvataggio utenti", error);
+			  })
+		},
+
+
+
+		aggiungiUtenteBacheca: function(idu, idb){
+	 		var THIS=this;
+	  		
+			var post = new Object();
+			post.idu = idu;
+			post.idb = idb;     
+			BaasBox.save(post, "Bacheca_Utente")
+				.done(function(res) {
+					THIS.setPermissionAggiungiUtenteBacheca(res);
+				})
+				.fail(function(error) {
+					THIS.trigger("errorAggiungiUtente", idu);
+				})
+			
+		},
+		
+		setPermissionAggiungiUtenteBacheca: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Bacheca_Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res aggiungiUtenteBacheca ", res);
+			    THIS.trigger("utenteAggiunto", res.idu);
+			  })
+			  .fail(function(error) {
+			    console.log("error permission salvataggio utenti", error);
+			  })
 		},
 
 
@@ -305,12 +375,25 @@ define(function(require) {
 			post.idb = idb;     
 			BaasBox.save(post, "Amministratore")
 				.done(function(res) {
-					THIS.trigger("salvataggioAmministratore", true);
+					THIS.setPermissionSalvaAmministratore(res);
 				})
 				.fail(function(error) {
 					THIS.trigger("errorSettaAmministratore", true);
 				})
    		},
+
+   		setPermissionSalvaAmministratore: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Amministratore",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);
+			    THIS.trigger("salvataggioAmministratore", true); 
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
+		},
 
    		//aggiunge un responsabile con id idu alla bacheca con id 'idb'
    		salvaResponsabile: function(idu, idb){
@@ -320,12 +403,28 @@ define(function(require) {
 			post.idb = idb;     
 			BaasBox.save(post, "Responsabile")
 				.done(function(res) {
-					THIS.trigger("salvataggioResponsabili", true);
+					THIS.setPermissionSalvaResponsabile(res);
+					/*THIS.trigger("salvataggioResponsabili", true);*/
 				})
 				.fail(function(error) {
 					THIS.trigger("errorSettaResponsabile", true);
 				})
    		},
+
+
+   		setPermissionSalvaResponsabile: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Responsabile",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);
+			    THIS.trigger("salvataggioResponsabili", true); 
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
+		},
+
 
    		//aggiunge un array di 'responsabili' con id idu alla bacheca con id 'idb'
    		salvaResponsabili: function(r, idb){
@@ -338,8 +437,10 @@ define(function(require) {
 				BaasBox.save(post, "Responsabile")
 					.done(function(res) {
 						c++;
+						THIS.setPermissionSalvaResponsabili(res);
 						if(c == r.length){
 							THIS.trigger("salvataggioResponsabili", true);
+							/*THIS.trigger("salvataggioResponsabili", true);*/
 						}
 					})
 					.fail(function(error) {
@@ -347,6 +448,19 @@ define(function(require) {
 						//THIS.trigger("errorSalvataggioResponsabili", true);
 					})
 			}
+		},
+
+
+		setPermissionSalvaResponsabili: function(result){
+			var THIS = this;
+			console.log("result", result, result.id);
+			BaasBox.grantRoleAccessToObject("Responsabile",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
+			  .done(function(res) {
+			    console.log("res ", res);  
+			  })
+			  .fail(function(error) {
+			    console.log("error permission", error);
+			  })
 		},
 
 		//restituisce un array contenente gli id dei responsabili della bacheca co id idb

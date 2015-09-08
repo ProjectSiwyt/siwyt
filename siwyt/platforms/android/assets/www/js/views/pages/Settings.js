@@ -26,6 +26,8 @@ define(function(require) {
       if (back.classList.contains('hide')){
         back.classList.remove('hide');
       }
+      this.utente = new Utente();
+      this.utente.on("baasboxLogout", this.logOut , this) ;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
