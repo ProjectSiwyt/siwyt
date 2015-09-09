@@ -4,6 +4,7 @@ define(function(require) {
   var Bacheca = require("models/Bacheca");
   var Bacheche = require("collections/Bacheche");
   var Utils = require("utils");
+  var Utente = require("models/Utente");
 
   var ShowListNoticeboardsContacts = Utils.Page.extend({
 
@@ -15,8 +16,8 @@ define(function(require) {
       // load the precompiled template
       this.bacheca = new Bacheca();
       this.template = Utils.templates.contentListBoardsContacts;
-
-      this.bacheca.on("utenteAggiunto", this.showChecked);
+      this.utente = new Utente();
+      this.bacheca.on("utenteAggiunto", this.showChecked, this);
 
       
      // here we can register to inTheDOM or removing events
@@ -46,13 +47,14 @@ define(function(require) {
     showChecked: function(result){
       if(result){
 
-        var item = document.getElementsByClassName("current");
-        console.log("cpntattoAggiunto");
+        var item = document.getElementsByClassName("current")[0];
+        console.log("contattoAggiunto");
         console.log(item);
-        debugger
-        var i = span.firstChild;
-        i.classList.toggle('fa-user-plus');
-        i.classList.toggle('fa-check');
+        var i = item.childNodes[1];
+        i.classList.toggle('fa-square-o');
+        i.classList.toggle('fa-check-square-o');
+        this.utente.inviaMailContattoAggiunto(localStorage.getItem("nameLogged"), localStorage.getItem("surnameLogged"), result);
+
       }
     },
 
@@ -61,11 +63,6 @@ define(function(require) {
       e.currentTarget.classList.toggle("current");
       console.log(idb);
       var idu = sessionStorage.getItem("idUserToAdd");
-      /*console.log(idb);
-      console.log(idu);*/
-      //this.bacheca.aggiungiMembro();
-      /*var a = new Array();
-      a[0]= idu;*/
       this.bacheca.aggiungiUtenteBacheca(idu, idb);
       
 

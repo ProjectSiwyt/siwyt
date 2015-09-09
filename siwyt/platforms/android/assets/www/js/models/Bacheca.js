@@ -293,7 +293,7 @@ define(function(require) {
 			BaasBox.grantRoleAccessToObject("Bacheca_Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
 			    console.log("res aggiungiUtenteBacheca ", res);
-			    THIS.trigger("utenteAggiunto", res.idu);
+			    THIS.trigger("utenteAggiunto", result.idu);
 			  })
 			  .fail(function(error) {
 			    console.log("error permission salvataggio utenti", error);

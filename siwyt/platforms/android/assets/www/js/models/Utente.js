@@ -261,6 +261,66 @@ define(function(require) {
 
 		},
 
+		// invia una mail che invita all indirizzo specificato a iscriversi a siwyt
+		inviaMailInvito: function(nome, cognome, mail){
+			var THIS = this;
+			var jqXHR = $.ajax({
+
+				url: "http://siwyt.altervista.org/sendInviteMail.php", //percorso script php che invia
+				data: {
+					nome : nome,
+					cognome : cognome,
+					mail: mail
+					
+				},
+				type: 'POST',
+				dataType: 'json',
+				async: false
+			});
+			//console.log(jqXHR.responseText);
+			THIS.trigger("mailSent ", true);
+
+		},
+
+		inviaMailContattoAggiunto: function(nome, cognome,mail){
+			var THIS = this;
+			var jqXHR = $.ajax({
+
+				url: "http://siwyt.altervista.org/sendMailContact.php", //percorso script php che invia
+				data: {
+					nome : nome,
+					cognome : cognome,
+					mail: mail
+					
+				},
+				type: 'POST',
+				dataType: 'json',
+				async: false
+			});
+			//console.log(jqXHR.responseText);
+			THIS.trigger("mailSent ", true);
+		},
+
+		inviaMailAggiuntoBacheca: function(nome, cognome, mail, bacheca){
+			var THIS = this;
+			var jqXHR = $.ajax({
+
+				url: "http://siwyt.altervista.org/sendMailAddToBoard.php", //percorso script php che invia
+				data: {
+					nome : nome,
+					cognome : cognome,
+					mail: mail,
+					bacheca: bacheca
+					
+				},
+				type: 'POST',
+				dataType: 'json',
+				async: false
+			});
+			//console.log(jqXHR.responseText);
+			THIS.trigger("mailSent ", true);
+		},
+
 
 		//funzione che cambia il nome dell'utente con id idu
 		saveName: function(idu, name){
@@ -352,7 +412,7 @@ define(function(require) {
 				})
    		},
 
-   		cercaUtente2: function(str){
+   	/*	cercaUtente2: function(str){
    			var THS = this;
    			BaasBox.fetchUsers()
 			  .done(function(res) {
@@ -368,12 +428,12 @@ define(function(require) {
 
 				    	}
 				    	if(a.length>0) THIS.filtraRisultati(a);
-				    	else THIS.trigger("resultCercaUtente", false);
+				    	else THIS.trigger("resultCercaUtente", []);
 			  })
 			  .fail(function(error) {
 			    console.log("error ", error);
   			})
-   		},
+   		},*/
 
    		// funzione che filtra i risultati di ricerca in modo da non visalizzare gli utenti che sono già stati aggiunti ai contatti
    		filtraRisultati: function(a){
@@ -401,7 +461,7 @@ define(function(require) {
    						console.log(c);
    						THIS.trigger("resultCercaUtente", c);
    					}else{
-   						THIS.trigger("resultCercaUtente", false);
+   						THIS.trigger("resultCercaUtente", []);
    						console.log("nessun utente trovato");
    					}
 

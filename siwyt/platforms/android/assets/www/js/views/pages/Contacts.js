@@ -70,7 +70,8 @@ define(function(require) {
       "tap .overlaySearch": "chiudiPopupSearch",
       "keyup":"startSearch",
       "tap #search": "startSearch",
-      "tap .fa-times-circle-o":"resetSearch"
+      "tap .fa-times-circle-o":"resetSearch",
+      "tap #invite": "invite"
       //"tap .rigabacheca": "aggiungiUtente"
       /*"tap .add_to_board": "add_to_board",
       "tap .remove_contact": "remove_contact"*/
@@ -122,6 +123,11 @@ define(function(require) {
       }
       
       
+    },
+
+    invite: function(e){
+      var mail = document.getElementById("mail").value;
+        this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
     },
 
     startQuery: function(e){
@@ -178,14 +184,14 @@ define(function(require) {
     },
 
     showResultSearch: function(result){
-        if(!result){
+        /*if(!result){
           var searchPopup = document.getElementById("searchPopup");
           var searchScreen = document.getElementById("searchScreen");
           searchScreen.classList.remove('hide');
-            searchPopup.innerHTML="Nessun risultato";
+            //searchPopup.innerHTML="Nessun risultato";
             searchPopup.classList.remove('hide');
 
-        }else{
+        }else{*/
           var c = new Utenti();
           c.add(result);
           console.log(c);
@@ -198,7 +204,7 @@ define(function(require) {
           searchPopup.appendChild(this.subViewContactsSearch);
           searchScreen.classList.remove('hide');
           searchPopup.classList.remove('hide');
-        }
+        
 
     },
 

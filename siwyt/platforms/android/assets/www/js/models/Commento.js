@@ -57,7 +57,7 @@ define(function(require) {
 			BaasBox.grantRoleAccessToObject("Commento",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
 			    console.log(" setPermissionAggiungiCommento ", res);
-			    THIS.trigger("aggiuntoCommento", res);
+			    THIS.trigger("aggiuntoCommento", result);
 			  })
 			  .fail(function(error) {
 			    console.log("error setPermissionAggiungiCommento", error);

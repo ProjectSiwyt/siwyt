@@ -86,7 +86,7 @@ define(function(require) {
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
-            "tap #backBoard": "goBack",
+            "tap #backBoard": "goToHome",
             "tap .postit": "manageAction",
             "tap .rename": "rename",
             "touchstart .postit": "saveEvent",
@@ -98,7 +98,7 @@ define(function(require) {
             "tap .menuRelation" : "reltionManagement",
             "tap .relation": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
-            "tap #boardCanvas" : "manageDeleteRelation"         
+            "touchstart #boardCanvas" : "manageDeleteRelation"         
         },
         manageDeleteRelation: function(e){
             var p=this.getTapPos(e);
