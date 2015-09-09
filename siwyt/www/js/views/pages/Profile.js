@@ -2,6 +2,7 @@ define(function(require) {
 
   var Backbone = require("backbone");
   var Utente = require("models/Utente");
+  var Bacheca = require("models/Bacheca");
   var Utils = require("utils");
 
 
@@ -43,10 +44,15 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
       var idUtente = localStorage.getItem('idu');
       this.utente = new Utente();
+      this.bacheca = new Bacheca();
       
 
-      this.utente.on("eventoContaBacheche", this.showNumBacheche, this);
+      this.utente.on("eventoContaBachecheUtente", this.showNumBachecheUtente, this);
+      this.bacheca.on("numBachecheAmministratore", this.showNumBachecheAmministratore, this);
+      this.bacheca.on("numBachecheResponsabile", this.showNumBachecheResposnsabile, this);
       this.utente.on("accountDeleted", this.goOut, this);
+      this.utente.on("datiUtente", this.showDatiUtente , this);
+      this.utente.on("changePasswordDone", this.changePasswordDone, this);
       
       //this.utente.on("resultData", this.showData, this);
       // carico i dati dell utente 
@@ -100,12 +106,13 @@ define(function(require) {
 
     startQuery: function(e){
       this.utente.contaBacheche();
+      this.utente.caricaDati();
       $("#uploadForm").submit(function(e) {
         e.preventDefault();
         var formObj = $(this);
         var formData = new FormData(this);
         BaasBox.uploadFile(formData)
-          .done(function(res) {
+          .done(function(res) {0
             console.log("res ", res);
           })
           .fail(function(error) {
@@ -115,12 +122,37 @@ define(function(require) {
     },
 
 
-    showNumBacheche: function(result){
-      console.log("num bacheche "+result);
-      if(result)
-        document.getElementById("numbacheche").innerHTML=result;
+    showNumBachecheUtente: function(result){
+      console.log("num bacheche ytente"+result);
+        document.getElementById("numBachecheUser").innerHTML=result;
+      this.bacheca.contaBachecheResponsabile();
+      this.numUser = result;
 
     },
+
+     showNumBachecheResposnsabile: function(result){
+      console.log("num bacheche responsabile"+result);
+        document.getElementById("numBachecheAdmin").innerHTML=result;
+      this.bacheca.contaBachecheAmministratore();
+      this.numAdmin = result;
+    },
+
+    showNumBachecheAmministratore: function(result){
+      console.log("num bacheche manager"+result);
+      document.getElementById("numBachecheManager").innerHTML=result;
+      var tot = this.numUser + this.numAdmin + result;
+      document.getElementById("numTotBacheche").innerHTML=tot;
+
+    },
+
+    showDatiUtente: function(result){
+      console.log("result showDatiUtente ", result);
+      document.getElementById("iscrizione").innerHTML=result.signUpDate.slice(0,10);
+
+    },
+
+
+
 
     deleteAccount: function(e){
       var del = window.confirm("Are you sure you want to delete your account?");
@@ -314,18 +346,23 @@ define(function(require) {
         var newPass = document.getElementById("profileNewPass").value;
         var confirm = document.getElementById("profileConfirm").value;
         
-        if(oldPass!=localStorage.getItem("passwordLogged")){
+        /*if(oldPass!=localStorage.getItem("passwordLogged")){
             $("#errPassword").attr("style","display:inline-block");
               valid=false;
-        } 
+        } */
 
         if( newPass!=confirm || newPass.length < 5 ){
               $("#errConfirm").attr("style","display:inline-block");
               valid=false;
         } 
-        if(valid){
-             this.utente.changePassword(localStorage.getItem("idu"), newPass);
-            localStorage.setItem('passwordLogged',newPass);
+        if(valid)
+            this.utente.changePasswordBaasbox(oldPass, newPass);
+
+    },
+
+    changePasswordDone: function(result){
+        if(result){
+            localStorage.setItem('passwordLogged',result);
             $("#editPassword , #savePassword , #cancellChangePass").removeAttr("style");
             document.getElementById("profileOldPass").value ="";
             document.getElementById("profileNewPass").value ="";
@@ -333,7 +370,8 @@ define(function(require) {
             $(".editPass").attr("disabled","disabled");
             $(".errorReg.pass").removeAttr("style");
            }
-
+        else
+          $("#errPassword").attr("style","display:inline-block");
     },
 
     goToHome: function(e) {

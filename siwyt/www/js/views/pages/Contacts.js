@@ -42,7 +42,7 @@ define(function(require) {
       this.bacheca.on("bachecheamministratore", this.elencoBacheche ,this);
       this.utente.on("elencoUtenti", this.search, this);
       this.utente.on("resultCercaUtente", this.showResultSearch, this);      
-      this.contatto.on("contattoCancellato", this.aggionraLista, this);
+      this.contatto.on("contattoCancellato", this.aggiornaLista, this);
       this.utente.on("listContacts", this.showContacts, this);
 
       
@@ -92,8 +92,8 @@ define(function(require) {
 
     },
 
-    aggionraLista: function(result){
-      console.log(result);
+    aggiornaLista: function(result){
+      console.log("result aggiorna lista: ",result);
       $("#"+result).remove();
     },
 
@@ -104,7 +104,6 @@ define(function(require) {
     },
 
     resetSearch: function(e){
-      console.log("ohvfajlsdhfv");
         document.getElementById("search").value="";
         var searchPopup = document.getElementById("searchPopup");
         var searchScreen = document.getElementById("searchScreen");

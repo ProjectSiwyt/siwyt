@@ -90,6 +90,19 @@ define(function(require) {
 					console.log("errorlistabacheche ", error);
 				})
 		},
+
+		contaBachecheResponsabile: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log(" numBachecheResponsabile", res.length);
+					THIS.trigger("numBachecheResponsabile", res.length);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
 		//passandogli un'array r contenente gli idb restituisce un'array contenente tutti i dati della bacheca con id idb
     	listaDatiBachecheAmministratore: function(r){
     		var a = new Array();
@@ -112,6 +125,19 @@ define(function(require) {
 					console.log("error ", error2);
 				})
     	},
+
+    	contaBachecheAmministratore: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log("numBachecheAmministratore ", res.length);
+					THIS.trigger("numBachecheAmministratore " , res.length);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
     
 		//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK

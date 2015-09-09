@@ -5,10 +5,11 @@
 <div class="i-8">
     <ul class="list-information">
         <li>Signed on <span id="iscrizione"></span></li>
-        <li>You are taking part to <span id="numbacheche"></span> boards:
+        <li>You are taking part to <span id="numTotBacheche"></span> boards:
             <ul>
-                <li><span id="numbacheche"> </span> as Project Manager</li>
-                <li><span id="numProjectManager"> </span> as Teammate</li>
+                <li><span id="numBachecheManager"> </span> as Project Manager</li>
+                <li><span id="numBachecheAdmin"> </span> as Admin</li>
+                <li><span id="numBachecheUser"> </span> as User</li>
             </ul>
         </li>
     </ul>
@@ -24,15 +25,18 @@
         <span class="errorReg" id="errSurname">Invalid surname</span>
         <input class="edit" type="text" id="profileSurname" value="{{cognome}}" disabled="disabled" /> Email:
         <span class="errorReg data" id="errEmail">Invalid email</span>
-        <input class="edit" type="text" id="profileEmail" value="{{mail}}" disabled="disabled" /> Password:
+        <input class="edit" type="text" id="profileEmail" value="{{mail}}" disabled="disabled" />
+
+
+         Password:
         <span id="editPassword" class="pull-right">Change password <i class="fa fa-pencil"></i></span>
         <span id="cancellChangePass" class="pull-right"> Cancell <i class="fa fa-times"></i></span>
         <span id="savePassword" class="pull-right">Save changes <i class="fa fa-save"></i></span>
-        <span class="errorReg" id="errPassword">Invalid Password</span>
-        <input class="edit" type="password" id="profileOldPass" name="oldPass" disabled="disabled" placeholder="Old Password" />
-        <span class="errorReg" id="errConfirm">New password invalid. Remenber Must be least 5 characters</span>
-        <input class="edit" type="password" id="profileNewPass" name="newPass" disabled="disabled" placeholder="New Password" />
-        <input class="edit" type="password" id="profileConfirm" name="confPass" disabled="disabled" placeholder="Confirm new Password" />
+        <span class="errorReg pass" id="errPassword">Invalid Password</span>
+        <input class="editPass" type="password" id="profileOldPass" name="oldPass" disabled="disabled" placeholder="Old Password" />
+        <span class="errorReg pass" id="errConfirm">New password invalid. Remenber Must be least 5 characters</span>
+        <input class="editPass" type="password" id="profileNewPass" name="newPass" disabled="disabled" placeholder="New Password" />
+        <input class="editPass" type="password" id="profileConfirm" name="confPass" disabled="disabled" placeholder="Confirm new Password" />
         <div id="deleteAccount" class="i-12">
             Delete Account <i class="fa fa-trash-o fa-2x"></i></li>
         </div>

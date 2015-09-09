@@ -108,12 +108,12 @@ define(function(require) {
 				    console.log("Risultatto loadCollection Utente: ", res);
 				    for (var i=0; i<res.length; i++){
 				    	//vedere se true deve essere una stringa o va bene booleano -> se si, cambiare nel database
-	            		if( res[i].username == username && res[i].password == password ){//&& res[i].confermato == true){
+	            		if( res[i].username == username ){
 	            			localStorage.setItem('idu',res[i].id);  //salvare nel localstorage -> res[i].id
 	            			localStorage.setItem('nameLogged',res[i].nome);
 	            			localStorage.setItem('surnameLogged',res[i].cognome);
 	            			localStorage.setItem('usernameLogged',res[i].username);
-	            			localStorage.setItem('passwordLogged',res[i].password);
+	            			//localStorage.setItem('passwordLogged',res[i].password);
 	            			localStorage.setItem("emailLogged", res[i].mail);
 	            			THIS.trigger("resultLogin",res[i]);
 	            			trovato=true;
@@ -147,12 +147,35 @@ define(function(require) {
 			var THIS=this;
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+localStorage.getItem('idu')+"'" })
 				.done(function(res) {
-					console.log("res ", res);
-					THIS.trigger("eventoContaBacheche", res.length);
+					console.log("res contaBachecheUtente ", res.length);
+					THIS.trigger("eventoContaBachecheUtente", res.length);
 				})
 				.fail(function(error) {
 					console.log("error ", error);
 					THIS.trigger("errorContaBacheche", false);
+				})
+    	},
+
+    	caricaDati: function(){
+    		var THIS = this;
+    		BaasBox.fetchUserProfile(localStorage.getItem("usernameLogged"))
+			  .done(function(res) {
+			  	THIS.trigger("datiUtente", res['data']);
+			  })
+			  .fail(function(error) {
+			    console.log("error ", error);
+			  })
+    	},
+
+    	changePasswordBaasbox: function(oldPass, newPass){
+    		var THIS = this;
+    		BaasBox.changePassword(oldPass, newPass)
+				.done(function(res) {
+					console.log("result changePasswordBaasbox ", res);
+					THIS.trigger("changePasswordDone", newPass);
+				})
+				.fail(function(error) {
+					THIS.trigger("changePasswordDone", 0);
 				})
     	},
 
