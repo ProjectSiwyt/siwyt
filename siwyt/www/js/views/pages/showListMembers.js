@@ -8,7 +8,7 @@ define(function(require) {
 
   var showlistmembers = Utils.Page.extend({
 
-    constructorName: "showListMembers",
+    constructorName: "ShowListMembers",
 
     model: Utente,
 

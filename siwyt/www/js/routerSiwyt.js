@@ -4,11 +4,8 @@ define(function(require) {
   var _= require("underscore");
   var Backbone = require("backbone");
   var Baasbox=require("baasbox");
-  var Bacheca = require("models/Bacheca");
   var Utente = require("models/Utente");
-  var Utenti = require("collections/Utenti");
-  var MyModel = require("models/MyModel");
-  var StructureViewSiwyt = require("views/structureViewSiwyt");
+  var StructureViewSiwyt = require("views/StructureViewSiwyt");
   var HomeSiwyt = require("views/pages/HomeSiwyt");
   var Contacts = require("views/pages/Contacts");
   var Profile = require("views/pages/Profile");
@@ -46,7 +43,7 @@ define(function(require) {
       "postit/:idp/:idb": "postit"
     },
 
-    BAASBOX_URL : "http://localhost:9000",
+    BAASBOX_URL : "http://10.170.50.65:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {

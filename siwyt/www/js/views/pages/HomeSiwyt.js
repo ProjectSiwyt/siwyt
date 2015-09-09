@@ -1,7 +1,6 @@
 define(function(require) {
 
   var Backbone = require("backbone");
-  var MyModel = require("models/MyModel");
   var Bacheche = require("collections/Bacheche");
   var Bacheca = require("models/Bacheca");
   var Utils = require("utils");

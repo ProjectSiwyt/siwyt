@@ -7,7 +7,7 @@ define(function(require) {
 
   var showListAddContacts = Utils.Page.extend({
 
-    constructorName: "showListAddContacts",
+    constructorName: "ShowListAddContacts",
 
     model: Bacheca,
 
