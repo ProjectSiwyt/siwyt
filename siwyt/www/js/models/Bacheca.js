@@ -312,6 +312,29 @@ define(function(require) {
 				})
 			
 		},
+
+		aggiungiUtenteBacheche: function(idu, r){
+	 		var THIS=this;
+	  		var c=0;
+	  		for(var i=0; i<r.length; i++){
+					var post = new Object();
+					post.idb = r[i];
+					post.idu = idu;     
+					BaasBox.save(post, "Bacheca_Utente")
+						.done(function(res) {
+							c++;
+							THIS.setPermissionSalvaUtenti(res);
+							if(c == r.length){
+								THIS.trigger("salvataggioUtente", res);
+							}
+						})
+						.fail(function(error) {
+							THIS.trigger("errorAggiungiUtenti", error);
+						})
+			}
+		},
+			
+
 		
 		setPermissionAggiungiUtenteBacheca: function(result){
 			var THIS = this;

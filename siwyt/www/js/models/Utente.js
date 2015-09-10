@@ -113,7 +113,7 @@ define(function(require) {
 	            			localStorage.setItem('nameLogged',res[i].nome);
 	            			localStorage.setItem('surnameLogged',res[i].cognome);
 	            			localStorage.setItem('usernameLogged',res[i].username);
-	            			//localStorage.setItem('passwordLogged',res[i].password);
+	            			localStorage.setItem('passwordLogged',res[i].password);
 	            			localStorage.setItem("emailLogged", res[i].mail);
 	            			THIS.trigger("resultLogin",res[i]);
 	            			trovato=true;

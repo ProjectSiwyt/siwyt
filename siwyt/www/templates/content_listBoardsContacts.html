@@ -1,11 +1,15 @@
 {{#if this}}
 <ul class="table-view">
+    <li> Add <span id="nameContact"></span> to boards: <li>
     {{#each this}}
     	<li class="table-view-cell rigabacheca" data-id="{{id}}">
     	{{nome}}
     	<i class="pull-right fa fa-square-o fa-2x"></i>
     	</li>
     {{/each}}
+    <li id="done">
+			DONE
+	 </li>
 </ul>
 {{else}}
 <ul class="table-view">
