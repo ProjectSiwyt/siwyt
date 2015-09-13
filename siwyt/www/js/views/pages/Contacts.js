@@ -59,7 +59,7 @@ define(function(require) {
     },
 
     id: "contacts",
-    className: "i-g page",
+    className: "i-g page size",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {

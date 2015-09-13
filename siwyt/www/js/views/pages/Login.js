@@ -60,15 +60,17 @@ define(function(require) {
             });
         }
         else{
-          $("#loginerror").attr("style","display:inline-block");}
+          $("#loginerror").attr("style","display:inline-block");
+          $("#logUsername").attr("style","border: 1px solid #ed7800");
+          $("#logPassword").attr("style","border: 1px solid #ed7800");
+        }
             
       },
 
 
      showMessageMail: function(result){
       if(result){
-        console.log("hfhvfVHFVHòFEHfhvò");
-        $("#emailSent").attr("style", " display:block");
+        $("#emailSent").attr("style", "display:block");
       }
 
      } ,

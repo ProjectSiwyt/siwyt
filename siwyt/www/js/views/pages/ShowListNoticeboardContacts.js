@@ -50,7 +50,7 @@ define(function(require) {
         var item = document.getElementsByClassName("current")[0];
         console.log("contattoAggiunto");
         console.log(item);
-        var i = item.childNodes[1];
+        var i = item.childNodes[3];
         i.classList.toggle('fa-square-o');
         i.classList.toggle('fa-check-square-o');
         this.utente.inviaMailContattoAggiunto(localStorage.getItem("nameLogged"), localStorage.getItem("surnameLogged"), result);
