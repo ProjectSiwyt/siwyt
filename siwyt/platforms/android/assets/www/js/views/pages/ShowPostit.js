@@ -6,7 +6,7 @@ define(function(require) {
 
   var showPostit = Utils.Page.extend({
 
-    constructorName: "showPosti",
+    constructorName: "showPostit",
 
     model: Postit,
 
@@ -25,7 +25,7 @@ define(function(require) {
     },
 
     //id: "showlistnoticeboards",
-    className: "div i-12",
+    className: "div",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {

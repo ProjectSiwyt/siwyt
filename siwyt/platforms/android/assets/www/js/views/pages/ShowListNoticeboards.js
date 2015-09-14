@@ -13,7 +13,7 @@ define(function(require) {
 
     initialize: function(template,ruolo) {
       // load the precompiled template
-      this.ruolo=ruolo
+      this.ruolo=ruolo;
       this.template = Utils.templates.contentListBoards;
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {

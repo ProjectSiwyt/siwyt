@@ -83,6 +83,7 @@ define(function(require) {
         events: {
             "tap #goToHome": "goToHome",
             "tap #boardManagement": "goToBoardManagement",
+            "tap #leaveBoard": "leaveBoard",
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
@@ -154,13 +155,18 @@ define(function(require) {
         },
         verificaRuolo:function(){
             var management=document.getElementById('boardManagement');
+            var leave=document.getElementById('leaveBoard')
             if(this.ruolo=='manager'){
                 if(management.classList.contains('hide')){
                     management.classList.remove('hide');
                 }
+                leave.classList.add('hide');
             }
             else{
                 management.classList.add('hide');
+                if(leave.classList.contains('hide')){
+                    leave.classList.remove('hide');
+                }
             }  
         },
         caricaDati:function(){
@@ -340,7 +346,7 @@ define(function(require) {
         },
         enableMove: function(e) {
             console.log("Moveble",this.obj);
-            e.currentTarget.classList.add("moveable");
+            e.currentTarget.classList.add("moveable","selection");            
             this.startDrag(this.event);
         },
         saveEvent: function(e){
@@ -403,18 +409,12 @@ define(function(require) {
                 //attiviamo la modalità "ridimensiona"
                 //activate the resize mode
                 this.dragmode = 2;
-                //impostiamo il cursore appropriato
-                //set the corresponding cursor
-                drag_object.style.cursor = "se-resize";
 
 
             } else {
                 //attiviamo la modalità "sposta"
                 //activate the move mode
                 this.dragmode = 1;
-                //impostiamo il cursore appropriato
-                //set the corresponding cursor
-                drag_object.style.cursor = "move";
             }
         },
         drag: function(e) {
@@ -464,8 +464,7 @@ define(function(require) {
         endDrag: function(e) {
             console.log("end");
             var drag_object = e.currentTarget;
-            drag_object.classList.remove("moveable");
-            drag_object.style.cursor = "auto";
+            drag_object.classList.remove("moveable","selection");
             switch (this.dragmode) {
                 case 1: 
                     this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
@@ -518,7 +517,7 @@ define(function(require) {
             }
             for (var i=0; i<a.length;i++){
                 if (a[i]!=this.relationStart){
-                    document.getElementById(a[i]).classList.add("relation");
+                    document.getElementById(a[i]).classList.add("selection");
                     document.getElementById(a[i]).classList.remove("postit");
                 }
             }
@@ -545,17 +544,26 @@ define(function(require) {
             ctx.lineTo(ax, ay);
             //Visualizza il disegno
             ctx.stroke();
-            var elenco= document.getElementsByClassName("relation");
+            var elenco= document.getElementsByClassName("selection");
             var a = new Array();
             for (var i=0; i<elenco.length;i++){
                 a[i]=elenco[i].id;
             }
             for (var i=0; i<a.length;i++){
                 document.getElementById(a[i]).classList.add("postit");
-                document.getElementById(a[i]).classList.remove("relation");
+                document.getElementById(a[i]).classList.remove("selection");
             }
             this.relazione.aggiungiRelazione(this.idb,postitpartenza.id, postitarrivo.id,"");
             
+        },
+        leaveBoard:function(e){
+            if (this.ruolo=='admin'){
+                this.bacheca.idRigaResponsabile(localStorage.getItem('idu'), this.idb);
+            }
+            else{
+                this.bacheca.idRigaUtente(localStorage.getItem('idu'), this.idb);
+            }
+            this.goToHome();
         },
         //Funzioni di cambio pagina
         goToHome: function(e) {

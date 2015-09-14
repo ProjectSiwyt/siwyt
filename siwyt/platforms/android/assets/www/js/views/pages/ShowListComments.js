@@ -26,7 +26,7 @@ define(function(require) {
     },
 
     //id: "showlistnoticeboards",
-    className: "i-g page",
+    className: "page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {

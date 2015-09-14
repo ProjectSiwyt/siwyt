@@ -1,9 +1,10 @@
 
 {{#each this}}
-    <li class="table-view-cell" id={{id}}>
-        {{contenuto}} <span class="pull-right caption">{{data}} {{ora}}</span>
-        <div class="caption padding-t">by {{idu}}</div>
-    </li>
+    <div class="div comment" id={{id}}>
+        <div>{{contenuto}}</div>
+        <div class="pull-right padding-t caption">posted on {{data}} {{ora}}</div>
+        <div class="pull-left padding-t caption">by {{idu}}</div>
+    </div>
 {{/each}}
 
 

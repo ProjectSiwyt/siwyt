@@ -18,6 +18,13 @@ define(function(require) {
       this.template = Utils.templates.contentListBoardsContacts;
       this.utente = new Utente();
       this.bacheca.on("utenteAggiunto", this.showChecked, this);
+      this.bacheca.on("salvataggioUtente", this.chiudiPopup, this);
+      console.log("name ",sessionStorage.getItem("nameContact"));
+      this.boards = [];
+      this.len = 0;
+      this.idb =0;
+      /*console.log(document.getElementById("nameContact"));
+      document.getElementById("nameContact").innerHTML=sessionStorage.getItem("nameContact");*/
 
       
      // here we can register to inTheDOM or removing events
@@ -31,12 +38,13 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    //id: "showlistnoticeboards",
+    id: "listBoardsContacts",
     className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap .rigabacheca": "addContactToBacheca",
+      "tap #done": "save"
     },
 
     render: function() {
@@ -44,18 +52,16 @@ define(function(require) {
       return this;
     },
 
-    showChecked: function(result){
-      if(result){
-
+    showChecked: function(e){
         var item = document.getElementsByClassName("current")[0];
-        console.log("contattoAggiunto");
+        item.classList.toggle('aggiunto');
         console.log(item);
-        var i = item.childNodes[1];
+        var i = item.childNodes[3];
         i.classList.toggle('fa-square-o');
         i.classList.toggle('fa-check-square-o');
-        this.utente.inviaMailContattoAggiunto(localStorage.getItem("nameLogged"), localStorage.getItem("surnameLogged"), result);
+        $(".current").removeClass("current");
+        //this.utente.inviaMailContattoAggiunto(localStorage.getItem("nameLogged"), localStorage.getItem("surnameLogged"), result);
 
-      }
     },
 
     addContactToBacheca: function(e){
@@ -63,13 +69,47 @@ define(function(require) {
       e.currentTarget.classList.toggle("current");
       console.log(idb);
       var idu = sessionStorage.getItem("idUserToAdd");
-      this.bacheca.aggiungiUtenteBacheca(idu, idb);
-      
-
+      console.log("a :", e.currentTarget);
+      if(!($(e.currentTarget).hasClass("aggiunto"))){
+        this.boards[this.len]= idb;
+        console.log(this.boards);
+        this.len++;
+        }
+      else{
+        for(var i =0; i<this.boards.length;i++){
+          if(this.boards[i]==idb)
+            this.boards[i]=0;
+        }
+      }
+      this.showChecked();
       //});
-
     
+    },
+
+    chiudiPopup: function(e){
+        idu = sessionStorage.getItem("idUserToAdd");
+        var popScreen = document.getElementById("LinkScreen");
+        var popPopup = document.getElementById(""+idu+"LinkPopup");
+        popScreen.classList.toggle('hide');
+        popPopup.classList.toggle('hide');
+        $("#listBoardsContacts").remove();
+    },
+
+
+    save: function(e){
+      var r = [];
+      var c =0;
+      for (var i =0;i< this.boards.length;i++){
+        if(this.boards[i]!=0){
+          r[c]=this.boards[i];
+          c++;
+        }
+      }
+      console.log("utente da aggiungere ",sessionStorage.getItem("idUserToAdd"));
+      console.log("alle bacheche: ", r);
+      this.bacheca.aggiungiUtenteBacheche(sessionStorage.getItem("idUserToAdd"), r);
     }
+
   });
 
   return ShowListNoticeboardsContacts;

@@ -90,6 +90,19 @@ define(function(require) {
 					console.log("errorlistabacheche ", error);
 				})
 		},
+
+		contaBachecheResponsabile: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log(" numBachecheResponsabile", res.length);
+					THIS.trigger("numBachecheResponsabile", res.length);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
 		//passandogli un'array r contenente gli idb restituisce un'array contenente tutti i dati della bacheca con id idb
     	listaDatiBachecheAmministratore: function(r){
     		var a = new Array();
@@ -112,6 +125,19 @@ define(function(require) {
 					console.log("error ", error2);
 				})
     	},
+
+    	contaBachecheAmministratore: function(){
+		var THIS = this;
+		
+			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+localStorage.getItem('idu')+"'" })
+				.done(function(res) {
+					console.log("numBachecheAmministratore ", res.length);
+					THIS.trigger("numBachecheAmministratore " , res.length);
+				})
+				.fail(function(error) {
+					console.log("errorlistabacheche ", error);
+				})
+		},
     
 		//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK
@@ -286,6 +312,29 @@ define(function(require) {
 				})
 			
 		},
+
+		aggiungiUtenteBacheche: function(idu, r){
+	 		var THIS=this;
+	  		var c=0;
+	  		for(var i=0; i<r.length; i++){
+					var post = new Object();
+					post.idb = r[i];
+					post.idu = idu;     
+					BaasBox.save(post, "Bacheca_Utente")
+						.done(function(res) {
+							c++;
+							THIS.setPermissionSalvaUtenti(res);
+							if(c == r.length){
+								THIS.trigger("salvataggioUtente", res);
+							}
+						})
+						.fail(function(error) {
+							THIS.trigger("errorAggiungiUtenti", error);
+						})
+			}
+		},
+			
+
 		
 		setPermissionAggiungiUtenteBacheca: function(result){
 			var THIS = this;
@@ -358,9 +407,64 @@ define(function(require) {
    		},
    		//rimuove dalla tabella 'Amministratore' la riga con id idu
    		rimuoviAmministratore: function(idRiga){
+   			var THIS=this;
    			BaasBox.deleteObject(idRiga, "Amministratore")
 				.done(function(res) {
 					THIS.trigger("rimossoAmministratore",res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//Per la funzione rimuoviResponsabile devo fare prima una query che mi ritorna l'id della riga
+   		idRigaResponsabile: function(idu, idb){
+			var THIS=this;
+			BaasBox.loadCollection("Responsabile")
+
+				.done(function(res) {
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							THIS.rimuoviResponsabile(res[i].id);
+						}
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//rimuove dalla tabella 'Responsabile' la riga con id idu
+   		rimuoviResponsabile: function(idRiga){
+   			var THIS=this;
+   			BaasBox.deleteObject(idRiga, "Responsabile")
+				.done(function(res) {
+					THIS.trigger("rimossoResponsabile",res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//Per la funzione rimuoviUtente devo fare prima una query che mi ritorna l'id della riga
+   		idRigaUtente: function(idu, idb){
+			var THIS=this;
+			BaasBox.loadCollection("Bacheca_Utente")
+
+				.done(function(res) {
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							THIS.rimuoviUtente(res[i].id);
+						}
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//rimuove dalla tabella 'Bacheca_Utente' la riga con id idu
+   		rimuoviUtente: function(idRiga){
+   			var THIS=this;
+   			BaasBox.deleteObject(idRiga, "Bacheca_Utente")
+				.done(function(res) {
+					THIS.trigger("rimossoUtente",res);
 				})
 				.fail(function(error) {
 					console.log("error ", error);
@@ -541,6 +645,8 @@ define(function(require) {
                     })
             } 
            },
+
+
            //Per la funzione rimuoviMembri devo fare prima una query che mi ritorna un array contenente gli id delle righe 
 
            idRigheMembri: function(r, idb){

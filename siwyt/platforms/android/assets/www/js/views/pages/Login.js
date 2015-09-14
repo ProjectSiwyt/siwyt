@@ -15,8 +15,8 @@ define(function(require) {
       
       // load the precompiled templates (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.login;
-      console.log("inizalize login");
-      console.log(this.sendemail);
+      //console.log("inizalize login");
+      //console.log(this.sendemail);
       $(".errorReg").removeAttr("style");
       document.getElementById("header").classList.add('hide');
       document.getElementById("navigation").classList.add('hide');
@@ -44,22 +44,14 @@ define(function(require) {
     },
 
     render: function() {
-      console.log("render login");
+      //console.log("render login");
       $(this.el).html(this.template());
       //$(this.el).html(this.template(this.model.models));
-      console.log(this);
+      //console.log(this);
       return this;
     },
 
-    /*doLogin: function(e){
-        if(this.validateLogin()){ 
-            Backbone.history.navigate("homeSiwyt", {
-            trigger: true
-              });
-
-        }
-
-    },*/
+ 
     login:function(result){
       console.log(result);
         if(result!=null){
@@ -68,15 +60,17 @@ define(function(require) {
             });
         }
         else{
-          $("#loginerror").attr("style","display:inline-block");}
+          $("#loginerror").attr("style","display:inline-block");
+          $("#logUsername").attr("style","border: 1px solid #ed7800");
+          $("#logPassword").attr("style","border: 1px solid #ed7800");
+        }
             
       },
 
 
      showMessageMail: function(result){
       if(result){
-        console.log("hfhvfVHFVHòFEHfhvò");
-        $("#emailSent").attr("style", " display:block");
+        $("#emailSent").attr("style", "display:block");
       }
 
      } ,

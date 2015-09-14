@@ -83,6 +83,7 @@ define(function(require) {
         events: {
             "tap #goToHome": "goToHome",
             "tap #boardManagement": "goToBoardManagement",
+            "tap #leaveBoard": "leaveBoard",
             "tap #aprimenu": "gestionemenu",
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
@@ -154,13 +155,18 @@ define(function(require) {
         },
         verificaRuolo:function(){
             var management=document.getElementById('boardManagement');
+            var leave=document.getElementById('leaveBoard')
             if(this.ruolo=='manager'){
                 if(management.classList.contains('hide')){
                     management.classList.remove('hide');
                 }
+                leave.classList.add('hide');
             }
             else{
                 management.classList.add('hide');
+                if(leave.classList.contains('hide')){
+                    leave.classList.remove('hide');
+                }
             }  
         },
         caricaDati:function(){
@@ -549,6 +555,15 @@ define(function(require) {
             }
             this.relazione.aggiungiRelazione(this.idb,postitpartenza.id, postitarrivo.id,"");
             
+        },
+        leaveBoard:function(e){
+            if (this.ruolo=='admin'){
+                this.bacheca.idRigaResponsabile(localStorage.getItem('idu'), this.idb);
+            }
+            else{
+                this.bacheca.idRigaUtente(localStorage.getItem('idu'), this.idb);
+            }
+            this.goToHome();
         },
         //Funzioni di cambio pagina
         goToHome: function(e) {

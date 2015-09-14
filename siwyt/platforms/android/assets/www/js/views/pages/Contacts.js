@@ -42,7 +42,7 @@ define(function(require) {
       this.bacheca.on("bachecheamministratore", this.elencoBacheche ,this);
       this.utente.on("elencoUtenti", this.search, this);
       this.utente.on("resultCercaUtente", this.showResultSearch, this);      
-      this.contatto.on("contattoCancellato", this.aggionraLista, this);
+      this.contatto.on("contattoCancellato", this.aggiornaLista, this);
       this.utente.on("listContacts", this.showContacts, this);
 
       
@@ -59,13 +59,13 @@ define(function(require) {
     },
 
     id: "contacts",
-    className: "i-g page",
+    className: "i-g page size",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "swipeLeft": "goToHome",
       "tap .removeContact": "removeContact",
-      "tap .addToBoard": "showBoard",
+      "tap .addToBoard": "showBoards",
       "tap .overlay": "chiudiPopup",
       "tap .overlaySearch": "chiudiPopupSearch",
       "keyup":"startSearch",
@@ -92,8 +92,8 @@ define(function(require) {
 
     },
 
-    aggionraLista: function(result){
-      console.log(result);
+    aggiornaLista: function(result){
+      console.log("result aggiorna lista: ",result);
       $("#"+result).remove();
     },
 
@@ -104,7 +104,6 @@ define(function(require) {
     },
 
     resetSearch: function(e){
-      console.log("ohvfajlsdhfv");
         document.getElementById("search").value="";
         var searchPopup = document.getElementById("searchPopup");
         var searchScreen = document.getElementById("searchScreen");
@@ -131,7 +130,7 @@ define(function(require) {
     },
 
     startQuery: function(e){
-      this.bacheca.listaIdBachecheAmministratore();
+      //this.bacheca.listaIdBachecheAmministratore();
       this.utente.listContacts(localStorage.getItem("idu"));
       //this.startListenerSearch();
     },
@@ -142,6 +141,7 @@ define(function(require) {
         var popPopup = document.getElementById(""+idu+"LinkPopup");
         popScreen.classList.toggle('hide');
         popPopup.classList.toggle('hide');
+        $("#listBoardsContacts").remove();
     },
 
     chiudiPopupSearch: function(e){
@@ -164,6 +164,14 @@ define(function(require) {
       c.add(result);
       console.log(c);
       this.subViewBoards = (new ShowListNoticeboardContacts({collection: c})).render().el;
+      console.log(this.subViewBoards);
+      var usr = sessionStorage.getItem("idUserToAdd");
+      document.getElementById(usr+"LinkPopup").appendChild(this.subViewBoards);
+      var popScreen = document.getElementById("LinkScreen");
+      var popPopup = document.getElementById(usr+"LinkPopup");
+      popScreen.classList.toggle('hide');
+      popPopup.classList.toggle('hide');
+      document.getElementById("nameContact").innerHTML=sessionStorage.getItem("nameContact");
     },
 
     aggiungiUtente: function(e){
@@ -172,15 +180,12 @@ define(function(require) {
       this.bacheca.salvaUtenti(idu, idb);
     },
 
-    showBoard: function(e){
+    showBoards: function(e){
       //$("#subviewContacts").remove();
-      console.log(this.subViewBoards);
-      document.getElementById(e.currentTarget.parentNode.id+"LinkPopup").appendChild(this.subViewBoards);
-      var popScreen = document.getElementById("LinkScreen");
-      var popPopup = document.getElementById(""+e.currentTarget.parentNode.id+"LinkPopup");
-      popScreen.classList.toggle('hide');
-      popPopup.classList.toggle('hide');
       sessionStorage.setItem("idUserToAdd", e.currentTarget.parentNode.id );
+      var n = $("#"+e.currentTarget.parentNode.id)[0].innerText;
+      sessionStorage.setItem("nameContact", n);
+      this.bacheca.listaIdBachecheAmministratore();
     },
 
     showResultSearch: function(result){

@@ -43,7 +43,7 @@ define(function(require) {
       "postit/:idp/:idb": "postit"
     },
 
-    BAASBOX_URL : "http://192.168.1.27:9000",
+    BAASBOX_URL : "http://192.168.1.37:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {

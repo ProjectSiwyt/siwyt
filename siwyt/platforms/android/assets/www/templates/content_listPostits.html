@@ -3,7 +3,7 @@
     <h3 class="postit-title" id="{{id}}Content" style="font-size:{{dimensione}}px;">{{contenuto}}</h3>
     <div class="pull-left caption">{{idu}}</div>
     <div class="pull-right caption">{{data}}</div>
-    <div id="{{id}}Link" class="popup"><i class="fa fa-pencil"></i></div>
+    <div id="{{id}}Link" class="popup"><i class="fa fa-pencil fa-2x"></i></div>
 </div>
 <div class="popup-screen overlay in hide" id="{{id}}RenameScreen"></div>
 <div class="postit-popup popup-container hide" id="{{id}}RenamePopup">
@@ -12,10 +12,10 @@
 </div>
 <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
 <!--Popup menu to manage postit-->
-<div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
+<div id="{{id}}LinkPopup" class="postit-popup popup-container size hide">
     <ul class="table-view border-table-view">
-        <li class="table-view-cell border-top media menuRelation">New relation<span class="pull-right"><i class="fa fa-plus"></i></span></li>
-        <li class="table-view-cell media menuRename menuPostit" data-autore="{{idu}}">Rename<span class="pull-right"><i class="fa fa-pencil"></i></span></li>
+        <li class="table-view-cell border-top media menuRelation"><span class="popup-list">New relation</span><i class="fa fa-plus fa-2x pull-right"></i></li>
+        <li class="table-view-cell media menuRename menuPostit" data-autore="{{idu}}"><span class="popup-list">Rename</span><i class="fa fa-pencil fa-2x pull-right"></i></li>
         <li class="table-view-cell media menuColor menuPostit" data-autore="{{idu}}">Change Color:
             <input type="color" name="colorPicker" value="{{colore}}">
         </li>
@@ -26,7 +26,7 @@
         <li class="table-view-cell media menuDimension menuPostit" data-autore="{{idu}}">Font size:
             <input type="number" value="{{dimensione}}" />
         </li>
-        <li class="table-view-cell media menuDelete menuPostit" data-autore="{{idu}}">Delete Postit<span class="pull-right"><i class="fa fa-trash-o"></i></span></li>
+        <li class="table-view-cell media menuDelete menuPostit" data-autore="{{idu}}"><span class="popup-list">Delete Postit</span><i class="fa fa-trash-o fa-2x pull-right"></i></li>
     </ul>
 </div>
 {{/each}}

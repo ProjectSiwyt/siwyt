@@ -58,7 +58,7 @@ define(function(require) {
 
     showDone: function(result){
       if(result){
-        console.log("showDone");
+        console.log("showDone", result);
         var item = document.getElementById(result);
         var span = item.childNodes[1];
         var i = span.firstChild;
@@ -68,7 +68,7 @@ define(function(require) {
         span.classList.toggle('addContact');
         i.classList.toggle('fa-user-plus');
         i.classList.toggle('fa-check');
-
+        $("#"+result).removeAttr("id");
         
       }
     },

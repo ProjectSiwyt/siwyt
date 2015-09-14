@@ -407,9 +407,64 @@ define(function(require) {
    		},
    		//rimuove dalla tabella 'Amministratore' la riga con id idu
    		rimuoviAmministratore: function(idRiga){
+   			var THIS=this;
    			BaasBox.deleteObject(idRiga, "Amministratore")
 				.done(function(res) {
 					THIS.trigger("rimossoAmministratore",res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//Per la funzione rimuoviResponsabile devo fare prima una query che mi ritorna l'id della riga
+   		idRigaResponsabile: function(idu, idb){
+			var THIS=this;
+			BaasBox.loadCollection("Responsabile")
+
+				.done(function(res) {
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							THIS.rimuoviResponsabile(res[i].id);
+						}
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//rimuove dalla tabella 'Responsabile' la riga con id idu
+   		rimuoviResponsabile: function(idRiga){
+   			var THIS=this;
+   			BaasBox.deleteObject(idRiga, "Responsabile")
+				.done(function(res) {
+					THIS.trigger("rimossoResponsabile",res);
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//Per la funzione rimuoviUtente devo fare prima una query che mi ritorna l'id della riga
+   		idRigaUtente: function(idu, idb){
+			var THIS=this;
+			BaasBox.loadCollection("Bacheca_Utente")
+
+				.done(function(res) {
+					for(var i=0; i<res.length; i++){
+						if(res[i].idu == idu && res[i].idb == idb){
+							THIS.rimuoviUtente(res[i].id);
+						}
+					}
+				})
+				.fail(function(error) {
+					console.log("error ", error);
+				})
+   		},
+   		//rimuove dalla tabella 'Bacheca_Utente' la riga con id idu
+   		rimuoviUtente: function(idRiga){
+   			var THIS=this;
+   			BaasBox.deleteObject(idRiga, "Bacheca_Utente")
+				.done(function(res) {
+					THIS.trigger("rimossoUtente",res);
 				})
 				.fail(function(error) {
 					console.log("error ", error);
@@ -590,6 +645,8 @@ define(function(require) {
                     })
             } 
            },
+
+
            //Per la funzione rimuoviMembri devo fare prima una query che mi ritorna un array contenente gli id delle righe 
 
            idRigheMembri: function(r, idb){

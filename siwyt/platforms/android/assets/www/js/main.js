@@ -33,11 +33,9 @@ require.config({
 
 // We launch the App
   require(['backbone', 'utils'], function(Backbone, Utils) {
-    alert("utils");
-    debugger;
-  //require(['preloader', 'router'], function(PreLoader, AppRouter) {
+
   require(['preloader', 'routerSiwyt'], function(PreLoader, AppRouter) {
-    alert("router");
+
     document.addEventListener("deviceready", run, false);
 
     function run() {

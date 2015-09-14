@@ -48,7 +48,6 @@ define(function(require) {
     id: "postitHome",
     className: "i-g page",
 
-    //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap #submitComment":"submit"
       //"tap": "goToContacts",

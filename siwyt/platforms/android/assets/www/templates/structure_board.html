@@ -1,36 +1,40 @@
-<header id="headerBoard"class="bar bar-nav">
-        <h1 id="titleBacheca" class="title">{{nome}}</h1>
-         <a class="pull-left" id="backBoard"><i class="fa fa-home fa-3x"></i></a>
-        <a id="addPostit" class="pull-right"><i class="fa fa-plus-square-o fa-2x"></i></a>
-    </header>
-
-    <div id="contenutoBacheca" class="close">
-        <ul id="menu" class="table-view border-table-view">
-            <div id="aprimenu"><i class="fa fa-angle-double-right fa-3x"></i></div>
-            <li id="goToHome" class="table-view-cell media activable">
-                <div class="navigate-right">
-                    Homepage
-                </div>
-            </li>
-            <li id="newPostit" class="table-view-cell media activable">
-                <div class="navigate-right">
-                    New Post-it
-                </div>
-            </li>
-            <li id="boardManagement" class="table-view-cell media activable">
-                <div class="navigate-right">
-                    Board Management
-                </div>
-            </li>
-            <li class="table-view-cell media activable">
-                <div class="navigate-right">
-                    Export to PDF
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div id="canvas">
+<header id="headerBoard" class="bar bar-nav no-border">
+    <h1 id="titleBacheca" class="title">{{nome}}</h1>
+    <a id="backBoard" class="pull-left bar-margin-top"><i class="fa fa-home fa-5x"></i></a>
+    <a id="addPostit" class="pull-right"><i class="fa fa-plus-square-o fa-5x"></i></a>
+</header>
+<div id="contenutoBacheca" class="close">
+    <ul id="menu" class="table-view border-table-view size">
+        <div id="aprimenu"><i class="fa fa-angle-double-right fa-3x"></i></div>
+        <li id="goToHome" class="table-view-cell media activable">
+            <div class="navigate-right">
+                Homepage
+            </div>
+        </li>
+        <li id="newPostit" class="table-view-cell media activable">
+            <div class="navigate-right">
+                New Post-it
+            </div>
+        </li>
+        <li id="boardManagement" class="table-view-cell media activable">
+            <div class="navigate-right">
+                Board Management
+            </div>
+        </li>
+        <li id="leaveBoard" class="table-view-cell media activable">
+            <div class="navigate-right">
+                Leave Board
+            </div>
+        </li>
+        <li class="table-view-cell media activable">
+            <div class="navigate-right">
+                Export to PDF
+            </div>
+        </li>
+    </ul>
+</div>
+<div id="canvas">
     <canvas id="boardCanvas" class="absolute canvas"></canvas>
-    </div>
-    <div id="boardContent" class="body-board"> 
-    </div>
+</div>
+<div id="boardContent" class="body-board">
+</div>
