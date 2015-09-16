@@ -43,7 +43,7 @@ define(function(require) {
       "postit/:idp/:idb": "postit"
     },
 
-    BAASBOX_URL : "http://192.168.1.37:9000",
+    BAASBOX_URL : "http://192.168.1.41:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
@@ -51,7 +51,6 @@ define(function(require) {
         //initialize BaasBox
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
-      
 
       if(localStorage.getItem("idu")==null){
           this.firstView="login";
@@ -61,6 +60,7 @@ define(function(require) {
         //utente.logout();
 
         utente.login(localStorage.getItem("usernameLogged"), localStorage.getItem("passwordLogged"));
+        utente.on("resultLogin", this.enableNotifications);
         this.firstView="homeSiwyt";
       }
       //at the moment we log in as admin  
@@ -98,6 +98,12 @@ define(function(require) {
       
       this.spinner = new Spinner(opts);
       //console.log(this.el);
+    },
+    enableNotifications: function(res){
+      $.ajax({
+        url:"http://localhost:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        method: "PUT"
+      });
     },
     homeSiwyt: function() {
       var THIS=this;

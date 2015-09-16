@@ -1,20 +1,24 @@
 {{#if this}}
-<ul class="table-view">
-    <li> Add <span id="nameContact"></span> to boards: <li>
-    {{#each this}}
-    	<li class="table-view-cell rigabacheca" data-id="{{id}}">
-    	<span class="popup-list">{{nome}}</span>
-    	<i class="pull-right fa fa-square-o fa-2x"></i>
-    	</li>
-    {{/each}}
-    <li id="done">
-			DONE
-	 </li>
-</ul>
+<div class="table-view no-float h2-fix-scroll">
+    <div class="center">Add <span id="nameContact"></span> to boards:</div>
+    <div class="scroll-board">
+        <div>
+        {{#each this}}
+        <div class="table-view-cell rigabacheca" data-id="{{id}}">
+            <span class="popup-list">{{nome}}</span>
+            <i class="pull-right fa fa-square-o fa-2x"></i>
+        </div>
+        {{/each}}
+        </div>
+    </div>
+    <div id="done" class="center btn-block">
+        DONE
+    </div>
+</div>
 {{else}}
-<ul class="table-view">
-    	<li class="table-view-cell rigabacheca" data-id="{{id}}">
-    		Crea una Bacheca per aggiungere un amico
-    	</li>
-</ul>
+<div class="table-view">
+    <div class="table-view-cell rigabacheca" data-id="{{id}}">
+        Crea una Bacheca per aggiungere un amico
+    </div>
+</div>
 {{/if}}

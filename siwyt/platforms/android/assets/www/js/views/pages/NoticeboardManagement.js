@@ -5,9 +5,9 @@ define(function(require) {
     var Utils = require("utils");
     var Utente = require("models/Utente");
     var Utenti = require("collections/Utenti");
-    var Postit= require("models/Postit");
-    var Commento= require("models/Commento");
-    var Relazione=require("models/Relazione");
+    var Postit = require("models/Postit");
+    var Commento = require("models/Commento");
+    var Relazione = require("models/Relazione");
     var ShowListMembers = require("views/pages/ShowListMembers");
     var ShowListAdmins = require("views/pages/ShowListAdmins");
     var ShowListUsers = require("views/pages/ShowListUsers");
@@ -22,29 +22,22 @@ define(function(require) {
             this.template = Utils.templates.structureBoardManagement;
             //copio l'id della bacheca che si sta gestendo
             this.idb = idb;
-            this.ruolo=ruolo;
+            this.ruolo = ruolo;
 
-            document.getElementById("title").innerHTML = "Board Management";
-            var header = document.getElementById("header");
-            var back = document.getElementById("back");
-            var title = document.getElementById("title");
-            if (header.classList.contains('hide')) {
-                header.classList.remove('hide');
-            }
-            if (back.classList.contains('hide')) {
-                back.classList.remove('hide');
-            }
-            if (title.classList.contains('hide')) {
-                title.classList.remove('hide');
+            document.getElementById("header").classList.add('hide');
+            document.getElementById("navigation").classList.add('hide');
+            var settings = document.getElementById("settingsMenu");
+            if (settings.classList.contains('hide')) {
+                settings.classList.remove('hide');
             }
 
 
             // load the precompiled template
 
             this.bacheca = new Bacheca();
-            this.postit=new Postit();
-            this.commento=new Commento();
-            this.relazione=new Relazione();
+            this.postit = new Postit();
+            this.commento = new Commento();
+            this.relazione = new Relazione();
 
 
             //mi metto in ascolto dell'evento che mi ritorna l'esito della query di salvataggio del titolo
@@ -89,7 +82,8 @@ define(function(require) {
         events: {
             "tap #submitUpdate": "update",
             "tap #addMembers": "goToAddContacts",
-            "tap #deleteNoticeboard": "deleteNoticeboard"
+            "tap #deleteNoticeboard": "deleteNoticeboard",
+            "tap #backBoard": "goToBacheca"
         },
         caricaMembriDaHome: function(e) {
             var b = new Utente({
@@ -242,7 +236,6 @@ define(function(require) {
         },
 
         salvaResponsabili: function(res) {
-
             //responsabili è la lista dei responsabili
             var a1 = new Array();
             var a2 = new Array();
@@ -289,7 +282,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    adminsEliminare[cae++]=o;
+                    adminsEliminare[cae++] = o;
                 }
             }
 
@@ -305,10 +298,9 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    usersEliminare[cue++]=o;
+                    usersEliminare[cue++] = o;
                 }
             }
-
 
             //controllo se i nuovi responsabili c'erano
             for (var i = 0; i < this.responsabili.length; i++) {
@@ -322,9 +314,10 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    adminsAggiungere[caa++]=o;
+                    adminsAggiungere[caa++] = o;
                 }
             }
+
             //controllo se i nuovi utenti c'erano
             for (var i = 0; i < this.utenti.length; i++) {
                 tr = false;
@@ -337,7 +330,7 @@ define(function(require) {
                     }
                 }
                 if (!tr) {
-                    usersAggiungere[cua++]=o;
+                    usersAggiungere[cua++] = o;
                 }
             }
 
@@ -345,7 +338,6 @@ define(function(require) {
             this.usersEliminare = usersEliminare;
             this.adminsAggiungere = adminsAggiungere;
             this.adminsEliminare = adminsEliminare;
-
 
             if (this.adminsAggiungere.length != 0) {
                 this.bacheca.salvaResponsabili(this.adminsAggiungere, this.idb);
@@ -357,7 +349,6 @@ define(function(require) {
         salvaMembri: function(res) {
             //utenti è la lista degli utenti non responsabili
             if (this.usersAggiungere.length != 0) {
-                console.log(this.usersAggiungere);
                 this.bacheca.salvaUtenti(this.usersAggiungere, this.idb);
             } else {
                 this.rimuoviResponsabili();
@@ -379,28 +370,26 @@ define(function(require) {
                 this.goToBacheca();
             }
         },
-        deleteNoticeboard: function(e){
+        deleteNoticeboard: function(e) {
             this.bacheca.rimuoviBacheca(this.idb);
         },
-        rimuoviElementiBacheca: function(res){
+        rimuoviElementiBacheca: function(res) {
             this.postit.idRighePostit(this.idb);
         },
-        rimuoviCommentiPostitBacheca: function(res){
-            console.log(res);
-            for (var i=0; i<res.length;i++){
+        rimuoviCommentiPostitBacheca: function(res) {
+            for (var i = 0; i < res.length; i++) {
                 this.commento.idRigheCommenti(res[i].id);
             }
             //rimuovo subito gli amministratori altrimenti ho problemi quando torno nella home
-            this.bacheca.idRigheTuttiAmministratori(this.idb); 
+            this.bacheca.idRigheTuttiAmministratori(this.idb);
         },
-        rimuoviResto: function(res){
-            console.log("resto");
+        rimuoviResto: function(res) {
             this.bacheca.idRigheTuttiResponsabili(this.idb);
             this.bacheca.idRigheTuttiMembri(this.idb);
             this.relazione.idRigheRelazioni(this.idb);
             this.goToHome();
         },
-        goToHome: function(){
+        goToHome: function() {
             localStorage.removeItem("responsabili");
             localStorage.removeItem("utenti");
             Backbone.history.navigate("homeSiwyt", {
@@ -409,10 +398,9 @@ define(function(require) {
         },
 
         goToBacheca: function() {
-            console.log("BBBBBBBBBBBBBBBBBBBBBB");
             localStorage.removeItem("responsabili");
             localStorage.removeItem("utenti");
-            Backbone.history.navigate("bacheca/" + this.idb+"/manager", {
+            Backbone.history.navigate("bacheca/" + this.idb + "/manager", {
                 trigger: true
             });
         },

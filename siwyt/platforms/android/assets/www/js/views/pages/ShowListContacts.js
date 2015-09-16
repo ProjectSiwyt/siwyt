@@ -27,7 +27,7 @@ define(function(require) {
     },
 
     //id: "showlistcontacts",
-    //className: "i-g page",
+    className: "table-view",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {

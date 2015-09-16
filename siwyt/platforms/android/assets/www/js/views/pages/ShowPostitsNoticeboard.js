@@ -16,7 +16,6 @@ define(function(require) {
 
         initialize: function() {
             Handlebars.registerHelper("xif", function (a) {
-                console.log(a);
                 if(a=="tahoma"){
                     var obj='<select><option value="helvetica">Helvetica</option><option value="arial">Arial</option><option value="tahoma" selected="selected">Tahoma</option></select>';
                     return new Handlebars.SafeString(obj);

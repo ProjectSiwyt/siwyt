@@ -9,6 +9,7 @@ define(function(require) {
     var Relazione = require("models/Relazione");
     var Baasbox = require("baasbox");
     var ShowPostitsNoticeboard = require("views/pages/ShowPostitsNoticeboard");
+    var $=require("jquery");
 
     var Bacheche = require("collections/Bacheche");
 
