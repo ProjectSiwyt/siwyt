@@ -76,6 +76,89 @@ define(function(require) {
 					console.log("error ", error2);
 				})
     	},
+
+
+    	listaBachecheAmministratoreContact: function(idu, idu2){
+            var THIS = this;
+
+            BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+idu+"'" })
+                    .done(function(res) {
+                    		console.log("bacheche user loggato", res);
+                            THIS.filtraBachecaUtente(res, idu2);
+                            
+                    })
+                    .fail(function(error) {
+                            console.log("errorlistabacheche ", error);
+                    })
+    	},
+
+        filtraBachecaUtente: function(result, idu2){
+            var THIS = this;
+            var a = new Array();
+            var j = 0;
+            BaasBox.loadCollectionWithParams("Bacheca_Utente",{where: "idu='"+idu2+"'"})
+                .done(function(res) {
+                	console.log("bacheche utente idu2 ",res);
+                	console.log("result (bacheche us loggato) ",result);
+                	for(var c=0; c< res.length; c++){
+                		for(var i=0; i<result.length; i++){
+                			if(result[i].idb!=0){
+	                			if(res[c].idb==result[i].idb)
+	                				result[i]=0;
+                			}
+                		}
+                	}
+                	var k=0;
+                    for(var i=0;i<result.length; i++){
+                    	if(result[i]!=0){
+                    		a[k]=result[i];
+                    		k++;
+                    	}
+                    }
+                    console.log("risultato filtro bachecha utente",a);
+                    THIS.filtraBachecaResponsabile(a,idu2);
+                    //THIS.listaDatiBachecheAmministratore(a);
+                })
+                .fail(function(error) {
+                        console.log("errorlistabacheche ", error);
+                })
+
+    },
+
+     filtraBachecaResponsabile: function(result, idu2){
+            var THIS = this;
+            var a = new Array();
+            var j = 0;
+            BaasBox.loadCollectionWithParams("Responsabile",{where: "idu='"+idu2+"'"})
+                .done(function(res) {
+                	console.log("bacheche responsabile idu2",res);
+                	for(var c=0; c< res.length; c++){
+                		for(var i=0; i<result.length; i++){
+                			if(result[i].idb!=0){
+                				if(res[c].idb==result[i].idb)
+                					result[i]=0;
+                			}
+                		}
+                	}
+                	var k=0;
+                    for(var i=0;i<result.length; i++){
+                    	if(result[i]!=0){
+                    		a[k]=result[i];
+                    		k++;
+                    	}
+                    }
+                    console.log("ris finale",a);
+                    if(a.length>0)
+                    	THIS.listaDatiBachecheAmministratore(a);
+                	else
+                		THIS.trigger("bachecheamministratore", 0);
+
+                })
+                .fail(function(error) {
+                        console.log("errorlistabacheche ", error);
+                })
+
+    },
     
 		//funzione che ritorna un array contenente gli idb dell'utente con id idu
 		//OK

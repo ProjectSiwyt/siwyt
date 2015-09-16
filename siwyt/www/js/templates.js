@@ -20,6 +20,7 @@ define({
     contentListPostits: "templates/content_listPostits.html",
     contentListMembers: "templates/content_listMembers.html",
     contentListBoardsContacts: "templates/content_listBoardsContacts.html",
+    contentListBoardsContactsFull: "templates/content_listBoardsContactsFull.html",
     contentListComments: "templates/content_listComments.html",
     contentListContacts: "templates/content_listContacts.html",
     contentListContactsSearch: "templates/content_listContactsSearch.html",

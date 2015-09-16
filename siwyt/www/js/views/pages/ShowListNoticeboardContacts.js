@@ -97,18 +97,21 @@ define(function(require) {
 
 
     save: function(e){
-      var r = [];
-      var c =0;
-      for (var i =0;i< this.boards.length;i++){
-        if(this.boards[i]!=0){
-          r[c]=this.boards[i];
-          c++;
+      if(this.boards.length>0){
+          var r = [];
+          var c =0;
+          for (var i =0;i< this.boards.length;i++){
+            if(this.boards[i]!=0){
+              r[c]=this.boards[i];
+              c++;
+            }
+          }
+          console.log("utente da aggiungere ",sessionStorage.getItem("idUserToAdd"));
+          console.log("alle bacheche: ", r);
+          this.bacheca.aggiungiUtenteBacheche(sessionStorage.getItem("idUserToAdd"), r);
         }
-      }
-      console.log("utente da aggiungere ",sessionStorage.getItem("idUserToAdd"));
-      console.log("alle bacheche: ", r);
-      this.bacheca.aggiungiUtenteBacheche(sessionStorage.getItem("idUserToAdd"), r);
-    }
+      else this.chiudiPopup();
+    },
 
   });
 

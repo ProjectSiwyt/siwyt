@@ -3,6 +3,7 @@ define(function(require) {
   var Backbone = require("backbone");
   var Utente = require("models/Utente");
   var Utils = require("utils");
+  var Spinner= require("spin");
 
 
   var Login = Utils.Page.extend({
@@ -23,6 +24,31 @@ define(function(require) {
       this.utente = new Utente();
       this.utente.on("resultLogin",this.login, this);
       this.utente.on("mailSent", this.showMessageMail, this );
+
+      var opts = {
+          lines: 13 // The number of lines to draw
+          , length: 11 // The length of each line
+          , width: 7 // The line thickness
+          , radius: 26 // The radius of the inner circle
+          , scale: 1 // Scales overall size of the spinner
+          , corners: 1 // Corner roundness (0..1)
+          , color: '#000' // #rgb or #rrggbb or array of colors
+          , opacity: 0.25 // Opacity of the lines
+          , rotate: 0 // The rotation offset
+          , direction: 1 // 1: clockwise, -1: counterclockwise
+          , speed: 2 // Rounds per second
+          , trail: 60 // Afterglow percentage
+          , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+          , zIndex: 2e9 // The z-index (defaults to 2000000000)
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , top: '50%' // Top position relative to parent
+          , left: '50%' // Left position relative to parent
+          , shadow: false // Whether to render a shadow
+          , hwaccel: false // Whether to use hardware acceleration
+          , position: 'absolute' // Element positioning
+      }
+      
+      this.spinner = new Spinner(opts);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -54,6 +80,7 @@ define(function(require) {
  
     login:function(result){
       console.log(result);
+      this.spinner.stop(); 
         if(result!=null){
           Backbone.history.navigate("homeSiwyt", {
               trigger: true
@@ -76,9 +103,11 @@ define(function(require) {
      } ,
 
     validateLogin: function(e) {
+      var THIS = this;
       var username = document.formLogin.logUsername.value;
       var password = document.formLogin.logPassword.value;
-
+      this.spinner.spin(document.body);
+      //setTimeout(function(){THIS.spinner.spin(document.body);},50);
       this.utente.login(username,password);
     },
   
