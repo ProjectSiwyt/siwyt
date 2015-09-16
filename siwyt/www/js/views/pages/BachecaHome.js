@@ -9,6 +9,9 @@ define(function(require) {
     var Relazione = require("models/Relazione");
     var Baasbox = require("baasbox");
     var ShowPostitsNoticeboard = require("views/pages/ShowPostitsNoticeboard");
+    var $=require("jquery");
+    var jqueryui = require("jqueryui");
+    var jqueryuipunch = require("jqueryuipunch");
 
     var Bacheche = require("collections/Bacheche");
 
@@ -222,6 +225,14 @@ define(function(require) {
                 }
             }
             document.getElementById("boardContent").appendChild(this.subView);
+            ///////////////////////////
+            var THIS=this;
+            var elements=document.getElementsByClassName("postit");
+            for(var i=0; i<elements.length;i++){
+                $("#"+elements[i].id).draggable();
+            }
+
+            ///////////////////////////
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){

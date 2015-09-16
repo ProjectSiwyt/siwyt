@@ -125,7 +125,7 @@ body {
     border: 0;
 }
 .content-margin-top{
-    margin-top: 2em !important;
+    margin-top: 1em !important;
 }
 #header {
     border-bottom: 0;
@@ -205,15 +205,16 @@ body {
     background: #ed7800;
     color: #f4f4f4;
 }
+#btn, #submit{
+        bottom: 0em;
+}
 .tap{
     width: 44px;
 }
 .title {
     font-size: 2.5em;
     color: #f4f4f4;
-}
-#titleBacheca{
-    margin-top: 0.5em;
+    margin-top: 0.4em;
 }
 .width-99{
     width: 99% !important;
@@ -289,7 +290,7 @@ body {
     border-bottom: 0;
     border-color: #bdb8b6;
     background-color: #f4f4f4;
-    border-bottom: 0;
+    margin-bottom: 0;
 }
 
 .table-view-cell {
@@ -403,7 +404,7 @@ body {
 }
 
 .close-member {
-    height: 3.5em;
+    height: 2.3em;
 }
 
 .close-member>.navigate-right:after {
@@ -627,7 +628,7 @@ body {
 }
 
 .on-btn {
-    bottom: 14em;
+    bottom: 11em;
 }
 
 ::-webkit-input-placeholder {
@@ -746,7 +747,10 @@ select{
     .h2-fix-scroll{
         height: 99%;
     }
+    .close-member {
+        height: 3.5em;
+    }
     #contenutoBacheca {
         width: 53%;
-    }
+    }    
 }

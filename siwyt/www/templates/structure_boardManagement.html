@@ -1,18 +1,19 @@
-<div class="scroll no-nav">
+<header class="bar bar-nav no-border">
+    <h1 class="title">Board Management</h1>
+    <a class="pull-left bar-margin-top tap" id="backBoard"><i class="fa fa-angle-left fa-5x"></i></a>
+    <a class="pull-right" id="settingsMenu"><i class="fa fa-cog fa-3x"></i></a>
+</header>
+<div class="scroll no-nav content-margin-top size">
     <div class="i-12">
         <form>
-            <p>
                 <h3>Title:</h3>
                 <input type="text" id="titleBacheca" placeholder="Board's Name" />
-            </p>
-            <p>
-                <h3>Members <i id="addMembers" class="fa fa-user-plus fa-1x"></i></h3>
+                <h3>Members <i id="addMembers" class="fa fa-user-plus fa-2x pull-right"></i></h3>
                 <div class="border-top table-view" id="membri"></div>
-            </p>
         </form>
         <div class="i-12">
             <div class="absolute on-btn" id="deleteNoticeboard">Delete Noticeboard <i class="absolute trash fa fa-trash-o fa-3x"></i></div>
-            <div class="btn-block btn-new btn-no-nav center">
+            <div class="btn-block btn-new btn-no-nav center" id="btn">
                 <i class="fa fa-check-circle fa-4x" id="submitUpdate"></i>
                 <div>Done</div>
             </div>

@@ -13,9 +13,14 @@ require.config({
     spin: '../lib/spin/spin.min',
     preloader: '../lib/preloader/pre-loader',
     utils: '../lib/utils/utils',
-    baasbox: '../lib/baasbox/baasbox'
+    baasbox: '../lib/baasbox/baasbox',
+    jqueryui: '../lib/jquery-ui/jquery-ui',
+    jqueryuipunch: '../lib/jquery-ui/jquery.ui.touch-punch.min'
   },
   shim: {
+    'jquery-ui':{
+        exports: '$'
+    },
     'jquery': {
       exports: '$'
     },
