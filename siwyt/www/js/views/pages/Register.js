@@ -164,8 +164,6 @@ define(function(require) {
 
           // se i dati sono validi controllo che lo username scelto sia disponibile
       if(valid){
-        //this.spinner.spin(document.body);
-
         setTimeout(function(){THIS.spinner.spin(document.body);},50);
         this.utente.checkUsername(name, surname, username, email, password); //this.utente.register(name, surname, username, email, password);  
     }

@@ -23,10 +23,11 @@ define(function(require) {
     initialize: function(options) {
       // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureSiwyt;
-      var push = PushNotification.init({ "android": {"senderID": "123456789"}}, true );
+      var push = PushNotification.init({ "android": {"senderID": "1234567890"}}, function(){ alert("init");} );
 
       push.on('registration', function(data) {
           // data.registrationId
+          alert("registration");
       });
 
       push.on('notification', function(data) {

@@ -173,7 +173,11 @@ define(function(require) {
     contacts: function() {
       this.structureView.setActiveTabBarElement("contactsMenu");
       var page = new Contacts();
+      var signal=false;
+      var THIS = this;
+      page.on('stop', function(){THIS.spinner.stop(); signal=true;})
       this.changePage(page);
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
       page.startQuery();
     },
 
@@ -191,8 +195,11 @@ define(function(require) {
       var page = new Profile({
         model: model
       });
-      page.on('stop', function(){THIS.spinner.stop();});
+      var signal =false;
+      page.on('stop', function(){THIS.spinner.stop();signal=true});
       this.changePage(page);
+      var THIS = this;
+      setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
       page.startQuery();
     },
 

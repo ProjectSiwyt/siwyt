@@ -11,6 +11,7 @@ define(function(require) {
   var ShowListContactsSearch = require("views/pages/ShowListContactsSearch");
   var ShowListNoticeboardContacts = require("views/pages/ShowListNoticeboardContacts");
   var ShowListNoticeboardContactsFull = require("views/pages/ShowListNoticeboardContactsFull");
+  var Spinner= require("spin");
   var $ = require("jquery");
 
 
@@ -45,8 +46,34 @@ define(function(require) {
       this.utente.on("resultCercaUtente", this.showResultSearch, this);      
       this.contatto.on("contattoCancellato", this.aggiornaLista, this);
       this.utente.on("listContacts", this.showContacts, this);
+      this.signal =false;
+      var THIS = this;
+      this.on('stop', function(){THIS.spinner.stop(); THIS.signal=true;});
 
+       var opts = {
+          lines: 13 // The number of lines to draw
+          , length: 11 // The length of each line
+          , width: 7 // The line thickness
+          , radius: 26 // The radius of the inner circle
+          , scale: 1 // Scales overall size of the spinner
+          , corners: 1 // Corner roundness (0..1)
+          , color: '#000' // #rgb or #rrggbb or array of colors
+          , opacity: 0.25 // Opacity of the lines
+          , rotate: 0 // The rotation offset
+          , direction: 1 // 1: clockwise, -1: counterclockwise
+          , speed: 2 // Rounds per second
+          , trail: 60 // Afterglow percentage
+          , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+          , zIndex: 2e9 // The z-index (defaults to 2000000000)
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , top: '50%' // Top position relative to parent
+          , left: '50%' // Left position relative to parent
+          , shadow: false // Whether to render a shadow
+          , hwaccel: false // Whether to use hardware acceleration
+          , position: 'absolute' // Element positioning
+      }
       
+      this.spinner = new Spinner(opts);
 
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
@@ -72,6 +99,7 @@ define(function(require) {
       "keyup":"startSearch",
       "tap #search": "startSearch",
       "tap .fa-times-circle-o":"resetSearch",
+      "tap #new":"createBoard",
       "tap #invite": "invite"
       //"tap .rigabacheca": "aggiungiUtente"
       /*"tap .add_to_board": "add_to_board",
@@ -79,6 +107,8 @@ define(function(require) {
     },
 
     showContacts: function(result){
+      this.signal = true;
+      this.trigger("stop");
       document.getElementById("contactsContent").innerHTML="";
       console.log( result);
       var c = new Utenti();
@@ -112,6 +142,15 @@ define(function(require) {
         searchPopup.classList.add('hide');
     },
 
+    createBoard: function(e){
+      localStorage.removeItem('utenti');
+      localStorage.removeItem('responsabili');
+      localStorage.removeItem('titolo');
+      Backbone.history.navigate("createBacheca", {
+        trigger: true
+      });
+    },
+
     removeContact: function(e){
      /* var name = e.currentTarget.parentNode.id*/
       console.log(e.currentTarget.parentNode.id);
@@ -126,8 +165,27 @@ define(function(require) {
     },
 
     invite: function(e){
+      var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
+      var email = document.getElementById("mail").value;
+      console.log("email ",email);
+      if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
+                   $("#errEmail").attr("style","display:block");
+                   $("#regEmail").attr("style","border: 1px solid #ed7800");
+                   document.formRegister.regEmail.select();
+                   valid = false;
+                }
       var mail = document.getElementById("mail").value;
         this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
+
+    //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL
+     plugins.toast.showWithOptions(
+        {
+          message: "Mail sent to "+mail,
+          duration: "short",
+          position: "bottom",
+          addPixelsY: -40  // added a negative value to move it up a bit (default 0)
+        }
+      );
     },
 
     startQuery: function(e){
@@ -161,6 +219,7 @@ define(function(require) {
     //Creo una subview con l'elnco di bacheche d
     elencoBacheche: function(result){
       var usr = sessionStorage.getItem("idUserToAdd");
+      console.log("elenco bacheche",result);
       if(result!=0){
         console.log(result);
         var c = new Bacheche();
@@ -174,6 +233,7 @@ define(function(require) {
         var popPopup = document.getElementById(usr+"LinkPopup");
         popScreen.classList.toggle('hide');
         popPopup.classList.toggle('hide');
+        if(result!=null)
         document.getElementById("nameContact").innerHTML=sessionStorage.getItem("nameContact");
         }
       else{
@@ -212,6 +272,7 @@ define(function(require) {
             searchPopup.classList.remove('hide');
 
         }else{*/
+          this.trigger("stop");
           var c = new Utenti();
           c.add(result);
           console.log(c);
@@ -247,11 +308,12 @@ define(function(require) {
       var searchPopup = document.getElementById("searchPopup");      
       searchScreen.classList.add('hide');
       searchPopup.classList.add('hide');
-      
+      var THIS = this;
       str = document.getElementById("search").value;
-      if( str.length > 2)
+      if( str.length > 2){
+        setTimeout(function(){if(!THIS.signal) THIS.spinner.spin(document.body);},0);
         this.utente.cercaUtente(str);
-     
+        }
       console.log(str);
 
     } 
