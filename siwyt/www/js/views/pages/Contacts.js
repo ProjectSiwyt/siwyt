@@ -165,7 +165,7 @@ define(function(require) {
     },
 
     invite: function(e){
-      var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
+      /*var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       var email = document.getElementById("mail").value;
       console.log("email ",email);
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
@@ -174,7 +174,7 @@ define(function(require) {
                    document.formRegister.regEmail.select();
                    valid = false;
                 }
-      var mail = document.getElementById("mail").value;
+      var mail = document.getElementById("mail").value;*/
         this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
 
     //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL

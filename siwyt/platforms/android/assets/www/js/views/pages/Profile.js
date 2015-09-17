@@ -136,6 +136,7 @@ define(function(require) {
       document.getElementById("numBachecheManager").innerHTML=result;
       var tot = this.numUser + this.numAdmin + result;
       document.getElementById("numTotBacheche").innerHTML=tot;
+      this.trigger("stop");
 
     },
 
@@ -173,7 +174,7 @@ define(function(require) {
         var THIS = this;
         console.log(THIS , "getImg");
         // caricamento dell immagine dalla collezione di immagini
-        if(e==3){
+        if(e==2){
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
           { quality: 50, 
@@ -217,7 +218,7 @@ define(function(require) {
 
         // caricamento dell immagine direttamente dalla camera
         else{
-          if (e==2){
+          if (e==1){
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
               { quality: 50, 

@@ -84,7 +84,8 @@ define(function(require) {
             BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+idu+"'" })
                     .done(function(res) {
                     		console.log("bacheche user loggato", res);
-                            THIS.filtraBachecaUtente(res, idu2);
+                    		if(res.length<1) THIS.trigger("bachecheamministratore", null);
+                    		else THIS.filtraBachecaUtente(res, idu2);
                             
                     })
                     .fail(function(error) {
