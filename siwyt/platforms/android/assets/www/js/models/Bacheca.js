@@ -372,6 +372,13 @@ define(function(require) {
 			console.log("result", result, result.id);
 			BaasBox.grantRoleAccessToObject("Bacheca_Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
+				  	BaasBox.sendPushNotification({"message" : "you've been added to a board", "users" : ["asdasd"], "badge" : 1, "sound" : "sound.aiff"})
+						  .done(function(res1) {
+						  	console.log( res1);
+						  })
+						  .fail(function(error) {
+						  	console.log("error sendPushNotification ", error);
+						  })
 			    console.log("res setPermissionSalvaUtenti ", res);
 			  })
 			  .fail(function(error) {

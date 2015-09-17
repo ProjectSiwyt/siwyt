@@ -4,6 +4,7 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
   var $ = require("jquery");
+  
 
 
   var Settings = Utils.Page.extend({

@@ -84,6 +84,31 @@ define(function(require) {
 			console.log("account deleted");
 		},
 
+		saveImage: function(idu, data_url){
+			var THIS=this
+			BaasBox.loadCollectionWithParams("Utente", {where: "idu='"+idu+"'"})
+			  .done(function(res) {
+			  	
+				  	BaasBox.updateField(idu, "Utente", "image", data_url)
+					.done(function(res1) {
+						console.log("res ", res1);
+						localStorage.setItem("imageLogged",data_url);
+						THIS.trigger("eventoSaveImage", true);
+					})
+					.fail(function(error) {
+					   	console.log("error ", error);
+					    THIS.trigger("errorSaveNome", false);
+					})
+
+
+			  })
+			  .fail(function(error) {
+			  	console.log("error ", error);
+			  })		
+			
+		},
+
+
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente
 		login: function(username, password){
 			console.log("login da",username, password);
@@ -116,6 +141,7 @@ define(function(require) {
 	            			localStorage.setItem('usernameLogged',res[i].username);
 	            			localStorage.setItem('passwordLogged',res[i].password);
 	            			localStorage.setItem("emailLogged", res[i].mail);
+	            			localStorage.setItem("imageLogged", res[i].image);
 	            			THIS.trigger("resultLogin",res[i]);
 	            			trovato=true;
 	            			break;
@@ -237,6 +263,7 @@ define(function(require) {
 			post.username = username;
 			post.mail = mail;
 			post.password = password;
+			post.image = "";
 			var exist = false;
 			var THIS=this
 			

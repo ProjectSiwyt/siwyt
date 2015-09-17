@@ -89,6 +89,14 @@ define(function(require) {
       if(result){
       console.log("registrazione", result);
       this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
+      window.plugins.toast.showWithOptions(
+              {
+                message: "An email with your username and password has been sent to "+result.email+"",
+                duration: "short",
+                position: "bottom",
+                addPixelsY: -10  // added a negative value to move it up a bit (default 0)
+              }
+          );
       Backbone.history.navigate("login",{
         trigger: true
       });

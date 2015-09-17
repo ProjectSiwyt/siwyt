@@ -30,7 +30,10 @@ define(function(require) {
       };
       document.getElementById("back").classList.add('hide');
       document.getElementById("title").innerHTML="Profile";
-      $(".profile-img").attr("src",localStorage.getItem("imgProfile"));
+      if(localStorage.getItem("imageLogged")!=""){
+          var image = document.getElementById("imgP");
+          image.src = 'data:image/png;base64,'+localStorage.getItem("imageLogged");
+      }
       
 
       // here we can register to inTheDOM or removing events
@@ -101,18 +104,6 @@ define(function(require) {
     startQuery: function(e){
       this.utente.contaBacheche();
       this.utente.caricaDati();
-      $("#uploadForm").submit(function(e) {
-        e.preventDefault();
-        var formObj = $(this);
-        var formData = new FormData(this);
-        BaasBox.uploadFile(formData)
-          .done(function(res) {0
-            console.log("res ", res);
-          })
-          .fail(function(error) {
-            console.log("error ", error);
-          })
-      });
     },
 
 
@@ -143,7 +134,6 @@ define(function(require) {
     showDatiUtente: function(result){
       console.log("result showDatiUtente ", result);
       document.getElementById("iscrizione").innerHTML=result.signUpDate.slice(0,10);
-
     },
 
 
@@ -172,43 +162,19 @@ define(function(require) {
 
     getImg: function(e){
         var THIS = this;
-        console.log(THIS , "getImg");
         // caricamento dell immagine dalla collezione di immagini
         if(e==2){
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
-          { quality: 50, 
-           targetWidth: 160,
-           targetHeight: 160,
+          { quality: 100, 
+           targetWidth: 60,
+           targetHeight: 60,
            encodingType: Camera.EncodingType.JPEG,
            destinationType: Camera.DestinationType.DATA_URL,
            sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM });
 
             function saveImgAlbum(img){
-              console.log(img);
-              localStorage.setItem("imgProfile",img);
-              $(".profile-img").attr("src",img);
-              console.log("save image gallery");
-
-
-              var myBlob = new Blob([img], {type: "imgProfile"});
-     
-              var reader = new FileReader();
-               
-              reader.onload = function(event) {
-                  /*var URL = event.target.result;
-                  document.getElementById("lnkDownload").href = URL;*/
-              };
-              var i = new File(); 
-              i = reader.readAsDataURL(myBlob);
-
-               BaasBox.uploadFile(i)
-                  .done(function(res) {
-                    console.log("res ", res);
-                  })
-                  .fail(function(error) {
-                    console.log("error ", error);
-                  })
+              THIS.utente.saveImage(localStorage.getItem("idu"),img);
             }
 
             function onFail(e){
@@ -221,15 +187,17 @@ define(function(require) {
           if (e==1){
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
-              { quality: 50, 
-               targetWidth: 160,
-               targetHeight: 160,
-               destinationType: Camera.DestinationType.NATIVE_URI,
+              { quality: 100, 
+               targetWidth: 60,
+               targetHeight: 60,
+               destinationType: Camera.DestinationType.DATA_URL,
                sourceType: Camera.PictureSourceType.CAMERA});
 
-              function saveImgCamera(DATA_URL){
+              function saveImgCamera(img){
                   console.log("save img camera")
-                  console.log(DATA_URL);
+                  //console.log(DATA_URL);
+                  THIS.utente.saveImage(localStorage.getItem("idu"),img);
+                  //document.body.appendChild(image);
               }
               
               function onFail(f){

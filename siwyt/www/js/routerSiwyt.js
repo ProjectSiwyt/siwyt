@@ -143,14 +143,17 @@ define(function(require) {
     settings: function(){
       var page = new Settings();
       this.changePage(page);
+      this.spinner.stop();
       page.set_notification();
     },
     
     login: function(){
       var page= new Login();
+      this.spinner.stop();
       this.changePage(page);
     },
     register: function(){
+      this.spinner.stop();
       var page= new Register();
       this.changePage(page);
     },

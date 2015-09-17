@@ -165,27 +165,28 @@ define(function(require) {
     },
 
     invite: function(e){
-      /*var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
+      var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       var email = document.getElementById("mail").value;
       console.log("email ",email);
+      var valid = true;
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
                    $("#errEmail").attr("style","display:block");
-                   $("#regEmail").attr("style","border: 1px solid #ed7800");
-                   document.formRegister.regEmail.select();
+                   $("#mail").attr("style","border: 1px solid #ed7800");
                    valid = false;
                 }
-      var mail = document.getElementById("mail").value;*/
-        this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
+      if(valid){
+          this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
 
-    //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL
-     plugins.toast.showWithOptions(
-        {
-          message: "Mail sent to "+mail,
-          duration: "short",
-          position: "bottom",
-          addPixelsY: -40  // added a negative value to move it up a bit (default 0)
-        }
-      );
+        //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL
+           window.plugins.toast.showWithOptions(
+              {
+                message: "Mail sent to "+email,
+                duration: "short",
+                position: "bottom",
+                addPixelsY: -40  // added a negative value to move it up a bit (default 0)
+              }
+          );
+     }
     },
 
     startQuery: function(e){
