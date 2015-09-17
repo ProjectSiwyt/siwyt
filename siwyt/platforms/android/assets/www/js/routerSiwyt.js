@@ -43,14 +43,33 @@ define(function(require) {
       "postit/:idp/:idb": "postit"
     },
 
-    BAASBOX_URL : "http://192.168.1.41:9000",
+    BAASBOX_URL : "http://192.168.1.46:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
       this.currentView = undefined;
         //initialize BaasBox
+      var THIS = this;
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
+      this.settings_val=[];
+      
+      $.get('../../res/settings.txt', function(file) {
+
+        var riga = file.split(";");
+        console.log(riga);
+        for(var i =0; i< riga.length;i++){
+          console.log("riga[elem]: ",riga[i]);
+          THIS.settings_val[i]= riga[i];             
+        }
+
+        console.log("settings_val: ",THIS.settings_val);
+        localStorage.setItem("notification_boards", THIS.settings_val[0]);
+        localStorage.setItem("notification_sounds", THIS.settings_val[1]);
+        localStorage.setItem("notification_vibration", THIS.settings_val[2]);
+
+      });
+
 
       if(localStorage.getItem("idu")==null){
           this.firstView="login";
@@ -100,10 +119,12 @@ define(function(require) {
       //console.log(this.el);
     },
     enableNotifications: function(res){
+      if(res!=null){
       $.ajax({
-        url:"http://localhost:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        url:"http://192.168.1.46:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
         method: "PUT"
       });
+      }
     },
     homeSiwyt: function() {
       var THIS=this;
@@ -122,6 +143,7 @@ define(function(require) {
     settings: function(){
       var page = new Settings();
       this.changePage(page);
+      page.set_notification();
     },
     
     login: function(){

@@ -4,6 +4,8 @@ define(function(require) {
   var Utente = require("models/Utente");
   var Utils = require("utils");
   var $ = require("jquery");
+  var Spinner= require("spin");
+
 
 
 
@@ -30,6 +32,30 @@ define(function(require) {
       this.utente.on("resultUsername",this.doRegistration, this);
   
       
+       var opts = {
+          lines: 13 // The number of lines to draw
+          , length: 11 // The length of each line
+          , width: 7 // The line thickness
+          , radius: 26 // The radius of the inner circle
+          , scale: 1 // Scales overall size of the spinner
+          , corners: 1 // Corner roundness (0..1)
+          , color: '#000' // #rgb or #rrggbb or array of colors
+          , opacity: 0.25 // Opacity of the lines
+          , rotate: 0 // The rotation offset
+          , direction: 1 // 1: clockwise, -1: counterclockwise
+          , speed: 2 // Rounds per second
+          , trail: 60 // Afterglow percentage
+          , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+          , zIndex: 2e9 // The z-index (defaults to 2000000000)
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , top: '50%' // Top position relative to parent
+          , left: '50%' // Left position relative to parent
+          , shadow: false // Whether to render a shadow
+          , hwaccel: false // Whether to use hardware acceleration
+          , position: 'absolute' // Element positioning
+      }
+      
+      this.spinner = new Spinner(opts);
       // here we can register to inTheDOM or removing events
       // this.listenTo(this, "inTheDOM", function() {
       //   $('#content').on("swipe", function(data){
@@ -59,19 +85,24 @@ define(function(require) {
 
     // quando la registrazione va a buon fine viene inviata una mail di conferma all email specificata
     sendMail: function(result){
+      this.spinner.stop();
+      if(result){
       console.log("registrazione", result);
       this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
       Backbone.history.navigate("login",{
         trigger: true
       });
+    }
     },
 
 
     // se lo username scelto è disponibile e valido viene effettuata la registrazinoe
     doRegistration: function(result) {
       console.log(result);
-      if(result==true)
+      if(result==true){
+          this.spinner.stop();
          $("#errUsernameExist").attr("style","display:block");
+       }
       else{
         $("#errUsernameExist").removeAttr("style");
         this.utente.register(result.name, result.surname, result.username, result.email, result.password);
@@ -88,7 +119,7 @@ define(function(require) {
       var password = document.formRegister.regPassword.value;
       var confirm = document.formRegister.regConfirm.value;
       var valid= true;
-
+      var THIS = this;
       var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       
       if (password != confirm || confirm=="") {
@@ -132,8 +163,13 @@ define(function(require) {
           }
 
           // se i dati sono validi controllo che lo username scelto sia disponibile
-      if(valid) this.utente.checkUsername(name, surname, username, email, password); //this.utente.register(name, surname, username, email, password);  
+      if(valid){
+        //this.spinner.spin(document.body);
+
+        setTimeout(function(){THIS.spinner.spin(document.body);},50);
+        this.utente.checkUsername(name, surname, username, email, password); //this.utente.register(name, surname, username, email, password);  
     }
+  },
 
   });
 

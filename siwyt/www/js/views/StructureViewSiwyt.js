@@ -23,6 +23,24 @@ define(function(require) {
     initialize: function(options) {
       // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureSiwyt;
+      var push = PushNotification.init({ "android": {"senderID": "123456789"}}, true );
+
+      push.on('registration', function(data) {
+          // data.registrationId
+      });
+
+      push.on('notification', function(data) {
+          alert(data.message);
+          // data.title,
+          // data.count,
+          // data.sound,
+          // data.image,
+          // data.additionalData
+      });
+
+      push.on('error', function(e) {
+          // e.message
+      });
       /*
       $(document).ajaxStart(function(){
           document.getElementById("spinner");

@@ -371,7 +371,10 @@ define(function(require) {
             }
         },
         deleteNoticeboard: function(e) {
-            this.bacheca.rimuoviBacheca(this.idb);
+            var del = confirm("Are you sure you want to delete this noticeboard?")
+            if (del){
+                this.bacheca.rimuoviBacheca(this.idb);
+            }
         },
         rimuoviElementiBacheca: function(res) {
             this.postit.idRighePostit(this.idb);

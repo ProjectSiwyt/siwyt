@@ -82,6 +82,10 @@ define(function(require) {
       console.log(result);
       this.spinner.stop(); 
         if(result!=null){
+          $.ajax({
+        url:"http://192.168.1.46:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        method: "PUT"
+      });
           Backbone.history.navigate("homeSiwyt", {
               trigger: true
             });

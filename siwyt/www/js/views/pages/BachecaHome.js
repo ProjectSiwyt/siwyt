@@ -354,11 +354,13 @@ define(function(require) {
             this.event=e;
         },
         deletePostit: function(e){
-            this.obj = e.target;
-            console.log(this.obj);
-            this.idp = this.obj.parentNode.parentNode.id.replace('LinkPopup',''); 
-            console.log(this.idp);
-            this.postits.rimuoviPostit(this.idp);
+            this.obj = e.currentTarget;
+            var del = confirm("Are you sure you want to delete this postit?");
+            if (del){
+                this.idp = this.obj.parentNode.parentNode.id.replace('LinkPopup',''); 
+                console.log(this.idp);
+                this.postits.rimuoviPostit(this.idp);
+            }
         },
         deleteComments: function(res){
             $("#"+res).remove();
@@ -558,13 +560,16 @@ define(function(require) {
             
         },
         leaveBoard:function(e){
-            if (this.ruolo=='admin'){
-                this.bacheca.idRigaResponsabile(localStorage.getItem('idu'), this.idb);
+            var del = confirm("Are you sure you want to leave this noticeboard?")
+            if (del){
+                if (this.ruolo=='admin'){
+                    this.bacheca.idRigaResponsabile(localStorage.getItem('idu'), this.idb);
+                }
+                else{
+                    this.bacheca.idRigaUtente(localStorage.getItem('idu'), this.idb);
+                }
+                this.goToHome();
             }
-            else{
-                this.bacheca.idRigaUtente(localStorage.getItem('idu'), this.idb);
-            }
-            this.goToHome();
         },
         //Funzioni di cambio pagina
         goToHome: function(e) {

@@ -87,11 +87,12 @@ define(function(require) {
 		//passando username e password come parametro devo controllare che compaino nella collezione Utente
 		login: function(username, password){
 			console.log("login da",username, password);
+			var us = username.toLowerCase();
 			var THIS = this;
-			BaasBox.login(username, password)
+			BaasBox.login(us, password)
 				.done(function (user) {
 					console.log("User Login done", user);
-					THIS.loadData(username, password);
+					THIS.loadData(us, password);
 				})
 				.fail(function (err) {
 					console.log("error ", err);
@@ -214,13 +215,15 @@ define(function(require) {
 		register: function(nome, cognome, username, mail, password){
 			var THIS = this;
 			//{"visibleByRegisteredUsers": {"mail": mail , "nome": nome, "cognome": cognome}}
-			BaasBox.signup(username, password)
+			var us = username.toLowerCase();
+			BaasBox.signup(us, password)
 				.done(function (res) {
 					console.log("signup ", res);
-					THIS.registerData(nome, cognome, username, mail, password);
+					THIS.registerData(nome, cognome, us, mail, password);
 
 				})
 				.fail(function (error) {
+					THIS.trigger("eventoRegister", false);
 					console.log("error ", error);
 				})
 
@@ -244,7 +247,7 @@ define(function(require) {
 						})
 						.fail(function(error) {
 							console.log("inserimentoError ", error);
-							THIS.trigger("inserimentoError ", 0); //in caso la registrazione non è andata bene ritorna 0
+							THIS.trigger("eventoRegister ", false); //in caso la registrazione non è andata bene ritorna 0
 						})			
 				
 		},
@@ -258,7 +261,7 @@ define(function(require) {
 			    THIS.trigger("eventoRegister ", result); //se la registrazione è andata bene torna res con i dati
 			  })
 			  .fail(function(error) {
-			    console.log("error permission", error);
+			    console.log("eventoRegister", false);
 			  })
 		},
 		//chiamare quando la funzione di sopra torna true
