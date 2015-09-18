@@ -693,6 +693,11 @@ input:focus {
     -webkit-border-radius: 0.5em;
     border-radius: 0.5em;
 }
+.relation{
+    border: 1px dashed;
+    -webkit-border-radius: 0.5em;
+    border-radius: 0.5em;
+}
 
 .size {
     font-size: 1.5em;
