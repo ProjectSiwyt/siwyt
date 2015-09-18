@@ -444,6 +444,11 @@ body {
     width: 150px;
 }
 
+.contact-image{
+    height: 60px;
+    width: 60px;
+}
+
 .list-information {
     list-style-type: none;
     font-size: 1.3em;

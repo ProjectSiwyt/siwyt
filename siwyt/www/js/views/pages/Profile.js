@@ -30,10 +30,6 @@ define(function(require) {
       };
       document.getElementById("back").classList.add('hide');
       document.getElementById("title").innerHTML="Profile";
-      if(localStorage.getItem("imageLogged")!=""){
-          var image = document.getElementById("imgP");
-          image.src = 'data:image/png;base64,'+localStorage.getItem("imageLogged");
-      }
       
 
       // here we can register to inTheDOM or removing events
@@ -56,6 +52,7 @@ define(function(require) {
       this.utente.on("accountDeleted", this.goOut, this);
       this.utente.on("datiUtente", this.showDatiUtente , this);
       this.utente.on("changePasswordDone", this.changePasswordDone, this);
+      
       
       //this.utente.on("resultData", this.showData, this);
       // carico i dati dell utente 
@@ -102,8 +99,21 @@ define(function(require) {
 
 
     startQuery: function(e){
-      this.utente.contaBacheche();
-      this.utente.caricaDati();
+      if (this.numUser==undefined)
+          this.utente.contaBacheche();
+      else{
+        document.getElementById("numBachecheUser").innerHTML=this.numUser;
+        document.getElementById("numBachecheAdmin").innerHTML=this.numAdmin;
+        document.getElementById("numBachecheManager").innerHTML=this.numMan;
+        document.getElementById("numTotBacheche").innerHTML=this.numUser + this.numAdmin + this.numMan;;
+      }
+      if(localStorage.getItem("signUpDate")==undefined)
+        this.utente.caricaDati();
+      else{
+          document.getElementById("iscrizione").innerHTML=localStorage.getItem("signUpDate").slice(0,10);
+          this.showImage();
+      }
+
     },
 
 
@@ -111,6 +121,7 @@ define(function(require) {
       console.log("num bacheche ytente"+result);
         document.getElementById("numBachecheUser").innerHTML=result;
       this.bacheca.contaBachecheResponsabile();
+      //localStorage.setItem("numBachecheUser", result);
       this.numUser = result;
 
     },
@@ -119,13 +130,16 @@ define(function(require) {
       console.log("num bacheche responsabile"+result);
         document.getElementById("numBachecheAdmin").innerHTML=result;
       this.bacheca.contaBachecheAmministratore();
+      //localStorage.setItem("numBachecheAdmin", result);
       this.numAdmin = result;
     },
 
     showNumBachecheAmministratore: function(result){
       console.log("num bacheche manager"+result);
+      this.numMan = result;
+      //localStorage.setItem("numBachecheManager", result);
       document.getElementById("numBachecheManager").innerHTML=result;
-      var tot = this.numUser + this.numAdmin + result;
+      var tot = this.numUser + this.numAdmin + this.numMan;
       document.getElementById("numTotBacheche").innerHTML=tot;
       this.trigger("stop");
 
@@ -133,9 +147,18 @@ define(function(require) {
 
     showDatiUtente: function(result){
       console.log("result showDatiUtente ", result);
-      document.getElementById("iscrizione").innerHTML=result.signUpDate.slice(0,10);
+      localStorage.setItem("signUpDate", result.signUpDate.slice(0,10))
+      document.getElementById("iscrizione").innerHTML=localStorage.getItem("signUpDate");
+      this.showImage();
     },
 
+    showImage: function(e){
+      if(localStorage.getItem("imageLogged")!=""){
+          var image = document.getElementById("imgP");
+          console.log(image);
+          image.src = 'data:image/png;base64,'+localStorage.getItem("imageLogged");
+      }
+    },
 
 
 
@@ -162,19 +185,30 @@ define(function(require) {
 
     getImg: function(e){
         var THIS = this;
+        console.log(THIS);
         // caricamento dell immagine dalla collezione di immagini
         if(e==2){
+          //var THIS = this;
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
-          { quality: 100, 
-           targetWidth: 60,
-           targetHeight: 60,
-           encodingType: Camera.EncodingType.JPEG,
+          { quality: 50, 
+           targetWidth: 150,
+           targetHeight: 150,
            destinationType: Camera.DestinationType.DATA_URL,
            sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM });
-
+            var THISS = THIS;
             function saveImgAlbum(img){
-              THIS.utente.saveImage(localStorage.getItem("idu"),img);
+              console.log(THISS);
+                  var utenteIm = new Utente();
+                  console.log("save img GALLERY", img);
+                  //console.log(DATA_URL);
+                  var usr = localStorage.getItem("usernameLogged");
+                  utenteIm.saveImage(usr,img);
+                  utenteIm.on("resultSaveImage", function(){
+                                                    var image = document.getElementById("imgP");
+                                                    console.log(image);
+                                                    image.src = 'data:image/png;base64,'+localStorage.getItem("imageLogged");}, this);
+                  
             }
 
             function onFail(e){
@@ -185,19 +219,26 @@ define(function(require) {
         // caricamento dell immagine direttamente dalla camera
         else{
           if (e==1){
+            //var THIS = this;
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
-              { quality: 100, 
-               targetWidth: 60,
-               targetHeight: 60,
+              { quality: 50, 
+               targetWidth: 150,
+               targetHeight: 150,
+               //allowEdit: true,
+               encodingType: Camera.EncodingType.JPEG,
                destinationType: Camera.DestinationType.DATA_URL,
                sourceType: Camera.PictureSourceType.CAMERA});
 
               function saveImgCamera(img){
-                  console.log("save img camera")
-                  //console.log(DATA_URL);
-                  THIS.utente.saveImage(localStorage.getItem("idu"),img);
-                  //document.body.appendChild(image);
+                  var utenteIm = new Utente();
+                  console.log("save img camera", img);
+                  var usr = localStorage.getItem("usernameLogged");
+                  utenteIm.saveImage(usr,img);
+                  utenteIm.on("resultSaveImage", function(){
+                                                    var image = document.getElementById("imgP");
+                                                    console.log(image);
+                                                    image.src = 'data:image/png;base64,'+localStorage.getItem("imageLogged");}, this);
               }
               
               function onFail(f){

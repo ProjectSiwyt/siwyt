@@ -1,6 +1,6 @@
 {{#each this}}
     <div id="{{id}}" class="table-view-cell">
-        {{nome}} {{cognome}}
+        <img src='data:image/png;base64,{{image}}' class="contact-image"> {{nome}} {{cognome}}
         <span class="absolute second-icon removeContact"><i class="pull-right fa fa-user-times fa-2x"></i></span>
         <span id="{{id}}Link" class="absolute first-icon popup addToBoard"><i class="pull-right fa fa-plus fa-2x"></i></span>
     </div>    

@@ -86,14 +86,15 @@ define(function(require) {
 
 		saveImage: function(idu, data_url){
 			var THIS=this
-			BaasBox.loadCollectionWithParams("Utente", {where: "idu='"+idu+"'"})
+			BaasBox.loadCollectionWithParams("Utente", {where: "username='"+idu+"'"})
 			  .done(function(res) {
-			  	
-				  	BaasBox.updateField(idu, "Utente", "image", data_url)
+			  		console.log("res loadCollection saveImg")
+			  		console.log(res);
+				  	BaasBox.updateField(res[0].id, "Utente", "image", data_url)
 					.done(function(res1) {
 						console.log("res ", res1);
 						localStorage.setItem("imageLogged",data_url);
-						THIS.trigger("eventoSaveImage", true);
+						THIS.trigger("resultSaveImage", true);
 					})
 					.fail(function(error) {
 					   	console.log("error ", error);
@@ -449,7 +450,7 @@ define(function(require) {
 				    for (var i=0; i<res.length; i++){
 				    	var nome = (res[i].nome).toLowerCase();
 				    	var cognome = (res[i].cognome).toLowerCase();
-				    	if((nome.includes(str.toLowerCase())) || (cognome.includes(str.toLowerCase()))) {
+				    	if((nome.indexOf(str.toLowerCase()))>=0 || (cognome.indexOf(str.toLowerCase()))>=0) {
 				    		a[c] = res[i];
 				    		c++;
 				    	}
@@ -499,17 +500,21 @@ define(function(require) {
    				.done(function(res) {
    					for (var i=0; i<a.length; i++){
    						exist = false;
-   						for( var j=0; j< res.length; j++){
-   							if((a[i].id == res[j].id1 && res[j].id2==idu) || (a[i].id == res[j].id2 && res[j].id1==idu) || (a[i].id==idu)){
-   								exist = true;
-   							}
+   						console.log(a[i].id);
+   						if(a[i].id==idu) exist =true;
+   						else{
+	   						for( var j=0; j< res.length; j++){
+	   							if((a[i].id == res[j].id1 && res[j].id2==idu) || (a[i].id == res[j].id2 && res[j].id1==idu)) {
+	   								exist = true;
+	   							}
+	   						}
 
 
    						}
    						if(!exist) c[k++]=a[i];
    						else console.log("contatto presente");
    					}
-
+   					
    					if(c.length>0) {
    						console.log(c);
    						THIS.trigger("resultCercaUtente", c);
