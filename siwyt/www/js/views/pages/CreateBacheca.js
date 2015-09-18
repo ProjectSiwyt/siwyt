@@ -24,15 +24,10 @@ define(function(require) {
       var header= document.getElementById("header");
       var back= document.getElementById("back");
       var settings = document.getElementById("settingsMenu");
-      if (header.classList.contains('hide')){
-        header.classList.remove('hide');
-      } 
-      if (back.classList.contains('hide')){
-        back.classList.remove('hide');
-      } 
-      if (settings.classList.contains('hide')){
-        settings.classList.remove('hide');
-      }
+      header.classList.add('hide');
+      back.classList.add('hide');
+      settings.classList.add('hide');
+      
       document.getElementById("title").innerHTML="Create Noticeboard"
       this.bacheca=new Bacheca();
       //mi metto in ascolto dell'evento che mi ritorna l'esito del salvataggio dei dati della bacheca
@@ -60,7 +55,9 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap #submit": "salva",
-      "tap #addMembers": "goToAddContacts"
+      "tap #addMembers": "goToAddContacts",
+      "tap #backHome": "goToHome",
+      "tap #settings": "goToSettings"
     },
 
     render: function() {
@@ -255,6 +252,18 @@ define(function(require) {
 
       localStorage.setItem("titolo", document.getElementById("nomeBacheca").value);
       Backbone.history.navigate("addContacts/"+this.id+"/new", {
+        trigger: true
+      });
+    },
+
+    goToHome: function(e) {
+      Backbone.history.navigate("homeSiwyt", {
+        trigger: true
+      });
+
+    },
+    goToSettings: function(event){
+      Backbone.history.navigate("settings",{
         trigger: true
       });
     }

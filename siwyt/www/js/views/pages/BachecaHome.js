@@ -98,13 +98,13 @@ define(function(require) {
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
             "tap .menuRelation" : "reltionManagement",
-            "tap .relation": "selectedPostitRelation",
+            "tap .selection": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
             "touchstart #boardCanvas" : "manageDeleteRelation"         
         },
         manageDeleteRelation: function(e){
             var p=this.getTapPos(e);
-            console.log(p);
+            console.touchstart
             for (var i=0; i<this.rel.length;i++){
                 var postitpartenza= document.getElementById(this.rel[i].idp1);
                 var postitarrivo = document.getElementById(this.rel[i].idp2);
@@ -124,30 +124,42 @@ define(function(require) {
                     console.log("CHIMARE QUERY CHE ELIMINA");
                     if (px<ax && py<ay){
                         if (p.x>px &&p.x<ax && p.y>py && p.y<ay){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);    
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (px<ax && ay<py){
                         if(p.x>px &&p.x<ax && p.y>ay && p.y<py){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (ax<px && ay<py){
                         if(p.x>ax &&p.x<px && p.y>ay && p.y<py){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (ax<px && py<ay){
                         if(p.x>ax &&p.x<px && p.y>py && p.y<ay){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                 }
@@ -252,6 +264,7 @@ define(function(require) {
                     //Origine 44 è l'altezza della navigation bar
                     var postitpartenza= document.getElementById(res[i].idp1);
                     var postitarrivo = document.getElementById(res[i].idp2);
+                    console.log(postitpartenza.style.width);
                     var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
                     var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
                     ctx.moveTo(px,py);
