@@ -191,6 +191,14 @@ define(function(require) {
         appendItems: function(res) {
             if(res.length!=0){
                 this.result=res;
+                for (var i=0; i<this.result.length;i++){
+                    console.log(this.result[i]['altezza']);
+                    this.result[i]['x']=(parseFloat(this.result[i]['x'].replace("px",""))*window.screen.width/100).toString()+"px";
+                    this.result[i]['y']=(parseFloat(this.result[i]['y'].replace("px",""))*window.screen.height/100).toString()+"px";
+                    this.result[i]['altezza']=(window.screen.height/this.result[i]['altezza']).toString()+"px";
+                    this.result[i]['larghezza']=(window.screen.width/this.result[i]['larghezza']).toString()+"px";
+                 }
+
                 this.postits.nomeAutori(res);      
             }
             else{
@@ -226,33 +234,36 @@ define(function(require) {
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){
-            this.rel=res;
-            $("#boardCanvas").remove();
-            var el = document.createElement("canvas");
-            el.classList.add("absolute");
-            el.classList.add("canvas");
-            el.width  = window.innerWidth;
-            el.height = window.innerHeight-44;
-            el.id="boardCanvas";
-            document.getElementById("canvas").appendChild(el);
-            var canvas=el;
-            var ctx = canvas.getContext('2d');
-            for (var i=0; i< res.length; i++){
-                //Inizio del disegno
-                ctx.beginPath();
-                //Origine 44 è l'altezza della navigation bar
-                var postitpartenza= document.getElementById(res[i].idp1);
-                var postitarrivo = document.getElementById(res[i].idp2);
-                var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
-                var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
-                ctx.moveTo(px,py);
-                //Destinazione 44 è l'altezza della navigation bar
-                var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
-                var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2-44;
-                ctx.lineTo(ax, ay);
-                //Visualizza il disegno
-                ctx.stroke();
+            if (res!=null){
+                this.rel=res;
+                $("#boardCanvas").remove();
+                var el = document.createElement("canvas");
+                el.classList.add("absolute");
+                el.classList.add("canvas");
+                el.width  = window.innerWidth;
+                el.height = window.innerHeight-44;
+                el.id="boardCanvas";
+                document.getElementById("canvas").appendChild(el);
+                var canvas=el;
+                var ctx = canvas.getContext('2d');
+                for (var i=0; i< res.length; i++){
+                    //Inizio del disegno
+                    ctx.beginPath();
+                    //Origine 44 è l'altezza della navigation bar
+                    var postitpartenza= document.getElementById(res[i].idp1);
+                    var postitarrivo = document.getElementById(res[i].idp2);
+                    var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
+                    var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
+                    ctx.moveTo(px,py);
+                    //Destinazione 44 è l'altezza della navigation bar
+                    var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
+                    var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2-44;
+                    ctx.lineTo(ax, ay);
+                    //Visualizza il disegno
+                    ctx.stroke();
+                }
             }
+            
             this.trigger("stop");
         },
         render: function() {
@@ -288,12 +299,15 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), 8, 3, (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
             //Gestione Salvataggio postit
 
         },
         createPostit: function(result){
             this.resultpostit=result;
+            console.log(this.resultpostit.altezza);     
+            this.resultpostit.altezza=(window.screen.height/this.resultpostit.altezza).toString()+"px";
+            this.resultpostit.larghezza=(window.screen.width/this.resultpostit.larghezza).toString()+"px";
             this.postits.nomeAutore(result.idu);
             console.log(result.idu)
         },
@@ -470,7 +484,7 @@ define(function(require) {
             drag_object.classList.remove("moveable","selection");
             switch (this.dragmode) {
                 case 1: 
-                    this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
+                    this.postits.saveXY(drag_object.id,(parseFloat(drag_object.style.left.replace("px",""))*100/window.screen.width).toString()+"px",(parseFloat(drag_object.style.top.replace("px",""))*100/window.screen.height).toString()+"px");
                     break;
                 case 2:
                     this.postits.saveHW(drag_object.id, drag_object.style.height, drag_object.style.width);
@@ -485,7 +499,7 @@ define(function(require) {
                 };
             } else if (e.originalEvent.touches[0].clientX || e.originalEvent.touches[0].clientY) {
                 //usiamo le proprietà nonstandard scrollLeft e scrollTop per determinare la porzione di documento visualizzata nel browser
-                //we use the scrollLeft and scrollTop properties to determine the part of the document shown in the browser
+                //we use the scrollLeft and scrollTop properties to determine the part of the documet snhown in the browser
                 return {
                     x: e.originalEvent.touches[0].clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
                     y: e.originalEvent.touches[0].clientY + document.body.scrollTop + document.documentElement.scrollTop
