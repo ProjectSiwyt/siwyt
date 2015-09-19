@@ -65,7 +65,7 @@ define(function(require) {
     },
 
     id: "profile",
-    className: "i-g page scroll size",
+    className: "i-g page scroll size scroll-profile",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
