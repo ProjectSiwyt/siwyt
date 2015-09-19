@@ -169,24 +169,26 @@ define(function(require) {
       var email = document.getElementById("mail").value;
       console.log("email ",email);
       var valid = true;
+      var textmessage = "Invalid Email";;
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
-                   $("#errEmail").attr("style","display:block");
-                   $("#mail").attr("style","border: 1px solid #ed7800");
                    valid = false;
                 }
+      
       if(valid){
-          this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail)
+          //this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail);
+          textmessage = "Mail sent to "+email;
+        }
 
         //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL
            window.plugins.toast.showWithOptions(
               {
-                message: "Mail sent to "+email,
-                duration: "short",
+                message: textmessage,
                 position: "bottom",
-                addPixelsY: -40  // added a negative value to move it up a bit (default 0)
+                duration: "short",
+                addPixelsY: -100
               }
           );
-     }
+     
     },
 
     startQuery: function(e){

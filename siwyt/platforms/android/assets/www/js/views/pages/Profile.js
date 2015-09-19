@@ -191,7 +191,7 @@ define(function(require) {
           //var THIS = this;
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
-          { quality: 50, 
+          { quality: 80, 
            targetWidth: 150,
            targetHeight: 150,
            destinationType: Camera.DestinationType.DATA_URL,
@@ -222,7 +222,7 @@ define(function(require) {
             //var THIS = this;
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
-              { quality: 50, 
+              { quality: 80, 
                targetWidth: 150,
                targetHeight: 150,
                //allowEdit: true,

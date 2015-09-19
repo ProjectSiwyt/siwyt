@@ -66,7 +66,8 @@ define(function(require) {
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
       "tap #btn_login": "validateLogin",
-      "tap #sign_up": "goToRegister"
+      "tap #sign_up": "goToRegister",
+      "keyup":"controlSubmit"
     },
 
     render: function() {
@@ -83,7 +84,9 @@ define(function(require) {
       this.spinner.stop(); 
         if(result!=null){
           $.ajax({
-        url:"http://192.168.1.46:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+            //url:"http://localhost:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        //url:"http://192.168.1.46:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        url:"http://192.168.1.225:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
         method: "PUT"
       });
           Backbone.history.navigate("homeSiwyt", {
@@ -97,6 +100,11 @@ define(function(require) {
         }
             
       },
+
+    controlSubmit: function(e){
+        if(e.which === 13)
+        this.validateLogin();
+    },
 
 
      showMessageMail: function(result){

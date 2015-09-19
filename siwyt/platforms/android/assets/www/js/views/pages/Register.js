@@ -72,7 +72,9 @@ define(function(require) {
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {
-      "tap .btn-block": "validateRegister"
+      "tap .btn-block": "validateRegister",
+      //"submit form": "validateRegister",
+      "keyup": "controlSubmit"
     },
 
     render: function() {
@@ -91,16 +93,21 @@ define(function(require) {
       this.utente.inviaMail(result.nome, result.cognome, result.username, result.mail , result.password );
       window.plugins.toast.showWithOptions(
               {
-                message: "An email with your username and password has been sent to "+result.email+"",
-                duration: "short",
+                message: "An email with your username and password has been sent to "+result.mail+"",
                 position: "bottom",
-                addPixelsY: -10  // added a negative value to move it up a bit (default 0)
+                duration: "long",
+                addPixelsY: -200
               }
           );
       Backbone.history.navigate("login",{
         trigger: true
       });
     }
+    },
+
+    controlSubmit: function(e){
+        if(e.which === 13)
+        this.validateRegister();
     },
 
 
@@ -120,6 +127,7 @@ define(function(require) {
     // viene verificata la validità dei dati immessi nella form di registrazione
     validateRegister: function(e){
       $(".errorReg").removeAttr("style");
+      $(".reg").removeAttr("style");
       var name = document.formRegister.regName.value;
       var surname = document.formRegister.regSurname.value;
       var username = document.formRegister.regUsername.value;
@@ -135,7 +143,7 @@ define(function(require) {
           $("#regConfirm").attr("style","border: 1px solid #ed7800");
           document.formRegister.regPassword.focus();
           valid= false;
-      }
+      } 
 
       if (!emailExp.test(email) || (email == "") || (email == "undefined")) {
              $("#errEmail").attr("style","display:block");
@@ -149,13 +157,14 @@ define(function(require) {
              $("#regName").attr("style","border: 1px solid #ed7800");
              document.formRegister.regName.select();
              valid = false;
-          }
+          } 
+
       if ((surname == "") || (surname == "undefined")) {
              $("#errSurname").attr("style","display:block");
              $("#regSurname").attr("style","border: 1px solid #ed7800");
              document.formRegister.regSurname.select();
              valid = false;
-          }
+          } 
 
       if ((username == "") || (surname == "undefined")) {
              $("#errUsername").attr("style","display:block");
@@ -165,10 +174,10 @@ define(function(require) {
           }
       if ((password == "") || (password.length < 5)) {
              $("#errPassword").attr("style","display:block");
-             $("#regPassword").attr("style","border: 1px solid #ed7800");
+             $("#regPassword").attr("style","border: 2px solid #ed7800");
              document.formRegister.regPassword.select();
              valid = false;
-          }
+          } 
 
           // se i dati sono validi controllo che lo username scelto sia disponibile
       if(valid){
