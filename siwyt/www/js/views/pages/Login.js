@@ -84,9 +84,13 @@ define(function(require) {
       this.spinner.stop(); 
         if(result!=null){
           $.ajax({
+<<<<<<< HEAD
             //url:"http://localhost:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
         //url:"http://192.168.1.46:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
         url:"http://192.168.1.225:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+=======
+        url:"http://192.168.1.49:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+>>>>>>> origin/master
         method: "PUT"
       });
           Backbone.history.navigate("homeSiwyt", {

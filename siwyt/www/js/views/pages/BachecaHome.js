@@ -35,6 +35,8 @@ define(function(require) {
             this.postits = new Postit();
             this.relazione = new Relazione();
             this.commento = new Commento();
+            this.rel=[]
+            this.activeRel=false;
 
             //Mi metto in ascolto dell'evento che mi ritorna i dati di una bacheca
             this.bacheca.on("datiBacheca", this.appendTitle, this);
@@ -97,12 +99,25 @@ define(function(require) {
             "touchend .moveable": "endDrag",
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
-            "tap .menuRelation" : "reltionManagement",
+            "tap .menuRelation" : "relationManagement",
             "tap .relation": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
             "touchstart #boardCanvas" : "manageDeleteRelation"         
         },
         manageDeleteRelation: function(e){
+            console.log(this.activeRel);
+            if (this.activeRel==true){
+                var elenco=document.getElementsByClassName("relation");
+                var a =new Array();
+                for (var i=0; i<elenco.length;i++){
+                    a[i]=elenco[i].id;
+                }
+                for (var i=0; i<a.length;i++){
+                    document.getElementById(a[i]).classList.add("postit");
+                    document.getElementById(a[i]).classList.remove("relation");
+                }
+                this.activeRel=false;
+            }
             var p=this.getTapPos(e);
             console.log(p);
             for (var i=0; i<this.rel.length;i++){
@@ -124,30 +139,42 @@ define(function(require) {
                     console.log("CHIMARE QUERY CHE ELIMINA");
                     if (px<ax && py<ay){
                         if (p.x>px &&p.x<ax && p.y>py && p.y<ay){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);    
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (px<ax && ay<py){
                         if(p.x>px &&p.x<ax && p.y>ay && p.y<py){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (ax<px && ay<py){
                         if(p.x>ax &&p.x<px && p.y>ay && p.y<py){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                     if (ax<px && py<ay){
                         if(p.x>ax &&p.x<px && p.y>py && p.y<ay){
-                            this.relazione.rimuoviRelazione(this.rel[i].id);
-                            this.rel.splice(i,1);
-                            this.appendRelations(this.rel);
+                            var del=confirm("Are you sure to delete this relation?")
+                            if (del){
+                                this.relazione.rimuoviRelazione(this.rel[i].id);
+                                this.rel.splice(i,1);
+                                this.appendRelations(this.rel);
+                            }
                         }
                     }
                 }
@@ -191,6 +218,16 @@ define(function(require) {
         appendItems: function(res) {
             if(res.length!=0){
                 this.result=res;
+                for (var i=0; i<this.result.length;i++){
+                    console.log(this.result[i]['x']);
+                    console.log(this.result[i]['y']);
+                    this.result[i]['x']=(parseFloat(this.result[i]['x'].replace("px",""))*window.screen.width/100).toString()+"px";
+                    this.result[i]['y']=(parseFloat(this.result[i]['y'].replace("px",""))*window.screen.height/100).toString()+"px";
+                    this.result[i]['altezza']=(window.screen.height/this.result[i]['altezza']).toString()+"px";
+                    this.result[i]['larghezza']=(window.screen.width/this.result[i]['larghezza']).toString()+"px";
+                    console.log(this.result[i]);
+                }
+
                 this.postits.nomeAutori(res);      
             }
             else{
@@ -226,33 +263,37 @@ define(function(require) {
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){
-            this.rel=res;
-            $("#boardCanvas").remove();
-            var el = document.createElement("canvas");
-            el.classList.add("absolute");
-            el.classList.add("canvas");
-            el.width  = window.innerWidth;
-            el.height = window.innerHeight-44;
-            el.id="boardCanvas";
-            document.getElementById("canvas").appendChild(el);
-            var canvas=el;
-            var ctx = canvas.getContext('2d');
-            for (var i=0; i< res.length; i++){
-                //Inizio del disegno
-                ctx.beginPath();
-                //Origine 44 è l'altezza della navigation bar
-                var postitpartenza= document.getElementById(res[i].idp1);
-                var postitarrivo = document.getElementById(res[i].idp2);
-                var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
-                var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
-                ctx.moveTo(px,py);
-                //Destinazione 44 è l'altezza della navigation bar
-                var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
-                var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2-44;
-                ctx.lineTo(ax, ay);
-                //Visualizza il disegno
-                ctx.stroke();
+            if (res!=null){
+                this.rel=res;
+                $("#boardCanvas").remove();
+                var el = document.createElement("canvas");
+                el.classList.add("absolute");
+                el.classList.add("canvas");
+                el.width  = window.innerWidth;
+                el.height = window.innerHeight-44;
+                el.id="boardCanvas";
+                document.getElementById("canvas").appendChild(el);
+                var canvas=el;
+                var ctx = canvas.getContext('2d');
+                for (var i=0; i< res.length; i++){
+                    //Inizio del disegno
+                    ctx.beginPath();
+                    //Origine 44 è l'altezza della navigation bar
+                    var postitpartenza= document.getElementById(res[i].idp1);
+                    var postitarrivo = document.getElementById(res[i].idp2);
+                    console.log(postitpartenza.style.width);
+                    var px = parseInt(postitpartenza.style.left)+parseInt(postitpartenza.style.width)/2;
+                    var py = parseInt(postitpartenza.style.top)+parseInt(postitpartenza.style.height)/2-44;
+                    ctx.moveTo(px,py);
+                    //Destinazione 44 è l'altezza della navigation bar
+                    var ax = parseInt(postitarrivo.style.left)+parseInt(postitarrivo.style.width)/2;
+                    var ay = parseInt(postitarrivo.style.top)+parseInt(postitarrivo.style.height)/2-44;
+                    ctx.lineTo(ax, ay);
+                    //Visualizza il disegno
+                    ctx.stroke();
+                }
             }
+            
             this.trigger("stop");
         },
         render: function() {
@@ -288,18 +329,25 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), "80px", "123px", (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), 8, 3, (((this.postit * 10.0)+20)*100/window.screen.width)+"px", (((this.postit * 10.0) + 60)*100/window.screen.height)+"px","#f4f4f4", "helvetica","20");
             //Gestione Salvataggio postit
 
         },
         createPostit: function(result){
             this.resultpostit=result;
+            console.log(this.resultpostit['x']); 
+            console.log(this.resultpostit['y']); 
+            this.resultpostit['x']=(parseFloat(this.resultpostit['x'].replace("px",""))*window.screen.width/100).toString()+"px";
+            this.resultpostit['y']=   (parseFloat(this.resultpostit['y'].replace("px",""))*window.screen.height/100).toString()+"px";
+            this.resultpostit.altezza=(window.screen.height/this.resultpostit.altezza).toString()+"px";
+            this.resultpostit.larghezza=(window.screen.width/this.resultpostit.larghezza).toString()+"px";
             this.postits.nomeAutore(result.idu);
             console.log(result.idu)
         },
         createPostit2: function(result){
             console.log(result);
             this.resultpostit.idu=result;
+            console.log(this.resultpostit);
             var post=new Postits();
             post.add(this.resultpostit);
             this.subView = (new ShowPostitsNoticeboard({collection: post})).render().el;
@@ -328,10 +376,6 @@ define(function(require) {
             this.showDialog(obj.id.replace("RenamePopup", ""));
             //this.postits.aggiungiPostit(this.idb, postit.firstChild.innerHTML, localStorage.getItem("idu"), "", "", x, y);            
             this.postit++;
-        },
-        //Funzione di salvataggio del postit
-        save: function(result) {
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("nameLogged"), 80, 123, (this.postit * 10), (this.postit * 10) + 50);
         },
         showPopup: function(idp){       
             var popScreen = document.getElementById(idp + "LinkScreen");
@@ -470,7 +514,7 @@ define(function(require) {
             drag_object.classList.remove("moveable","selection");
             switch (this.dragmode) {
                 case 1: 
-                    this.postits.saveXY(drag_object.id,drag_object.style.left,drag_object.style.top);
+                    this.postits.saveXY(drag_object.id,(parseFloat(drag_object.style.left.replace("px",""))*100/window.screen.width).toString()+"px",(parseFloat(drag_object.style.top.replace("px",""))*100/window.screen.height).toString()+"px");
                     break;
                 case 2:
                     this.postits.saveHW(drag_object.id, drag_object.style.height, drag_object.style.width);
@@ -485,7 +529,7 @@ define(function(require) {
                 };
             } else if (e.originalEvent.touches[0].clientX || e.originalEvent.touches[0].clientY) {
                 //usiamo le proprietà nonstandard scrollLeft e scrollTop per determinare la porzione di documento visualizzata nel browser
-                //we use the scrollLeft and scrollTop properties to determine the part of the document shown in the browser
+                //we use the scrollLeft and scrollTop properties to determine the part of the documet snhown in the browser
                 return {
                     x: e.originalEvent.touches[0].clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
                     y: e.originalEvent.touches[0].clientY + document.body.scrollTop + document.documentElement.scrollTop
@@ -500,7 +544,7 @@ define(function(require) {
             this.showDialog(idPopup.replace("LinkPopup",""));
             this.showPopup(idPopup.replace("LinkPopup",""));
         },
-        reltionManagement:function(e){
+        relationManagement:function(e){
             console.log(e.target.parentNode.parentNode);
             var idp = e.target.parentNode.parentNode;
             document.getElementById(idp.id).classList.add('hide');
@@ -520,12 +564,14 @@ define(function(require) {
             }
             for (var i=0; i<a.length;i++){
                 if (a[i]!=this.relationStart){
-                    document.getElementById(a[i]).classList.add("selection");
+                    document.getElementById(a[i]).classList.add("relation");
                     document.getElementById(a[i]).classList.remove("postit");
                 }
             }
+            this.activeRel=true;
         },
         selectedPostitRelation: function(e){
+            this.activeRel=false;
             console.log(e);
             var idp = e.currentTarget.id;
             var postitpartenza = document.getElementById(this.relationStart);
@@ -547,14 +593,14 @@ define(function(require) {
             ctx.lineTo(ax, ay);
             //Visualizza il disegno
             ctx.stroke();
-            var elenco= document.getElementsByClassName("selection");
+            var elenco= document.getElementsByClassName("relation");
             var a = new Array();
             for (var i=0; i<elenco.length;i++){
                 a[i]=elenco[i].id;
             }
             for (var i=0; i<a.length;i++){
                 document.getElementById(a[i]).classList.add("postit");
-                document.getElementById(a[i]).classList.remove("selection");
+                document.getElementById(a[i]).classList.remove("relation");
             }
             this.relazione.aggiungiRelazione(this.idb,postitpartenza.id, postitarrivo.id,"");
             
