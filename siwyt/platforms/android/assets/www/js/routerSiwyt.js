@@ -40,10 +40,11 @@ define(function(require) {
       "login":"login",
       "register":"register",
       "boardManagement/:idb/:idpage":"boardManagement",
-      "postit/:idp/:idb": "postit"
+      "postit/:idp/:idb": "postit",
+      "activePushNotification": "activePushNotification"
     },
 
-    BAASBOX_URL : "http://192.168.1.49:9000",
+    BAASBOX_URL : "http://192.168.1.234:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
@@ -52,6 +53,7 @@ define(function(require) {
       var THIS = this;
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
+
       this.settings_val=[];
       
       $.get('../../res/settings.txt', function(file) {
@@ -79,7 +81,6 @@ define(function(require) {
         //utente.logout();
 
         utente.login(localStorage.getItem("usernameLogged"), localStorage.getItem("passwordLogged"));
-        utente.on("resultLogin", this.enableNotifications);
         this.firstView="homeSiwyt";
       }
       //at the moment we log in as admin  
@@ -118,14 +119,6 @@ define(function(require) {
       this.spinner = new Spinner(opts);
       //console.log(this.el);
     },
-    enableNotifications: function(res){
-      if(res!=null){
-      $.ajax({
-        url:"http://192.168.1.49:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
-        method: "PUT"
-      });
-      }
-    },
     homeSiwyt: function() {
       var THIS=this;
       // highlight the nav1 tab bar element as the current one
@@ -136,7 +129,6 @@ define(function(require) {
       this.changePage(page);
       setTimeout(function(){if(!signal){THIS.spinner.spin(document.body);}},1000);
       page.caricaDati();
-
 
      },
 
@@ -228,6 +220,16 @@ define(function(require) {
       }
       // go to first view
       this.navigate(this.firstView, {trigger: true});
+    },
+    activePushNotification: function(){
+        this.structureView = new StructureViewSiwyt();
+        // put the el element of the structure view into the DOM
+        //this.structureView.render().el chiama la funzione render della view structureView.js
+        var main=document.getElementById("main");
+        document.body.removeChild(main);
+        document.body.appendChild(this.structureView.render().el);
+        this.structureView.trigger("inTheDOM");
+        this.navigate("homeSiwyt", {trigger: true});
     },
 
     showNoticeboard: function(idb, ruolo){

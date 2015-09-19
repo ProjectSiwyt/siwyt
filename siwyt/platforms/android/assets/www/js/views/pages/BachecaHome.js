@@ -35,6 +35,8 @@ define(function(require) {
             this.postits = new Postit();
             this.relazione = new Relazione();
             this.commento = new Commento();
+            this.rel=[]
+            this.activeRel=false;
 
             //Mi metto in ascolto dell'evento che mi ritorna i dati di una bacheca
             this.bacheca.on("datiBacheca", this.appendTitle, this);
@@ -97,14 +99,27 @@ define(function(require) {
             "touchend .moveable": "endDrag",
             "tap .overlay": "hideElements",
             "tap .menuRename" : "renameManagement",
-            "tap .menuRelation" : "reltionManagement",
-            "tap .selection": "selectedPostitRelation",
+            "tap .menuRelation" : "relationManagement",
+            "tap .relation": "selectedPostitRelation",
             "tap .menuDelete" : "deletePostit",
             "touchstart #boardCanvas" : "manageDeleteRelation"         
         },
         manageDeleteRelation: function(e){
+            console.log(this.activeRel);
+            if (this.activeRel==true){
+                var elenco=document.getElementsByClassName("relation");
+                var a =new Array();
+                for (var i=0; i<elenco.length;i++){
+                    a[i]=elenco[i].id;
+                }
+                for (var i=0; i<a.length;i++){
+                    document.getElementById(a[i]).classList.add("postit");
+                    document.getElementById(a[i]).classList.remove("relation");
+                }
+                this.activeRel=false;
+            }
             var p=this.getTapPos(e);
-            console.touchstart
+            console.log(p);
             for (var i=0; i<this.rel.length;i++){
                 var postitpartenza= document.getElementById(this.rel[i].idp1);
                 var postitarrivo = document.getElementById(this.rel[i].idp2);
@@ -204,12 +219,14 @@ define(function(require) {
             if(res.length!=0){
                 this.result=res;
                 for (var i=0; i<this.result.length;i++){
-                    console.log(this.result[i]['altezza']);
+                    console.log(this.result[i]['x']);
+                    console.log(this.result[i]['y']);
                     this.result[i]['x']=(parseFloat(this.result[i]['x'].replace("px",""))*window.screen.width/100).toString()+"px";
                     this.result[i]['y']=(parseFloat(this.result[i]['y'].replace("px",""))*window.screen.height/100).toString()+"px";
                     this.result[i]['altezza']=(window.screen.height/this.result[i]['altezza']).toString()+"px";
                     this.result[i]['larghezza']=(window.screen.width/this.result[i]['larghezza']).toString()+"px";
-                 }
+                    console.log(this.result[i]);
+                }
 
                 this.postits.nomeAutori(res);      
             }
@@ -312,13 +329,16 @@ define(function(require) {
         //Aggiunge i postit alla bacheca
         addPostit: function(e) {
             console.log("BENE!!!!!");
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), 8, 3, (this.postit * 10)+"px", ((this.postit * 10) + 50)+"px","#f4f4f4", "helvetica","20");
+            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("idu"), 8, 3, (((this.postit * 10.0)+20)*100/window.screen.width)+"px", (((this.postit * 10.0) + 60)*100/window.screen.height)+"px","#f4f4f4", "helvetica","20");
             //Gestione Salvataggio postit
 
         },
         createPostit: function(result){
             this.resultpostit=result;
-            console.log(this.resultpostit.altezza);     
+            console.log(this.resultpostit['x']); 
+            console.log(this.resultpostit['y']); 
+            this.resultpostit['x']=(parseFloat(this.resultpostit['x'].replace("px",""))*window.screen.width/100).toString()+"px";
+            this.resultpostit['y']=   (parseFloat(this.resultpostit['y'].replace("px",""))*window.screen.height/100).toString()+"px";
             this.resultpostit.altezza=(window.screen.height/this.resultpostit.altezza).toString()+"px";
             this.resultpostit.larghezza=(window.screen.width/this.resultpostit.larghezza).toString()+"px";
             this.postits.nomeAutore(result.idu);
@@ -327,6 +347,7 @@ define(function(require) {
         createPostit2: function(result){
             console.log(result);
             this.resultpostit.idu=result;
+            console.log(this.resultpostit);
             var post=new Postits();
             post.add(this.resultpostit);
             this.subView = (new ShowPostitsNoticeboard({collection: post})).render().el;
@@ -355,10 +376,6 @@ define(function(require) {
             this.showDialog(obj.id.replace("RenamePopup", ""));
             //this.postits.aggiungiPostit(this.idb, postit.firstChild.innerHTML, localStorage.getItem("idu"), "", "", x, y);            
             this.postit++;
-        },
-        //Funzione di salvataggio del postit
-        save: function(result) {
-            this.postits.aggiungiPostit(this.idb, "Postit" + this.postit, localStorage.getItem("nameLogged"), 80, 123, (this.postit * 10), (this.postit * 10) + 50);
         },
         showPopup: function(idp){       
             var popScreen = document.getElementById(idp + "LinkScreen");
@@ -527,7 +544,7 @@ define(function(require) {
             this.showDialog(idPopup.replace("LinkPopup",""));
             this.showPopup(idPopup.replace("LinkPopup",""));
         },
-        reltionManagement:function(e){
+        relationManagement:function(e){
             console.log(e.target.parentNode.parentNode);
             var idp = e.target.parentNode.parentNode;
             document.getElementById(idp.id).classList.add('hide');
@@ -547,12 +564,14 @@ define(function(require) {
             }
             for (var i=0; i<a.length;i++){
                 if (a[i]!=this.relationStart){
-                    document.getElementById(a[i]).classList.add("selection");
+                    document.getElementById(a[i]).classList.add("relation");
                     document.getElementById(a[i]).classList.remove("postit");
                 }
             }
+            this.activeRel=true;
         },
         selectedPostitRelation: function(e){
+            this.activeRel=false;
             console.log(e);
             var idp = e.currentTarget.id;
             var postitpartenza = document.getElementById(this.relationStart);
@@ -574,14 +593,14 @@ define(function(require) {
             ctx.lineTo(ax, ay);
             //Visualizza il disegno
             ctx.stroke();
-            var elenco= document.getElementsByClassName("selection");
+            var elenco= document.getElementsByClassName("relation");
             var a = new Array();
             for (var i=0; i<elenco.length;i++){
                 a[i]=elenco[i].id;
             }
             for (var i=0; i<a.length;i++){
                 document.getElementById(a[i]).classList.add("postit");
-                document.getElementById(a[i]).classList.remove("selection");
+                document.getElementById(a[i]).classList.remove("relation");
             }
             this.relazione.aggiungiRelazione(this.idb,postitpartenza.id, postitarrivo.id,"");
             

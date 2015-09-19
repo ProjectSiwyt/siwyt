@@ -33,7 +33,7 @@ define(function(require) {
         title.classList.remove('hide');
       }
       document.getElementById("back").classList.add('hide');
-      document.getElementById("title").innerHTML="Noticeboards";
+      title.innerHTML="Noticeboards";
       this.bacheca=new Bacheca();
       this.bacheca.on("bachecheutente", this.appendNoticeboardsUsers,this);
       this.bacheca.on("bachecheamministratore", this.appendNoticeboardsManager,this);

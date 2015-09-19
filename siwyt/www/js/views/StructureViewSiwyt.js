@@ -21,26 +21,34 @@ define(function(require) {
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
+          if(localStorage.getItem("usernameLogged")){
+
+          var push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": "true"}}, true );
+          console.log(push);
+          push.on('registration', function(data) {
+                //alert(data.registrationId);
+                localStorage.setItem("registrationId", data.registrationId);
+                $.ajax({
+                  url:"http://192.168.1.234:9000/push/enable/android/"+data.registrationId,
+                  method: "PUT"
+                });
+            });
+          
+           push.on('notification', function(data) {
+                alert(data.message);
+                // data.title,
+                // data.count,
+                // data.sound,
+                // data.image,
+                // data.additionalData
+            });
+
+            push.on('error', function(e) {
+                // e.message
+            });
+      }
       // load the precompiled template (NOTA: bisogna aggiungere il template in templates.js)
       this.template = Utils.templates.structureSiwyt;
-      var push = PushNotification.init({ "android": {"senderID": "123456789"}}, true );
-
-      push.on('registration', function(data) {
-          // data.registrationId
-      });
-
-      push.on('notification', function(data) {
-          alert(data.message);
-          // data.title,
-          // data.count,
-          // data.sound,
-          // data.image,
-          // data.additionalData
-      });
-
-      push.on('error', function(e) {
-          // e.message
-      });
       /*
       $(document).ajaxStart(function(){
           document.getElementById("spinner");
