@@ -52,6 +52,7 @@ define(function(require) {
       this.utente.on("accountDeleted", this.goOut, this);
       this.utente.on("datiUtente", this.showDatiUtente , this);
       this.utente.on("changePasswordDone", this.changePasswordDone, this);
+      this.utente.on("baasboxLogout", this.logOut , this);
       
       
       //this.utente.on("resultData", this.showData, this);
@@ -87,10 +88,10 @@ define(function(require) {
       return this;
     },
 
-    goOut: function(result){
+    logOut: function(result){
       console.log("result "+result);
       if(result){
-        localStorage.setItem('idu',null);
+        localStorage.clear();
         Backbone.history.navigate("login", {
         trigger: true
       });
@@ -166,7 +167,8 @@ define(function(require) {
       var del = window.confirm("Are you sure you want to delete your account?");
       console.log(del);
       if(del) 
-          this.utente.deleteAccount(localStorage.getItem("idu"));
+          //this.utente.deleteAccount(localStorage.getItem("idu"));
+          this.utente.deleteUserDataUser(localStorage.getItem("idu"));
     
     },
 
@@ -250,14 +252,6 @@ define(function(require) {
 
         }
 
-    },
-
-   saveImg: function(DATA_URL){
-        console.log(DATA_URL);
-    },
-    
-    onFail: function(f){
-        console.log("change image failed");
     },
 
 

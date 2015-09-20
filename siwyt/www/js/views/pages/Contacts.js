@@ -215,7 +215,6 @@ define(function(require) {
         var searchDelete = searchInput.parentNode.children[1];
         popScreen.classList.toggle('hide');
         popPopup.classList.toggle('hide');
-        debugger;
         if (searchInput.classList.contains('search-result')&&searchDelete.classList.contains('search-result')){
           searchInput.classList.remove('search-result');
           searchDelete.classList.remove('search-result');

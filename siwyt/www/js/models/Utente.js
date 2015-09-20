@@ -80,8 +80,265 @@ define(function(require) {
 			})
 		},
 
-		deleteAccount: function(e){
-			console.log("account deleted");
+
+		//sospende l account di idu impedendo il login
+		suspendAccount: function(idu){
+			console.log(localStorage.getItem("usernameLogged"));
+			$.ajax({
+                  url:"http://192.168.1.225:9000/me/suspend",
+                  method: "PUT"
+                });
+			this.logout();
+		},
+
+
+		//elimina tutte i riferimenti alle bacheche di cui l utente idu era utente semplice
+		deleteUserDataUser: function(idu){
+			console.log("deleteUserData ", idu);
+			var THIS = this;
+			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+idu+"'"})
+			  .done(function(res) {
+			  		var c =1;
+			  		console.log(res);
+			  		if(res.length==0) THIS.deleteUserDataAdmin(idu);
+			  		else
+			  			{
+					  		for(var i=0; i<res.length; i++){
+					  			BaasBox.deleteObject(res[i].id, "Bacheca_Utente")
+									  .done(function(result) {
+									  	if(c==res.length){
+									  		
+									  		c++;
+									  	}
+									  })
+									  .fail(function(error) {
+									    console.log("error ", error);
+									  })
+					  			}
+					  		THIS.deleteUserDataAdmin(idu);
+			  		}
+
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
+		},
+
+		// elimina tutti i riferimenti alle bacheche di cui l utente idu era amministratore
+		deleteUserDataAdmin: function(idu){
+			console.log("deleteUserDataAdmin ", idu);
+			var THIS = this;
+			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+idu+"'"})
+			  .done(function(res) {
+			  		var c =1;
+			  		console.log("res ", res);
+			  		if(res.length==0) THIS.deleteUserDataManager(idu);
+			  		else
+			  			{
+				  		for(var i=0; i<res.length; i++){
+				  			BaasBox.deleteObject(res[i].id, "Responsabile")
+								  .done(function(result) {
+								  	if(c==res.length){
+								  		
+								  		c++;
+								  	}
+								  })
+								  .fail(function(error) {
+								    console.log("error ", error);
+								  })
+				  			}
+				  		THIS.deleteUserDataManager(idu);
+				  		}
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
+		},
+
+		// elimina tutti i riferimenti alle tabelle di cui lutente idu era manager
+		deleteUserDataManager: function(idu){
+			console.log("deleteUserDataManager ", idu);
+			var THIS = this;
+			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+idu+"'"})
+			  .done(function(res) {
+			  		var idb = new Array();
+			  		console.log("res ", res);
+			  		if(res.length==0) THIS.deleteUserContacts_id1(idu);
+			  		else
+			  			{
+				  		for(var i=0; i<res.length; i++){
+				  			idb[i]=res[i].idb;
+				  			BaasBox.deleteObject(res[i].id, "Amministratore")
+								  .done(function(result) {
+								    
+								  })
+								  .fail(function(error) {
+								    console.log("error ", error);
+								  })
+				  			}
+				  		THIS.deleteUsersFromBacheca_Utente(idb, idu);
+				  		}
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
+		},
+
+		//quando un utente cancella il proprio account vengono cencellati tutti i record in Bacheca_Utente
+		// riguardanti le bacheche di cui l'utente eliminato era manager
+		deleteUsersFromBacheca_Utente: function(idb,idu){
+			console.log("deleteUsersFromBacheca_Utente ", idu);
+			var THIS = this;
+			BaasBox.loadCollection("Bacheca_Utente")
+			  .done(function(res) {
+			  		for (var i=0; i<res.length; i++){
+			  			for(var j=0; j<idb.length; j++){
+			  				if(res[i].idb==idb[j]){
+			  					BaasBox.deleteObject(res[i].id, "Bacheca_Utente")
+								  .done(function(result) {
+								  	console.log("eliminato record Bacheca_Utente: ");
+								  })
+								  .fail(function(error) {
+								    console.log("error deleteUsersFromBacheca_Utente", error);
+								  })
+			  				}
+			  			}
+			  		}
+			  		THIS.deleteUsersFromResponsabile(idb, idu);
+			  		
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
+		},
+
+		//quando un utente cancella il proprio account vengono cencellati tutti i record in Responsabile
+		// riguardanti le bacheche di cui l'utente eliminato era manager
+		deleteUsersFromResponsabile: function(idb,idu){
+		console.log("deleteUsersFromResponsabile ", idu);
+		var THIS = this;
+		BaasBox.loadCollection("Responsabile")
+		  .done(function(res) {
+		  		for (var i=0; i<res.length; i++){
+		  			for(var j=0; j<idb.length; j++){
+		  				if(res[i].idb==idb[j]){
+		  					BaasBox.deleteObject(res[i].id, "Responsabile")
+							  .done(function(result) {
+							  	console.log("eliminato record Responsabile: ");
+							  })
+							  .fail(function(error) {
+							    console.log("error deleteUsersFromResponsabile", error);
+							  })
+		  				}
+		  			}
+		  		}
+		  		THIS.deleteUserBoards(idb, idu);
+		  		
+			})
+			.fail(function(error) {
+			   	console.log("error ", error);
+			    THIS.trigger("", false);
+			})
+
+		},
+
+
+		//quando un utente cancella il proprio account vengono cencellate le bacheche di cui era manager
+		deleteUserBoards: function(idb, idu){
+			console.log("deleteUserBoards ",idb, idu);
+			var THIS = this;
+			var c =0;
+			if(idb.length==0) THIS.deleteUserContacts_id1(idu)
+			else{
+		  		for(var i=0; i<idb.length; i++){
+		  			BaasBox.deleteObject(idb[i], "Bacheca")
+						  .done(function(result) {
+						  	if(c==idb.length-1){
+						  		THIS.deleteUserContacts_id1(idu);
+						  	}
+						  	c++;
+						  })
+						  .fail(function(error) {
+						    console.log("error ", error);
+						  })
+		  			}
+	  		}						
+
+		},
+
+		// cancella tutti i contatti dell utente idu in cui compare come id1
+		deleteUserContacts_id1: function(idu){
+			console.log("deleteUserContacts ", idu);
+			var THIS = this;
+			BaasBox.loadCollectionWithParams("Contatto", {where: "id1='"+idu+"'"})
+			  .done(function(res) {
+			  		console.log(res);
+			  		var c =1;
+			  		if(res.length==0) THIS.deleteUserContacts_id2(idu);
+			  		else
+			  			{
+				  		for(var i=0; i<res.length; i++){
+				  			BaasBox.deleteObject(res[i].id, "Contatto")
+								  .done(function(result) {
+								  	if(c==res.length){
+								  		
+								  		c++;
+								  	}
+								  })
+								  .fail(function(error) {
+								    console.log("error ", error);
+								  })
+				  			}
+				  		THIS.deleteUserContacts_id2(idu);
+				  		}
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
+		},
+
+
+		// cancella tutti i contatti dell utente idu in cui compare come id2
+		deleteUserContacts_id2: function(idu){
+			console.log("deleteUserContacts ", idu);
+			var THIS = this;
+			BaasBox.loadCollectionWithParams("Contatto", {where: "id2='"+idu+"'"})
+			  .done(function(res) {
+			  		console.log(res);
+			  		var c =1;
+			  		if(res.length==0) THIS.suspendAccount(idu);
+			  		else
+			  			{
+				  		for(var i=0; i<res.length; i++){
+				  			BaasBox.deleteObject(res[i].id, "Contatto")
+								  .done(function(result) {
+								  	if(c==res.length){
+								  		
+								  		c++;
+								  	}
+								  })
+								  .fail(function(error) {
+								    console.log("error ", error);
+								  })
+				  			}
+				  		THIS.suspendAccount(idu);
+				  		}
+				})
+				.fail(function(error) {
+				   	console.log("error ", error);
+				    THIS.trigger("", false);
+				})
+
 		},
 
 		saveImage: function(idu, data_url){

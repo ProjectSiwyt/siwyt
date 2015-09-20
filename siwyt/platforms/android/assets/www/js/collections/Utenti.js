@@ -20,7 +20,7 @@ define(function(require) {
   		}
 
 	});
-	console.log(Utenti);
+	//console.log(Utenti);
 
 	return Utenti;
 });

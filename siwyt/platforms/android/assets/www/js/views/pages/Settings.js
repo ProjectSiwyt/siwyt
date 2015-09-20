@@ -53,7 +53,11 @@ define(function(require) {
     events: {
       //"swipeRight": "goBack",
       "tap #logout": "logOut",
-      "tap .notification": "saveNotification"
+      "tap .notification": "saveNotification",
+      "swipeRight .notification": "saveNotification",
+      "swipeLeft .notification": "saveNotification"
+
+
       
     },
 
@@ -65,7 +69,7 @@ define(function(require) {
 
 
     set_notification: function(e){
-      if(localStorage.getItem("notification_boards")=="1"){
+      if(localStorage.getItem("boards")=="1"){
 
         $("#boards").addClass("active");
       }
@@ -73,14 +77,14 @@ define(function(require) {
         $("#boards").removeClass("active");
       }
 
-      if(localStorage.getItem("notification_sounds")=="1"){
+      if(localStorage.getItem("sounds")=="1"){
         $("#sounds").addClass("active");
       }
       else{
         $("#sounds").removeClass("active");
       }
       
-      if(localStorage.getItem("notification_vibration")=="1"){
+      if(localStorage.getItem("vibration")=="1"){
         $("#vibration").addClass("active");
       }
       else{
@@ -91,37 +95,51 @@ define(function(require) {
     saveNotification: function(e){
       var THIS = this;
       console.log(e.currentTarget.id);
-      var b = localStorage.getItem("notification_boards");
-      var s = localStorage.getItem("notification_sounds");
-      var v = localStorage.getItem("notification_vibration");
+      if ($("#"+e.currentTarget.id).hasClass("active")) localStorage.setItem(e.currentTarget.id, 1);
+      else localStorage.setItem(e.currentTarget.id, 0);
+      var b = localStorage.getItem("boards");
+      var s = localStorage.getItem("sounds");
+      var v = localStorage.getItem("vibration");
       var str = b+";"+s+";"+v;
       console.log(str);
 
       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
         console.log("got main dir",dir);
-        dir.getFile("settings.txt", {create:true}, function(file) {
+        dir.getFile("settings.txt", {create:false}, function(file) {
           console.log("got the file", file);
           logOb = file;
-          THIS.writeLog(str, logOb);      
+          THIS.writeSettings(str, logOb);      
         });
 
       });
 
     },
 
-    writeLog: function(str, logOb) {
-          if(!logOb) return;
-          var log = str + " [" + (new Date()) + "]\n";
-          console.log("going to log "+log);
-          logOb.createWriter(function(fileWriter) {
-            
-            fileWriter.seek(fileWriter.length);
-            
-            var blob = new Blob([log], {type:'text/plain'});
-            fileWriter.write(blob);
-            console.log("ok, in theory i worked");
-          }, fail);
-        },
+   writeSettings: function(str, logOb){
+      if(!logOb) return;
+            //var log = str + " [" + (new Date()) + "]\n";
+            //console.log("going to log "+log);
+            logOb.createWriter(function(fileWriter) {
+              
+              var settings_val = new Array();
+              //fileWriter.seek(fileWriter.length);
+              
+              var blob = new Blob([str], {type:'text/plain'});
+              fileWriter.write(blob);
+              console.log("ok, in theory i worked");
+              var riga = str.split(";");
+              console.log(riga);
+              for(var i =0; i< riga.length;i++){
+                console.log("riga[elem]: ",riga[i]);
+                settings_val[i]= riga[i];             
+              }
+
+              console.log("settings_val: ", settings_val);
+              localStorage.setItem("boards", settings_val[0]);
+              localStorage.setItem("sounds", settings_val[1]);
+              localStorage.setItem("vibration", settings_val[2]);
+            }, function(){console.log("errore write initial settings");});
+          },
 
     logOut: function(e){
       //localStorage.removeItem("idu");
