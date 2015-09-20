@@ -43,7 +43,7 @@ define(function(require) {
       "postit/:idp/:idb": "postit"
     },
 
-    BAASBOX_URL : "http://192.168.1.49:9000",
+    BAASBOX_URL : "http://192.168.1.225:9000",
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
@@ -52,9 +52,10 @@ define(function(require) {
       var THIS = this;
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
-      this.settings_val=[];
+      //this.settings_val=[];
+      this.initializeSettings();
       
-      $.get('../../res/settings.txt', function(file) {
+      /*$.get('../../res/settings.txt', function(file) {
 
         var riga = file.split(";");
         console.log(riga);
@@ -68,7 +69,7 @@ define(function(require) {
         localStorage.setItem("notification_sounds", THIS.settings_val[1]);
         localStorage.setItem("notification_vibration", THIS.settings_val[2]);
 
-      });
+      });*/
 
 
       if(localStorage.getItem("idu")==null){
@@ -121,11 +122,109 @@ define(function(require) {
     enableNotifications: function(res){
       if(res!=null){
       $.ajax({
-        url:"http://192.168.1.49:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
+        url:"http://192.168.1.225:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
         method: "PUT"
       });
       }
     },
+
+    initializeSettings: function(e){
+     var THIS = this;
+      window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+        var directoryReader = dir.createReader();
+
+        directoryReader.readEntries(function(entries){
+                                                var exist = false;
+                                                for( var i=0; i<entries.length; i++){
+                                                  if(entries[i].name=="settings.txt") exist=true;
+                                                }
+                                                console.log(THIS);
+                                                THIS.checkSettings(exist);    
+                                              }
+                                  , function(){ console.log("errore readEntries");});
+
+        });
+
+    },
+
+
+    checkSettings: function(exist){
+      var THIS = this;
+      window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+        if(exist){
+            dir.getFile("settings.txt",{create: false}, function(file){
+            var setOb =  file;
+            THIS.readSettings(setOb); 
+            });
+        } 
+        else{
+            console.log("not exist");
+            dir.getFile("settings.txt", {create:true}, function(file) {
+            console.log("got the file", file);
+            var logOb = file;
+            THIS.writeSettings("1;1;1", logOb);      
+            });
+
+        }
+
+      });
+
+      },
+
+    readSettings: function(fileEntry) {
+        var str;
+        fileEntry.file(function(file) {
+        var reader = new FileReader();
+
+        reader.onloadend = function(e) {
+            var settings_val = new Array(); 
+            console.log("Text is: "+this.result);
+            var riga = this.result.split(";");
+            console.log(riga);
+            for(var i =0; i< riga.length;i++){
+              console.log("riga[elem]: ",riga[i]);
+              settings_val[i]= riga[i];             
+            }
+
+            console.log("settings_val: ", settings_val);
+            localStorage.setItem("boards", settings_val[0]);
+            localStorage.setItem("sounds", settings_val[1]);
+            localStorage.setItem("vibration", settings_val[2]);
+
+        }
+
+        reader.readAsText(file);
+        });
+
+    },
+
+    writeSettings: function(str, logOb) {
+          if(!logOb) return;
+          //var log = str + " [" + (new Date()) + "]\n";
+          //console.log("going to log "+log);
+          logOb.createWriter(function(fileWriter) {
+            
+            var settings_val = new Array();
+            fileWriter.seek(fileWriter.length);
+            
+            var blob = new Blob([str], {type:'text/plain'});
+            fileWriter.write(blob);
+            console.log("ok, in theory i worked");
+            var riga = str.split(";");
+            console.log(riga);
+            for(var i =0; i< riga.length;i++){
+              console.log("riga[elem]: ",riga[i]);
+              settings_val[i]= riga[i];             
+            }
+
+            console.log("settings_val: ", settings_val);
+            localStorage.setItem("boards", settings_val[0]);
+            localStorage.setItem("sounds", settings_val[1]);
+            localStorage.setItem("vibration", settings_val[2]);
+          }, function(){console.log("errore write initial settings");});
+        },
+
+
     homeSiwyt: function() {
       var THIS=this;
       // highlight the nav1 tab bar element as the current one
