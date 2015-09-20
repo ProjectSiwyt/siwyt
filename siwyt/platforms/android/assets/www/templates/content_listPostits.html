@@ -1,9 +1,8 @@
 {{#each this}}
 <div id="{{id}}" class="postit block absolute center {{font}}" style="top: {{y}}; left: {{x}}; height: {{altezza}};  width: {{larghezza}}; background-color: {{colore}}; font-family: {{font}};">
     <h3 class="postit-title" id="{{id}}Content" style="font-size:{{dimensione}}px;">{{contenuto}}</h3>
-    <div class="pull-left caption">{{idu}}</div>
-    <div class="pull-right caption">{{data}}</div>
-    <div id="{{id}}Link" class="popup"><i class="fa fa-pencil fa-2x"></i></div>
+    <div class="margin-l pull-left"><span class="author">{{idu}}</span> on {{data}}</div>    
+    <div id="{{id}}Link" class="popup margin-r pull-right"><i class="fa fa-pencil fa-2x"></i></div>
 </div>
 <div class="popup-screen overlay in hide" id="{{id}}RenameScreen"></div>
 <div class="postit-popup popup-container hide" id="{{id}}RenamePopup">

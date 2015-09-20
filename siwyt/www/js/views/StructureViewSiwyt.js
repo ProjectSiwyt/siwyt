@@ -38,7 +38,7 @@ define(function(require) {
                  window.plugins.toast.showWithOptions(
                       {
                         message: data.message,
-                        position: "top",
+                        position: "center",
                         duration: "long",
                         addPixelsY: -200
                       }
