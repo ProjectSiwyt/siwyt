@@ -1,9 +1,10 @@
 
 {{#each this}}
     <div class="div comment" id="{{id}}">
-        <div>{{contenuto}}</div>
-        <div class="pull-right padding-t caption">posted on {{data}} {{ora}}</div>
-        <div class="pull-left padding-t caption">by {{idu}}</div>
+    	<div class="margin-l caption"><span class="author padding-s">{{idu}}</span> on {{data}} {{ora}}:</div>
+    	<img src='data:image/png;base64,{{image}}' class="contact-image-comment">
+        <div class="margin-t  margin-l margin-r">{{contenuto}}</div>
+        
     </div>
 {{/each}}
 

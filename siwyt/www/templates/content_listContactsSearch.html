@@ -1,21 +1,15 @@
 <ul class="table-view" id="searchContacts">
-risultati ricerca:
-{{#if this}}
-    {{#each this}}
-    <li id="{{id}}" class="table-view-cell">
-        <img src='data:image/png;base64,{{image}}' class="contact-image"> {{nome}} {{cognome}} 
-        <span class="absolute second-icon-search addContact"><i class="pull-right fa fa-user-plus fa-2x"></i></span>
+    Risultati ricerca: 
+    {{#if this}} 
+        {{#each this}}
+        <li id="{{id}}" class="table-view-cell">
+            <img src='data:image/png;base64,{{image}}' class="contact-image"> <span class="contact">{{nome}} {{cognome}}</span>
+            <span class="absolute second-icon-search second-icon addContact"><i class="pull-right fa fa-user-plus fa-2x"></i></span>
+        </li>
+        {{/each}} 
+    {{else}}
+    <li class="table-view-cell">
+        Nessun risultato
     </li>
-    <!-- <div class="popup-screen overlay in hide" id="{{id}}LinkScreen"></div>
-    <div id="{{id}}LinkPopup" class="postit-popup popup-container hide">
-    
-    </div> -->
-    {{/each}}
-{{else}}
-
-		<li class="table-view-cell">
-	        Nessus risultato
-	    </li>
-
-{{/if}}
+    {{/if}}
 </ul>

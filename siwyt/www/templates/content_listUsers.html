@@ -1,7 +1,8 @@
 {{#each this}}
 <li class="table-view-cell close-member" id="toggle{{id}}">
     <a class="navigate-right rigamembro" id="{{id}}">
-        {{nome}} {{cognome}}
+        <img src='data:image/png;base64,{{image}}' class="contact-image"> 
+        <span class="contact">{{nome}} {{cognome}}</span>
         </a>
     <div class="relative margin-t">Licences:
         <div class="margin-l">
