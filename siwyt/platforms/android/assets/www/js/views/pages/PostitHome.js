@@ -22,7 +22,11 @@ define(function(require) {
       this.idb=idb;
       
       document.getElementById("navigation").classList.add('hide');
-      document.getElementById("title").classList.add('hide');
+      var title=document.getElementById("title");
+      title.innerHTML='';
+      if (title.classList.contains('hide')){
+        title.classList.remove('hide');
+      }
       var header= document.getElementById("header");
       var settings = document.getElementById("settingsMenu");
       var back=document.getElementById("back");
@@ -49,7 +53,8 @@ define(function(require) {
     className: "i-g page",
 
     events: {
-      "tap #submitComment":"submit"
+      "tap #submitComment":"submit",
+      "keyup":"controlSubmit"
       //"tap": "goToContacts",
       
     },
@@ -57,14 +62,19 @@ define(function(require) {
         this.postit.postitData(this.idp);
 
     },
+    controlSubmit: function(e){
+        if(e.which === 13)
+        this.submit();
+    },
     loadPostit: function(result){
         this.resultpostit=result;
+        document.getElementById('title').innerHTML=result[0].contenuto;
         this.postit.nomeAutore(result[0].idu);
         console.log(result[0].idu)
      },
      loadPostit2: function(result){
-        console.log(result);
         this.resultpostit[0].idu=result;
+
         var post=new Postits();
         post.add(this.resultpostit);
         this.subView = (new ShowPostit({collection: post})).render().el;

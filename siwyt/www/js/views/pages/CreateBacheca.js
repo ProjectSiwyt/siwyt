@@ -50,7 +50,7 @@ define(function(require) {
     },
 
     id: "createBacheca",
-    className: "i-g page size",
+    className: "i-g page",
 
     //ci chiama la funzione goToMap al tap sull'elemento con id goToMap
     events: {

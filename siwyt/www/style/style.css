@@ -448,7 +448,11 @@ body {
     height: 60px;
     width: 60px;
 }
-
+.contact{
+    position: absolute;
+    top: 1.7em;
+    left: 5em;   
+}
 .list-information {
     list-style-type: none;
     font-size: 1.3em;
@@ -471,12 +475,12 @@ body {
 }
 
 .first-icon {
-    top: 7px;
+    top: 27px;
     right: 70px;
 }
 
 .second-icon {
-    top: 5px;
+    top: 25px;
     right: 5px;
 }
 
@@ -720,6 +724,7 @@ input:focus {
 .no-float{
     float: none !important;
 }
+
 select{
     height: 42px;
 }

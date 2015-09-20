@@ -144,6 +144,11 @@ define(function(require) {
     logOut: function(e){
       //localStorage.removeItem("idu");
       localStorage.clear();
+      console.log(localStorage.getItem("registrationId"));
+      $.ajax({
+          url:"http://192.168.1.234:9000/push/disable/"+localStorage.getItem("registrationId"),
+          method: "PUT"
+      });
       Backbone.history.navigate("login",{
         trigger: true
       });
