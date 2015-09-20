@@ -211,17 +211,27 @@ define(function(require) {
         idu = sessionStorage.getItem("idUserToAdd");
         var popScreen = document.getElementById("searchScreen");
         var popPopup = document.getElementById("searchPopup");
+        var searchInput = document.getElementById("search");
+        var searchDelete = searchInput.parentNode.children[1];
         popScreen.classList.toggle('hide');
         popPopup.classList.toggle('hide');
+        debugger;
+        if (searchInput.classList.contains('search-result')&&searchDelete.classList.contains('search-result')){
+          searchInput.classList.remove('search-result');
+          searchDelete.classList.remove('search-result');
+        }
         this.utente.listContacts(localStorage.getItem("idu"));
     },
    /* elencoUtenti: function(e){
       this.utente.elencoUtenti();
     },*/
 
-    //Creo una subview con l'elnco di bacheche d
+    //Creo una subview con l'elenco di bacheche d
     elencoBacheche: function(result){
       var usr = sessionStorage.getItem("idUserToAdd");
+      var idLinkPopup = document.getElementById(usr+"LinkPopup");
+      var popScreen = document.getElementById("LinkScreen");
+        var popPopup = document.getElementById(usr+"LinkPopup");        
       console.log("elenco bacheche",result);
       if(result!=0){
         console.log(result);
@@ -231,9 +241,8 @@ define(function(require) {
         console.log(c);
         this.subViewBoards = (new ShowListNoticeboardContacts({collection: c})).render().el;
         console.log(this.subViewBoards);
-        document.getElementById(usr+"LinkPopup").appendChild(this.subViewBoards);
-        var popScreen = document.getElementById("LinkScreen");
-        var popPopup = document.getElementById(usr+"LinkPopup");
+        idLinkPopup.appendChild(this.subViewBoards);
+        
         popScreen.classList.toggle('hide');
         popPopup.classList.toggle('hide');
         if(result!=null)
@@ -241,10 +250,9 @@ define(function(require) {
         }
       else{
 
-          this.subViewBoards = (new ShowListNoticeboardContactsFull()).render().el;
-          document.getElementById(usr+"LinkPopup").appendChild(this.subViewBoards);
-          var popScreen = document.getElementById("LinkScreen");
-          var popPopup = document.getElementById(usr+"LinkPopup");
+          this.subViewBoards = (new ShowListNoticeboardContactsFull()).render().el;          
+          idLinkPopup.appendChild(this.subViewBoards);
+          idLinkPopup.classList.remove('h1-fix-scroll');
           popScreen.classList.toggle('hide');
           popPopup.classList.toggle('hide');
           document.getElementById("nameContact").innerHTML=sessionStorage.getItem("nameContact");
@@ -267,14 +275,7 @@ define(function(require) {
     },
 
     showResultSearch: function(result){
-        /*if(!result){
-          var searchPopup = document.getElementById("searchPopup");
-          var searchScreen = document.getElementById("searchScreen");
-          searchScreen.classList.remove('hide');
-            //searchPopup.innerHTML="Nessun risultato";
-            searchPopup.classList.remove('hide');
 
-        }else{*/
           this.trigger("stop");
           var c = new Utenti();
           c.add(result);
@@ -284,12 +285,14 @@ define(function(require) {
           console.log(this.subViewContactsSearch);
           var searchScreen = document.getElementById("searchScreen");
           var searchPopup = document.getElementById("searchPopup");
+          var searchInput = document.getElementById("search");
+          var searchDelete = searchInput.parentNode.children[1];
           searchPopup.innerHTML="";
           searchPopup.appendChild(this.subViewContactsSearch);
           searchScreen.classList.remove('hide');
           searchPopup.classList.remove('hide');
-        
-
+          searchInput.classList.add('search-result');
+          searchDelete.classList.add('search-result');
     },
 
 

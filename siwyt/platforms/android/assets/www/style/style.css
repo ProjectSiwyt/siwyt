@@ -190,7 +190,12 @@ body {
 }
 
 #search {
-    z-index: 1100;
+    border-radius: 3px;
+    position: absolute;
+    width: 98%;
+}
+#searchContactsContent{
+    margin-bottom: 4em;
 }
 #addcontacts > .btn-no-nav{
     bottom: 0em;
@@ -208,6 +213,7 @@ body {
 #btn, #submit{
         bottom: 0em;
 }
+
 .tap{
     width: 44px;
 }
@@ -280,9 +286,7 @@ body {
 .bar-tab {
     top: 44px;
     border-top: 0;
-    /*border-bottom: 1px solid #ddd;*/
     height: 60px;
-    margin-bottom: 2em
 }
 
 .table-view {
@@ -335,7 +339,7 @@ body {
     border-bottom: 3px solid #428bca;
 }
 
-.tab-item {
+.bar-tab .tab-item {
     color: #bdb8b6;
     border-bottom: 3px solid #bdb8b6;
 }
@@ -348,13 +352,16 @@ body {
 }
 
 .active {
-    border-color: #ed7800;
+    border-color: #ed7800 !important;
 }
 
 .navigate-right:after {
     color: #bdb8b6;
+    right: 28px;
 }
-
+.rigamembro>.navigate-right:after{
+    font-size: 2em;
+}
 .navigate-right:after:active {
     color: #f4f4f4;
 }
@@ -382,8 +389,12 @@ body {
     color: #ed7800;
 }
 
+.margin-r {
+    margin-right: 0.5em;
+}
+
 .margin-l {
-    margin-left: 5%;
+    margin-left: 0.5em;
 }
 
 .relative {
@@ -404,11 +415,12 @@ body {
 }
 
 .close-member {
-    height: 2.3em;
+    height: 3.5em;
 }
 
 .close-member>.navigate-right:after {
     content: '\e820';
+    font-size: 2em;
 }
 
 .open-member {
@@ -418,20 +430,21 @@ body {
 .open-member>.navigate-right:after {
     content: '\e820';
     transform: rotateZ(180deg);
-    margin-top: -6px;
+    margin-top: -12px;
+    font-size: 2em;
 }
 
 .caption {
-    font-size: 0.7em;
+    font-size: 0.8em;
 }
 
 .padding-s {
-    padding-left: 11px;
+    padding-left: 7%;
 }
 
 .trash {
     top: -.3em;
-    right: -7em;
+    right: -6.2em;
 }
 
 .errorReg {
@@ -445,10 +458,28 @@ body {
 }
 
 .contact-image{
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
 }
-
+.contact-image-comment-title{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    bottom: 0.5em;
+    right: 10em;
+}
+.contact-image-comment{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    top: 0.3em;
+    left: 0.5em;
+}
+.contact{
+    position: absolute;
+    top: 1.2em;
+    left: 5em;   
+}
 .list-information {
     list-style-type: none;
     font-size: 1.3em;
@@ -460,23 +491,41 @@ body {
 }
 
 .search-delete {
-    top: .4em;
-    right: 1em;
+    right: 0.3em;
     color: #bdb8b6;
+    background-color: white;
+    border: solid 1px #bdb8b6;
+    border-radius: 3px;
+    width: 44px;
+    height: 44px;
+    padding-top: 4px;
+    padding-left: 6px;
+    top: 8px;
 }
-
+.search-result{
+    z-index: 1100;
+}
 .send {
     top: 1.1em;
-    right: .3em;
+    right: 0em;
+    background-color: white;
+    border: solid 1px #bdb6b8;
+    border-radius: 3px;
+    /* border-left: none; */
+    width: 43px;
+    height: 44px;
+    margin-top: -5px;
+    padding-top: 4px;
+    padding-left: 5px;
 }
 
 .first-icon {
-    top: 7px;
+    top: 17px;
     right: 70px;
 }
 
 .second-icon {
-    top: 5px;
+    top: 15px;
     right: 5px;
 }
 
@@ -485,11 +534,15 @@ body {
 }
 
 .div {
+    font-size: 1.5em;
+    padding-top: 5px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #bdb8b6;
-    padding-bottom: 18px;
+    position: relative;
 }
 .comment{
-    padding-bottom: 27px;
+    padding-top: 7px;
+    padding-bottom: 4px;
 }
 .no-nav>.btn-new {
     bottom: 48px;
@@ -500,7 +553,7 @@ body {
 }
 
 .padding-t {
-    padding-top: 8px;
+    padding-top: 5px;
 }
 
 .open {
@@ -622,6 +675,7 @@ body {
     position: absolute;
     padding: 0;
     outline: 0;
+    top: 5em;
 }
 
 .popup-container > .table-view > .table-view-cell {
@@ -715,10 +769,19 @@ input:focus {
 }
 .popup-list{
     position: absolute;
-    top: 14px;
+    /*top: 14px;*/
+    top: 21px;
 }
 .no-float{
     float: none !important;
+}
+.author{
+    color: #004a93;
+    font-size: 1.4em;
+}
+
+input[type=color], input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, textarea{
+    border-color: #bdb8b6;
 }
 select{
     height: 42px;
@@ -734,7 +797,7 @@ select{
         padding-right: 3em;
     }       
     .search-delete {
-        top: 1em;
+        top: 1.3em;
     }
     .btn-new {
         bottom: 7em;
@@ -743,10 +806,10 @@ select{
         bottom: 3em;
     }
     .first-icon {
-        top: 11px;
-    }
+    top: 27px;
+}
     .second-icon {
-        top: 10px;
+        top: 25px;
     }
     .scroll-board {
         overflow-y: auto;
@@ -758,8 +821,23 @@ select{
         height: 99%;
     }
     .close-member {
-        height: 3.5em;
+        height: 5.5em;
     }
+    .contact{
+    position: absolute;
+    top: 1.7em;
+    left: 5em;   
+    }
+.contact-image-comment-title{
+    bottom: 0.7em;
+    right: 8em;
+}
+.contact-image-comment{
+    top: 0.3em;
+    left: 0.5em;
+}.padding-s{
+        padding-left: 10%;
+}
     #contenutoBacheca {
         width: 53%;
     }    

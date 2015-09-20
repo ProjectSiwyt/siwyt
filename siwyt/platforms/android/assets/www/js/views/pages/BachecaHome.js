@@ -91,6 +91,7 @@ define(function(require) {
             "tap #addPostit": "addPostit",
             "tap #newPostit": "addPostit",
             "tap #backBoard": "goToHome",
+            "tap #export": "exportToJPG",
             "tap .postit": "manageAction",
             "tap .rename": "rename",
             "touchstart .postit": "saveEvent",
@@ -196,6 +197,44 @@ define(function(require) {
                     leave.classList.remove('hide');
                 }
             }  
+        },
+        exportToJPG: function(){
+            var menu = document.getElementById("contenutoBacheca");
+
+            if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+                menu.classList.add('close');
+            } else {
+                menu.classList.remove('close');
+                menu.classList.add('open');
+            }
+            navigator.notification.prompt(
+            "Insert name of file", 
+            onPrompt,                  // callback to invoke
+            'Export To JPG',            // title
+            ['Ok'],             // buttonLabels
+            'screenshot'                 // defaultText
+            );
+            function onPrompt(results){
+                setTimeout(function(){
+                    navigator.screenshot.save(function(error,res){
+                  if(error){
+                    console.error(error);
+                  }else{
+                    console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
+                    window.plugins.toast.showWithOptions(
+                      {
+                        message: "The Board has been exported",
+                        position: "center",
+                        duration: "long",
+                        addPixelsY: -200
+                      }
+                    );
+                  }
+                },'jpg',50,results.input1);
+                },500);    
+            }
+            
         },
         caricaDati:function(){
             this.bacheca.noticeboardData(this.idb);

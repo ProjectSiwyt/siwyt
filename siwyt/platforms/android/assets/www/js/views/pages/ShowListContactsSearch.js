@@ -60,7 +60,7 @@ define(function(require) {
       if(result){
         console.log("showDone", result);
         var item = document.getElementById(result);
-        var span = item.childNodes[1];
+        var span = item.childNodes[5];
         var i = span.firstChild;
         /*console.log("item ",item);
         console.log("span ",span);

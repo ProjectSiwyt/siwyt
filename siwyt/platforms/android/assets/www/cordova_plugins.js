@@ -232,6 +232,13 @@ module.exports = [
     {
         "file": "plugins/cordova-plugin-x-toast/test/tests.js",
         "id": "cordova-plugin-x-toast.tests"
+    },
+    {
+        "file": "plugins/com.darktalker.cordova.screenshot/www/Screenshot.js",
+        "id": "com.darktalker.cordova.screenshot.screenshot",
+        "merges": [
+            "navigator.screenshot"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -244,7 +251,8 @@ module.exports.metadata =
     "cordova-plugin-vibration": "1.2.0",
     "cordova-plugin-whitelist": "1.0.0",
     "phonegap-plugin-push": "1.2.3",
-    "cordova-plugin-x-toast": "2.2.0"
+    "cordova-plugin-x-toast": "2.2.0",
+    "com.darktalker.cordova.screenshot": "0.1.1"
 }
 // BOTTOM OF METADATA
 });

@@ -39,6 +39,10 @@
                         {
                             "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Screenshot\"><param name=\"android-package\" value=\"com.darktalker.cordova.screenshot.Screenshot\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -48,7 +52,7 @@
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 3
+                            "count": 4
                         }
                     ],
                     "/manifest": [
@@ -129,6 +133,9 @@
         },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
+        },
+        "com.darktalker.cordova.screenshot": {
+            "PACKAGE_NAME": "io.cordova.siwyt"
         }
     },
     "dependent_plugins": {}
