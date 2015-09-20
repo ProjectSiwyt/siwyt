@@ -190,10 +190,9 @@ body {
 }
 
 #search {
-    width: 90%;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: 3px;
     position: absolute;
+    width: 98%;
 }
 #searchContactsContent{
     margin-bottom: 4em;
@@ -214,6 +213,7 @@ body {
 #btn, #submit{
         bottom: 0em;
 }
+
 .tap{
     width: 44px;
 }
@@ -415,7 +415,7 @@ body {
 }
 
 .close-member {
-    height: 2.3em;
+    height: 3.5em;
 }
 
 .close-member>.navigate-right:after {
@@ -439,7 +439,7 @@ body {
 }
 
 .padding-s {
-    padding-left: 10%;
+    padding-left: 7%;
 }
 
 .trash {
@@ -465,8 +465,8 @@ body {
     height: 30px;
     width: 30px;
     position: absolute;
-    bottom: 0.7em;
-    right: 8em;
+    bottom: 0.5em;
+    right: 10em;
 }
 .contact-image-comment{
     height: 30px;
@@ -477,7 +477,7 @@ body {
 }
 .contact{
     position: absolute;
-    top: 1.7em;
+    top: 1.2em;
     left: 5em;   
 }
 .list-information {
@@ -491,33 +491,41 @@ body {
 }
 
 .search-delete {
-    right: 1em;
+    right: 0.3em;
     color: #bdb8b6;
     background-color: white;
     border: solid 1px #bdb8b6;
-    border-left-style: none;
-    width: 28px;
+    border-radius: 3px;
+    width: 44px;
     height: 44px;
-    margin-top: -9px;
-    padding-top: 8px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    padding-top: 4px;
+    padding-left: 6px;
+    top: 8px;
 }
 .search-result{
     z-index: 1100;
 }
 .send {
     top: 1.1em;
-    right: .3em;
+    right: 0em;
+    background-color: white;
+    border: solid 1px #bdb6b8;
+    border-radius: 3px;
+    /* border-left: none; */
+    width: 43px;
+    height: 44px;
+    margin-top: -5px;
+    padding-top: 4px;
+    padding-left: 5px;
 }
 
 .first-icon {
-    top: 27px;
+    top: 17px;
     right: 70px;
 }
 
 .second-icon {
-    top: 25px;
+    top: 15px;
     right: 5px;
 }
 
@@ -761,7 +769,8 @@ input:focus {
 }
 .popup-list{
     position: absolute;
-    top: 14px;
+    /*top: 14px;*/
+    top: 21px;
 }
 .no-float{
     float: none !important;
@@ -797,10 +806,10 @@ select{
         bottom: 3em;
     }
     .first-icon {
-        top: 20px;
-    }
+    top: 27px;
+}
     .second-icon {
-        top: 19px;
+        top: 25px;
     }
     .scroll-board {
         overflow-y: auto;
@@ -814,6 +823,21 @@ select{
     .close-member {
         height: 5.5em;
     }
+    .contact{
+    position: absolute;
+    top: 1.7em;
+    left: 5em;   
+    }
+.contact-image-comment-title{
+    bottom: 0.7em;
+    right: 8em;
+}
+.contact-image-comment{
+    top: 0.3em;
+    left: 0.5em;
+}.padding-s{
+        padding-left: 10%;
+}
     #contenutoBacheca {
         width: 53%;
     }    
