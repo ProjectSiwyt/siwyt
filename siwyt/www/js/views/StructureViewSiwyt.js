@@ -29,13 +29,21 @@ define(function(require) {
                 //alert(data.registrationId);
                 localStorage.setItem("registrationId", data.registrationId);
                 $.ajax({
-                  url:"http://192.168.1.234:9000/push/enable/android/"+data.registrationId,
+                  url:"http://192.168.43.48:9000/push/enable/android/"+data.registrationId,
                   method: "PUT"
                 });
             });
           
            push.on('notification', function(data) {
-                alert(data.message);
+                 window.plugins.toast.showWithOptions(
+                      {
+                        message: data.message,
+                        position: "top",
+                        duration: "long",
+                        addPixelsY: -200
+                      }
+                  );
+                //data.message,
                 // data.title,
                 // data.count,
                 // data.sound,
