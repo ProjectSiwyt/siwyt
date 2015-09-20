@@ -44,11 +44,8 @@ define(function(require) {
       "activePushNotification": "activePushNotification"
     },
 
-<<<<<<< HEAD
     BAASBOX_URL : "http://192.168.1.225:9000",
-=======
-    BAASBOX_URL : "http://192.168.1.234:9000",
->>>>>>> origin/master
+
     BAASBOX_APP_CODE : "1234567890",
 
     initialize: function(options) {
@@ -57,13 +54,9 @@ define(function(require) {
       var THIS = this;
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
-<<<<<<< HEAD
       //this.settings_val=[];
       this.initializeSettings();
-=======
 
-      this.settings_val=[];
->>>>>>> origin/master
       
       /*$.get('../../res/settings.txt', function(file) {
 
@@ -127,15 +120,6 @@ define(function(require) {
       
       this.spinner = new Spinner(opts);
       //console.log(this.el);
-    },
-<<<<<<< HEAD
-    enableNotifications: function(res){
-      if(res!=null){
-      $.ajax({
-        url:"http://192.168.1.225:9000/push/enable/android/AIzaSyD8xdSPD650vb70H0BiEIRU4Np1nQGi1XM",
-        method: "PUT"
-      });
-      }
     },
 
     initializeSettings: function(e){
@@ -234,9 +218,6 @@ define(function(require) {
           }, function(){console.log("errore write initial settings");});
         },
 
-
-=======
->>>>>>> origin/master
     homeSiwyt: function() {
       var THIS=this;
       // highlight the nav1 tab bar element as the current one
