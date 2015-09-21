@@ -75,7 +75,8 @@ define(function(require) {
       }
       var b = new Utente({
       nome:localStorage.getItem('nameLogged'),
-      cognome:localStorage.getItem('surnameLogged')
+      cognome:localStorage.getItem('surnameLogged'),
+      image:localStorage.getItem('imageLogged')
     });
       this.subview1=(new ShowListMembers({model: b})).render().el;
       document.getElementById("membri").appendChild(this.subview1);

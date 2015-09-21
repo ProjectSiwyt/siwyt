@@ -4,7 +4,7 @@
         <h3>Welcome</h3>
     </header>
 </div>
-<div class="i-12">
+<div class="i-12" id="formLogin">
     <form name="formLogin">
         <span id="loginerror" class="errorReg">Wrong Password or Username</span>
         <input id="logUsername" type="text" placeholder="USERNAME">
@@ -13,6 +13,20 @@
     <div class="btn-center">
         <button id="btn_login" class="btn btn-block">LOGIN</button>
     </div>
+
 </div>
-<div class="errorReg center" id="emailSent">An email its been sent to your e-mail. Please confirm your account before login</div>
+
 <div class="i-12 center" id="sign_up">Sign-up</div>
+
+<div class="i-12 center" id="recover">Recover password</div>
+<div class="i-12 hide" id="formRecover">
+    <form name="formRecover">
+        <input id="recoverUsername" type="text" placeholder="INSERT YOUR USERNAME">
+        <input type="text" class="hide">
+    </form>
+    <div class="btn-center ">
+        <button id="btn_recover" class="btn btn-block hide">Recover password</button>
+    </div>
+</div>
+
+<div class="i-12 center hide" id="back_login">Back to Login</div>

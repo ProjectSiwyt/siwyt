@@ -193,9 +193,9 @@ define(function(require) {
           //var THIS = this;
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
-          { quality: 80, 
-           targetWidth: 150,
-           targetHeight: 150,
+          { quality: 50, 
+           targetWidth: 250,
+           targetHeight: 250,
            destinationType: Camera.DestinationType.DATA_URL,
            sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM });
             var THISS = THIS;
@@ -224,9 +224,9 @@ define(function(require) {
             //var THIS = this;
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
-              { quality: 80, 
-               targetWidth: 150,
-               targetHeight: 150,
+              { quality: 50, 
+               targetWidth: 250,
+               targetHeight: 250,
                //allowEdit: true,
                encodingType: Camera.EncodingType.JPEG,
                destinationType: Camera.DestinationType.DATA_URL,
