@@ -73,7 +73,7 @@ define(function(require) {
         localStorage.setItem("notification_vibration", THIS.settings_val[2]);
 
       });*/
-
+      navigator.splashscreen.hide();
 
       if(localStorage.getItem("idu")==null){
           this.firstView="login";
