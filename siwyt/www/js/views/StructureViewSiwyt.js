@@ -18,6 +18,8 @@ define(function(require) {
       "tap #homeMenu": "goToHome",
       "tap #back": "goBack"
     },
+
+    BAASBOX_URL : "http://192.168.1.225:9000",
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
@@ -28,10 +30,17 @@ define(function(require) {
           push.on('registration', function(data) {
                 //alert(data.registrationId);
                 localStorage.setItem("registrationId", data.registrationId);
-                $.ajax({
-                  url:"http://192.168.43.48:9000/push/enable/android/"+data.registrationId,
-                  method: "PUT"
-                });
+                if(localStorage.getItem("boards")==1){
+                  $.ajax({
+                    url:"http://"+this.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
+                    method: "PUT"
+                  });
+                }else{
+                      $.ajax({
+                          url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+                          method: "PUT"
+                      });
+                }
             });
           
            push.on('notification', function(data) {

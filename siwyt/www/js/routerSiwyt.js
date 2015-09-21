@@ -44,7 +44,7 @@ define(function(require) {
       "activePushNotification": "activePushNotification"
     },
 
-    BAASBOX_URL : "http://192.168.43.48:9000",
+    BAASBOX_URL : "http://192.168.1.225:9000",
 
     BAASBOX_APP_CODE : "1234567890",
 

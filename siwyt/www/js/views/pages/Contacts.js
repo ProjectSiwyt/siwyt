@@ -96,7 +96,7 @@ define(function(require) {
       "tap .addToBoard": "showBoards",
       "tap .overlay": "chiudiPopup",
       "tap .overlaySearch": "chiudiPopupSearch",
-      "keyup":"startSearch",
+      "keyup":"checkInput",
       "tap #search": "startSearch",
       "tap .fa-times-circle-o":"resetSearch",
       "tap #new":"createBoard",
@@ -164,6 +164,18 @@ define(function(require) {
       
     },
 
+    checkInput: function(e){
+      var inp = document.activeElement.id;
+      console.log(inp);
+      if (inp=="search")
+          this.startSearch();
+      if (inp=="mail"){
+        if(e.which === 13)
+          this.invite();
+      }
+
+    },
+
     invite: function(e){
       var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-]{2,})+\.)+([a-zA-Z0-9]{2,})+$/;
       var email = document.getElementById("mail").value;
@@ -176,7 +188,8 @@ define(function(require) {
       
       if(valid){
           //this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail);
-          textmessage = "Mail sent to "+email;
+          textmessage = "Inviting Mail sent to "+email;
+          document.getElementById("mail").value=""; 
         }
 
         //DA INSERIRE IN UN METODO RICHIAATO SUL SUCCESS DELL INVIO MAIL

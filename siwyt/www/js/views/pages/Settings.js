@@ -138,6 +138,17 @@ define(function(require) {
               localStorage.setItem("boards", settings_val[0]);
               localStorage.setItem("sounds", settings_val[1]);
               localStorage.setItem("vibration", settings_val[2]);
+              if(localStorage.getItem("boards")==1){
+                $.ajax({
+                    url:"http://"+this.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
+                    method: "PUT"
+                  });
+              }else{
+                  $.ajax({
+                      url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+                      method: "PUT"
+                  });
+              }
             }, function(){console.log("errore write initial settings");});
           },
 
@@ -146,7 +157,7 @@ define(function(require) {
       localStorage.clear();
       console.log(localStorage.getItem("registrationId"));
       $.ajax({
-          url:"http://192.168.1.234:9000/push/disable/"+localStorage.getItem("registrationId"),
+          url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
           method: "PUT"
       });
       Backbone.history.navigate("login",{
