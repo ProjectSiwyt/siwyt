@@ -899,21 +899,20 @@ define(function(require) {
 								 .fail(function(error2) {
 								 	console.log(error2)
 								 })
+							BaasBox.deleteObject(r[i].id, "Responsabile") 
+			                    .done(function(res) {
+			                    	c++; 
+			                    	if (c==r.length){
+			                    		THIS.trigger("rimuoviTuttiResponsabili", r);
+			                    	}
+			                    }) 
+			                    .fail(function(error) { 
+			                        console.log("error ", error); 
+			                    })
 						})
 						.fail(function(err){
 							console.log("error",err);
 						})
-					BaasBox.deleteObject(r[i].id, "Responsabile") 
-	                    .done(function(res) {
-	                    	c++; 
-	                    	if (c==r.length){
-	                    		THIS.trigger("rimuoviTuttiResponsabili", r);
-	                    	}
-	                    }) 
-	                    .fail(function(error) { 
-	                        console.log("error ", error); 
-	                    })
-					
             } 
            },
            idRigheTuttiMembri: function(idb){
@@ -942,10 +941,14 @@ define(function(require) {
            	var THIS=this;
            	var c=0;
             for(var i=0; i<r.length; i++){ 
+            		var riga=r[i];
+            		console.log("riga",riga);
             		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
 			  			.done(function(user){
+			  				console.log(riga)
 			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
 								 .done(function(board) {
+								 	console.log("board",board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
 										  .done(function(res1) {
 										  	console.log( res1);
@@ -957,20 +960,21 @@ define(function(require) {
 								 .fail(function(error2) {
 								 	console.log(error2)
 								 })
+							BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
+			                    .done(function(res) {
+			                    	c++; 
+			                    	if (c==r.length){
+			                    		THIS.trigger("rimuoviTuttiMembri", r);
+			                    	}
+			                    }) 
+			                    .fail(function(error) { 
+			                        console.log("error ", error); 
+			                    })
 						})
 						.fail(function(err){
 							console.log("error",err);
 						})
-					 BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
-	                    .done(function(res) {
-	                    	c++; 
-	                    	if (c==r.length){
-	                    		THIS.trigger("rimuoviTuttiMembri", r);
-	                    	}
-	                    }) 
-	                    .fail(function(error) { 
-	                        console.log("error ", error); 
-	                    })     
+					      
             } 
            },
            idRigheTuttiAmministratori: function(idb){
