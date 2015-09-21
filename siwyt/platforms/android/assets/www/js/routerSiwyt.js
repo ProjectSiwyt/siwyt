@@ -44,7 +44,7 @@ define(function(require) {
       "activePushNotification": "activePushNotification"
     },
 
-    BAASBOX_URL : "http://192.168.1.225:9000",
+    BAASBOX_URL : "http://192.168.1.115:9000",
 
     BAASBOX_APP_CODE : "1234567890",
 
@@ -73,7 +73,7 @@ define(function(require) {
         localStorage.setItem("notification_vibration", THIS.settings_val[2]);
 
       });*/
-
+      navigator.splashscreen.hide();
 
       if(localStorage.getItem("idu")==null){
           this.firstView="login";

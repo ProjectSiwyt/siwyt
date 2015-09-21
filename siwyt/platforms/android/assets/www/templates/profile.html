@@ -1,6 +1,6 @@
 {{#if this}}
 <div class="i-4">
-    <img id="imgP" src="{{img}}" class="profile-img" /><span id="changeImg"><i class="fa fa-pencil fa-2x"></i></span>
+    <img id="imgP" src="{{img}}" class="profile-img" /><span id="changeImg"><i class="fa fa-pencil fa-2x option-icon"></i></span>
 </div>
 <div class="i-8">
     <ul class="list-information">
@@ -15,9 +15,9 @@
     </ul>
 </div>
 <div class="i-12 width-99">        
-        <span id="editData" class="pull-right">Modify your account <i class="fa fa-pencil"></i></span>
-    <span id="deleteData" class="pull-right"> Cancell changes <i class="fa fa-times"></i></span>
-    <span id="saveData" class="pull-right">Save changes <i class="fa fa-save"></i></span>
+    <span id="editData" class="pull-right option">Modify your account <i class="fa fa-pencil option-icon"></i></span>
+    <span id="deleteData" class="pull-right option"> Cancell changes <i class="fa fa-times option-icon"></i></span>
+    <span id="saveData" class="pull-right option">Save changes <i class="fa fa-save option-icon"></i></span>
         Name:
         <span class="errorReg" id="errName">Invalid name</span>
         <input class="edit" type="text" id="profileName" value="{{nome}}" disabled="disabled" /> Surname:
@@ -28,16 +28,16 @@
 
 
          Password:
-        <span id="editPassword" class="pull-right">Change password <i class="fa fa-pencil"></i></span>
-        <span id="cancellChangePass" class="pull-right"> Cancell <i class="fa fa-times"></i></span>
-        <span id="savePassword" class="pull-right">Save changes <i class="fa fa-save"></i></span>
+        <span id="editPassword" class="pull-right option">Change password <i class="fa fa-pencil option-icon"></i></span>
+        <span id="cancellChangePass" class="pull-right option"> Cancell <i class="fa fa-times option-icon"></i></span>
+        <span id="savePassword" class="pull-right option">Save changes <i class="fa fa-save option-icon"></i></span>
         <span class="errorReg pass" id="errPassword">Invalid Password</span>
         <input class="editPass" type="password" id="profileOldPass" name="oldPass" disabled="disabled" placeholder="Old Password" />
         <span class="errorReg pass" id="errConfirm">New password invalid. Remenber Must be least 5 characters</span>
         <input class="editPass" type="password" id="profileNewPass" name="newPass" disabled="disabled" placeholder="New Password" />
         <input class="editPass" type="password" id="profileConfirm" name="confPass" disabled="disabled" placeholder="Confirm new Password" />
-        <div id="deleteAccount" class="i-12">
-            Delete Account <i class="fa fa-trash-o fa-2x"></i></li>
+        <div id="deleteAccount" class="i-12" class="option">
+            Delete Account <i class="fa fa-trash-o fa-2x option-icon"></i></li>
         </div>
 </div>
 {{/if}}

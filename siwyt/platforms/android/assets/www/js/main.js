@@ -41,6 +41,7 @@ require.config({
     function run() {
       // Here we precompile ALL the templates so that the app will be quickier when switching views
       // see utils.js
+      navigator.splashscreen.show();
       Utils.loadTemplates().once("templatesLoaded", function() {
 
       var images = []; // here the developer can add the paths to the images that he would like to be preloaded
@@ -55,7 +56,7 @@ require.config({
         }
 
         function startRouter() {
-          // launch the router
+          // launch the router          
           var router = new AppRouter();
           Backbone.history.start();
         }

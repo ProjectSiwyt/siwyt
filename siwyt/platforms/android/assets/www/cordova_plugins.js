@@ -239,6 +239,13 @@ module.exports = [
         "merges": [
             "navigator.screenshot"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "clobbers": [
+            "navigator.splashscreen"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -252,7 +259,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.0.0",
     "phonegap-plugin-push": "1.2.3",
     "cordova-plugin-x-toast": "2.2.0",
-    "com.darktalker.cordova.screenshot": "0.1.1"
+    "com.darktalker.cordova.screenshot": "0.1.1",
+    "cordova-plugin-splashscreen": "2.1.0"
 }
 // BOTTOM OF METADATA
 });

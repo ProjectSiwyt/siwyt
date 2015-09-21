@@ -29,7 +29,7 @@ define(function(require) {
                 //alert(data.registrationId);
                 localStorage.setItem("registrationId", data.registrationId);
                 $.ajax({
-                  url:"http://192.168.43.48:9000/push/enable/android/"+data.registrationId,
+                  url:"http://192.168.1.115:9000/push/enable/android/"+data.registrationId,
                   method: "PUT"
                 });
             });
