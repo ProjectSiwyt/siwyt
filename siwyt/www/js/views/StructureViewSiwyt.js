@@ -19,25 +19,26 @@ define(function(require) {
       "tap #back": "goBack"
     },
 
-    BAASBOX_URL : "http://192.168.1.225:9000",
+    BAASBOX_URL : "http://192.168.1.55:9000",
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
+          var THIS=this;
           if(localStorage.getItem("usernameLogged")){
 
-          var push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": "true"}}, true );
+          window.push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": "true"}}, true );
           console.log(push);
           push.on('registration', function(data) {
                 //alert(data.registrationId);
                 localStorage.setItem("registrationId", data.registrationId);
                 if(localStorage.getItem("boards")==1){
                   $.ajax({
-                    url:"http://"+this.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
+                    url:THIS.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
                     method: "PUT"
                   });
                 }else{
                       $.ajax({
-                          url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+                          url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
                           method: "PUT"
                       });
                 }

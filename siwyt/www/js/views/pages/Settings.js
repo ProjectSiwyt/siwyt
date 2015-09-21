@@ -46,6 +46,8 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
+    BAASBOX_URL : "http://192.168.1.55:9000",
+
     id: "settings",
     className: "i-g page size",
 
@@ -102,7 +104,6 @@ define(function(require) {
       var v = localStorage.getItem("vibration");
       var str = b+";"+s+";"+v;
       console.log(str);
-
       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
         console.log("got main dir",dir);
         dir.getFile("settings.txt", {create:false}, function(file) {
@@ -119,6 +120,7 @@ define(function(require) {
       if(!logOb) return;
             //var log = str + " [" + (new Date()) + "]\n";
             //console.log("going to log "+log);
+            var THIS=this;
             logOb.createWriter(function(fileWriter) {
               
               var settings_val = new Array();
@@ -139,25 +141,65 @@ define(function(require) {
               localStorage.setItem("sounds", settings_val[1]);
               localStorage.setItem("vibration", settings_val[2]);
               if(localStorage.getItem("boards")==1){
-                $.ajax({
-                    url:"http://"+this.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
-                    method: "PUT"
-                  });
+                    console.log(push);
+                    var vibration=false;
+                    var sounds=false;
+                    if(localStorage.getItem("vibration")==1){
+                        vibration=true;
+                    }
+                    if(localStorage.getItem("sounds")==1){
+                        sounds=true;
+                    }
+                    console.log(sounds,vibration);
+                    window.push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": sounds, "vibrate": vibration}}, true );
+                    console.log(push);
+
+                    push.on('registration', function(data) {
+                        //alert(data.registrationId);
+                        localStorage.setItem("registrationId", data.registrationId);
+                        $.ajax({
+                          url:THIS.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
+                          method: "PUT"
+                        });
+                    });
+                
+                    push.on('notification', function(data) {
+                       window.plugins.toast.showWithOptions(
+                            {
+                              message: data.message,
+                              position: "center",
+                              duration: "long",
+                              addPixelsY: -200
+                            }
+                      );
+                      //data.message,
+                      // data.title,
+                      // data.count,
+                      // data.sound,
+                      // data.image,
+                      // data.additionalData
+                    });
+
+                    push.on('error', function(e) {
+                        // e.message
+                    });
               }else{
                   $.ajax({
-                      url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+                      url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
                       method: "PUT"
                   });
+                  localStorage.removeItem("registrationId");
               }
             }, function(){console.log("errore write initial settings");});
           },
 
     logOut: function(e){
+      var THIS=this;
       //localStorage.removeItem("idu");
       localStorage.clear();
       console.log(localStorage.getItem("registrationId"));
       $.ajax({
-          url:"http://"+this.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+          url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
           method: "PUT"
       });
       Backbone.history.navigate("login",{
