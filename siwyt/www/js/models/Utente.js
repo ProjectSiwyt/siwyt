@@ -286,12 +286,23 @@ define(function(require) {
 			  		else
 			  			{
 				  		for(var i=0; i<res.length; i++){
+				  			var c = res[i].id2;
 				  			BaasBox.deleteObject(res[i].id, "Contatto")
 								  .done(function(result) {
-								  	if(c==res.length){
-								  		
-								  		c++;
-								  	}
+								  	BaasBox.loadCollectionWithParams("Utente", {where: "id='"+c+"'" })
+								  			.done(function(user){
+											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted his account. All his boards has been deleted '" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+													  .done(function(res1) {
+													  	console.log( res1);
+													  })
+													  .fail(function(error) {
+													  	console.log("error sendPushNotification ", error);
+													  })
+											 })
+											 .fail(function(error2) {
+											 	console.log(error2)
+											 })
+
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
@@ -320,12 +331,23 @@ define(function(require) {
 			  		else
 			  			{
 				  		for(var i=0; i<res.length; i++){
+				  			var c = res[i].id1;
 				  			BaasBox.deleteObject(res[i].id, "Contatto")
 								  .done(function(result) {
-								  	if(c==res.length){
-								  		
-								  		c++;
-								  	}
+								  		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+c+"'" })
+								  			.done(function(user){
+											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted his account. All his boards has been deleted '" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+													  .done(function(res1) {
+													  	console.log( res1);
+													  })
+													  .fail(function(error) {
+													  	console.log("error sendPushNotification ", error);
+													  })
+											 })
+											 .fail(function(error2) {
+											 	console.log(error2)
+											 })
+
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
@@ -458,11 +480,34 @@ define(function(require) {
     		var THIS = this;
     		BaasBox.changePassword(oldPass, newPass)
 				.done(function(res) {
-					console.log("result changePasswordBaasbox ", res);
-					THIS.trigger("changePasswordDone", newPass);
+					BaasBox.login(localStorage.getItem("usernameLogged"), newPass)
+						.done(function (user) {
+							console.log("RRRRiLogin done", user);
+							console.log("result changePasswordBaasbox ", res);
+							THIS.trigger("changePasswordDone", newPass);
+						})
+						.fail(function (err) {
+							console.log("error ", err);
+							THIS.trigger("resultLogin", null);
+
+						})
+					
 				})
 				.fail(function(error) {
 					THIS.trigger("changePasswordDone", 0);
+				})
+    	},
+
+    	updatePass: function(pass, idu){
+    		var THIS = this;
+    		BaasBox.updateField(idu, "Utente", "password", pass)
+				.done(function(r) {
+					console.log("done update passwordLogged");
+					
+				})
+				.fail(function(error) {
+				   	console.log("error change password", error);
+				    
 				})
     	},
 
@@ -637,12 +682,12 @@ define(function(require) {
 
 
 		//funzione che cambia il nome dell'utente con id idu
-		saveName: function(idu, name){
+		saveData: function(idu, name, surname, email){
 		var THIS = this;
 			BaasBox.updateField(idu, "Utente", "nome", name)
 				.done(function(res) {
 					console.log("res ", res);
-					THIS.trigger("eventoSaveNome", true);
+					THIS.saveSurname(idu, surname, email);
 				})
 				.fail(function(error) {
 				   	console.log("error ", error);
@@ -651,12 +696,12 @@ define(function(require) {
 		},
 
 		//funzione che cambia cognome dell'utente con id idu
-		saveSurname: function(idu, surname){
+		saveSurname: function(idu, surname, email){
 			var THIS = this;
 			BaasBox.updateField(idu, "Utente", "cognome", surname)
 				.done(function(res) {
 					console.log("res ", res);
-					THIS.trigger("eventoSaveCognome", true);
+					THIS.saveEmail(idu, email);
 				})
 				.fail(function(error) {
 				   	console.log("error ", error);
@@ -676,24 +721,6 @@ define(function(require) {
 				.fail(function(error) {
 				   	console.log("error ", error);
 				    THIS.trigger("errorSaveEmail", false);
-				})
-		},
-
-		// funzione che cambia la password dell utente con id idu
-		changePassword: function(idu, password){
-			var THIS = this;
-			console.log(idu);
-			console.log(name);
-			var c=0;
-			BaasBox.updateField(idu, "Utente", "password", password)
-				.done(function(res) {
-					console.log("res ", res);
-					console.log("password changed");
-					THIS.trigger("passwordChanged", true);
-									})
-				.fail(function(error) {
-				   	console.log("error ", error);
-				    THIS.trigger("errormodificaTitolo", false);
 				})
 		},
 

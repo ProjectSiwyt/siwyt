@@ -330,9 +330,7 @@ define(function(require) {
           localStorage.setItem('surnameLogged',surname);
           localStorage.setItem("emailLogged", email);
           $(".edit").attr("disabled", "disabled");
-           this.utente.saveName(localStorage.getItem("idu"), name);
-           this.utente.saveSurname(localStorage.getItem("idu"), surname);
-           this.utente.saveEmail(localStorage.getItem("idu"), email);
+           this.utente.saveData(localStorage.getItem("idu"), name, surname, email);
            
          }
     },
@@ -367,6 +365,7 @@ define(function(require) {
             document.getElementById("profileConfirm").value ="";
             $(".editPass").attr("disabled","disabled");
             $(".errorReg.pass").removeAttr("style");
+            this.utente.updatePass(result, localStorage.getItem("idu"));
            }
         else
           $("#errPassword").attr("style","display:inline-block");

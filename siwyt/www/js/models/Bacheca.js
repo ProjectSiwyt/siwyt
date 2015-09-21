@@ -446,6 +446,25 @@ define(function(require) {
 			BaasBox.grantRoleAccessToObject("Bacheca_Utente",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
 			    console.log("res aggiungiUtenteBacheca ", res);
+			    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+result.idu+"'" })
+			  			.done(function(user){
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+result.idb+"'" })
+								 .done(function(board) {
+								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has added you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+										  .done(function(res1) {
+										  	console.log( res1);
+										  })
+										  .fail(function(error) {
+										  	console.log("error sendPushNotification ", error);
+										  })
+								 })
+								 .fail(function(error2) {
+								 	console.log(error2)
+								 })
+						})
+						.fail(function(err){
+							console.log("error",err);
+						})
 			    THIS.trigger("utenteAggiunto", result.idu);
 			  })
 			  .fail(function(error) {
@@ -756,11 +775,12 @@ define(function(require) {
            rimuoviResponsabili: function(r){
            	var THIS=this;
            	var c=0;
+           	var j=0;
             for(var i=0; i<r.length; i++){
-            		var riga=r[i];
-            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+            		
+            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
 			  			.done(function(user){
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
 								 .done(function(board) {
 								 	console.log(board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as admin to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
@@ -780,7 +800,8 @@ define(function(require) {
 						})  
 					BaasBox.deleteObject(r[i].id, "Responsabile") 
 	                    .done(function(res) {
-	                    	c++; 
+	                    	c++;
+	                    	j++;
 	                    	if (c==r.length){
 	                    		THIS.trigger("rimuoviResponsabili", true);
 	                    	}
@@ -820,12 +841,13 @@ define(function(require) {
            rimuoviMembri: function(r){
            	var THIS=this;
            	var c=0;
+           	var j=0
             for(var i=0; i<r.length; i++){ 
-            		var riga=r[i];
-                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+            		
+                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
 			  			.done(function(user){
 			  				console.log(r[i]);
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
 								 .done(function(board) {
 								 	console.log(board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
@@ -845,7 +867,8 @@ define(function(require) {
 						})
 					BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
 	                    .done(function(res) {
-	                    	c++; 
+	                    	c++;
+	                    	j++;
 	                    	if (c==r.length){
 	                    		console.log("eliminato");
 	                    		THIS.trigger("rimuoviMembri", true); 
@@ -878,14 +901,16 @@ define(function(require) {
 	                console.log("error ", error); 
 	            }) 
 	       },
+
 	       rimuoviTuttiResponsabili: function(r){
            	var THIS=this;
            	var c=0;
+           	var j=0;
             for(var i=0; i<r.length; i++){ 
-            		var riga=r[i];
-                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+        
+                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
 			  			.done(function(user){
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
 								 .done(function(board) {
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as admin to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
 										  .done(function(res1) {
@@ -901,7 +926,8 @@ define(function(require) {
 								 })
 							BaasBox.deleteObject(r[i].id, "Responsabile") 
 			                    .done(function(res) {
-			                    	c++; 
+			                    	c++;
+			                    	j++; 
 			                    	if (c==r.length){
 			                    		THIS.trigger("rimuoviTuttiResponsabili", r);
 			                    	}
@@ -940,13 +966,14 @@ define(function(require) {
 	       rimuoviTuttiMembri: function(r){
            	var THIS=this;
            	var c=0;
+           	var j=0;
             for(var i=0; i<r.length; i++){ 
-            		var riga=r[i];
-            		console.log("riga",riga);
-            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+
+            		//console.log("riga",riga);
+            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
 			  			.done(function(user){
-			  				console.log(riga)
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
+			  				//console.log(riga)
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
 								 .done(function(board) {
 								 	console.log("board",board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
@@ -962,7 +989,8 @@ define(function(require) {
 								 })
 							BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
 			                    .done(function(res) {
-			                    	c++; 
+			                    	c++;
+			                    	j++; 
 			                    	if (c==r.length){
 			                    		THIS.trigger("rimuoviTuttiMembri", r);
 			                    	}
