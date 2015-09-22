@@ -800,7 +800,6 @@ define(function(require) {
             for(var i=0; i<r.length; i++){
             	BaasBox.deleteObject(r[i].id, "Responsabile") 
 	                    .done(function(res) {
-	                    	THIS.rimuoviResponsabiliPushNotifications(r[c]);
 	                    	c++;
 	                    	if (c==r.length){
 	                    		THIS.trigger("rimuoviResponsabili", true);
@@ -809,6 +808,8 @@ define(function(require) {
 	                    .fail(function(error) { 
 	                        console.log("error ", error); 
 	                    }) 
+	           	THIS.rimuoviResponsabiliPushNotifications(r[i]);
+
             } 
            },
 
@@ -865,7 +866,6 @@ define(function(require) {
             for(var i=0; i<r.length; i++){                   
 					BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
 	                    .done(function(res) {
-	                    	THIS.rimuoviMembriPushNotifications(r[c]);
 	                    	c++;
 	                    	if (c==r.length){
 	                    		console.log("eliminato");
@@ -875,6 +875,8 @@ define(function(require) {
 	                    .fail(function(error) { 
 	                        console.log("error ", error); 
 	                    })
+	               	THIS.rimuoviMembriPushNotifications(r[i]);
+
             } 
            },
            idRigheTuttiResponsabili: function(idb){
@@ -922,7 +924,6 @@ define(function(require) {
            	BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[0].idb+"'" })
            		.done(function(board){
            			for(var i=0;i<r.length;i++){
-           				THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
 						BaasBox.deleteObject(r[i].id, "Responsabile") 
 				                    .done(function(res) {
 				                    	c++;
@@ -933,6 +934,8 @@ define(function(require) {
 				                    .fail(function(error) { 
 				                        console.log("error ", error); 
 				                    })
+           				THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
+				        
            			}
            		})
            		.fail(function(err){
@@ -982,7 +985,6 @@ define(function(require) {
            	BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[0].idb+"'" })
            		.done(function(board){
            			for(var i=0;i<r.length;i++){
-           				THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
 						BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
 				                    .done(function(res) {
 				                    	c++;
@@ -993,6 +995,8 @@ define(function(require) {
 				                    .fail(function(error) { 
 				                        console.log("error ", error); 
 				                    })
+				        THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
+
            			}
            		})
            		.fail(function(err){

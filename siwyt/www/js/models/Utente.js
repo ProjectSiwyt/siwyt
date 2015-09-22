@@ -98,24 +98,24 @@ define(function(require) {
 			var THIS = this;
 			BaasBox.loadCollectionWithParams("Bacheca_Utente", {where: "idu='"+idu+"'"})
 			  .done(function(res) {
-			  		var c =1;
+			  		var c =0;
 			  		console.log(res);
 			  		if(res.length==0) THIS.deleteUserDataAdmin(idu);
 			  		else
 			  			{
 					  		for(var i=0; i<res.length; i++){
-					  			BaasBox.deleteObject(res[i].id, "Bacheca_Utente")
+					  			BaasBox.deleteObject(res[c].id, "Bacheca_Utente")
 									  .done(function(result) {
+									  	c++;
 									  	if(c==res.length){
-									  		
-									  		c++;
+									  		THIS.deleteUserDataAdmin(idu);  	
 									  	}
 									  })
 									  .fail(function(error) {
 									    console.log("error ", error);
 									  })
 					  			}
-					  		THIS.deleteUserDataAdmin(idu);
+					  		
 			  		}
 
 				})
@@ -132,24 +132,23 @@ define(function(require) {
 			var THIS = this;
 			BaasBox.loadCollectionWithParams("Responsabile", {where: "idu='"+idu+"'"})
 			  .done(function(res) {
-			  		var c =1;
+			  		var c =0;
 			  		console.log("res ", res);
 			  		if(res.length==0) THIS.deleteUserDataManager(idu);
 			  		else
 			  			{
 				  		for(var i=0; i<res.length; i++){
-				  			BaasBox.deleteObject(res[i].id, "Responsabile")
+				  			BaasBox.deleteObject(res[c].id, "Responsabile")
 								  .done(function(result) {
+								  	c++;
 								  	if(c==res.length){
-								  		
-								  		c++;
+								  		THIS.deleteUserDataManager(idu);
 								  	}
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
 								  })
 				  			}
-				  		THIS.deleteUserDataManager(idu);
 				  		}
 				})
 				.fail(function(error) {
@@ -165,6 +164,7 @@ define(function(require) {
 			var THIS = this;
 			BaasBox.loadCollectionWithParams("Amministratore", {where: "idu='"+idu+"'"})
 			  .done(function(res) {
+			  		var c=0;
 			  		var idb = new Array();
 			  		console.log("res ", res);
 			  		if(res.length==0) THIS.deleteUserContacts_id1(idu);
@@ -174,13 +174,15 @@ define(function(require) {
 				  			idb[i]=res[i].idb;
 				  			BaasBox.deleteObject(res[i].id, "Amministratore")
 								  .done(function(result) {
-								    
+								    c++;
+								    if(c==res.length){
+								  		THIS.deleteUsersFromBacheca_Utente(idb, idu);				    	
+								    }
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
 								  })
 				  			}
-				  		THIS.deleteUsersFromBacheca_Utente(idb, idu);
 				  		}
 				})
 				.fail(function(error) {
@@ -274,6 +276,25 @@ define(function(require) {
 
 		},
 
+
+
+		deleteContactsId1PushNotifications: function(idu){
+         		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+idu+"'" })
+		  			.done(function(user){
+					 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted his account. All his boards has been deleted '" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+							  .done(function(res1) {
+							  	console.log( res1);
+							  })
+							  .fail(function(error) {
+							  	console.log("error sendPushNotification ", error);
+							  })
+					 })
+					 .fail(function(error2) {
+					 	console.log(error2)
+					 })
+         },
+	       
+
 		// cancella tutti i contatti dell utente idu in cui compare come id1
 		deleteUserContacts_id1: function(idu){
 			console.log("deleteUserContacts ", idu);
@@ -281,34 +302,24 @@ define(function(require) {
 			BaasBox.loadCollectionWithParams("Contatto", {where: "id1='"+idu+"'"})
 			  .done(function(res) {
 			  		console.log(res);
-			  		var c =1;
+			  		var j =0;
 			  		if(res.length==0) THIS.deleteUserContacts_id2(idu);
 			  		else
 			  			{
 				  		for(var i=0; i<res.length; i++){
-				  			var c = res[i].id2;
 				  			BaasBox.deleteObject(res[i].id, "Contatto")
 								  .done(function(result) {
-								  	BaasBox.loadCollectionWithParams("Utente", {where: "id='"+c+"'" })
-								  			.done(function(user){
-											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted his account. All his boards has been deleted '" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
-													  .done(function(res1) {
-													  	console.log( res1);
-													  })
-													  .fail(function(error) {
-													  	console.log("error sendPushNotification ", error);
-													  })
-											 })
-											 .fail(function(error2) {
-											 	console.log(error2)
-											 })
+								  	j++;
+								  	if(j==res.length){
+								  		THIS.deleteUserContacts_id2(idu);
+								  	}
 
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
 								  })
-				  			}
-				  		THIS.deleteUserContacts_id2(idu);
+				  				THIS.deleteContactsId1PushNotifications(res[i].id2);
+				  			}				  		
 				  		}
 				})
 				.fail(function(error) {
@@ -326,34 +337,24 @@ define(function(require) {
 			BaasBox.loadCollectionWithParams("Contatto", {where: "id2='"+idu+"'"})
 			  .done(function(res) {
 			  		console.log(res);
-			  		var c =1;
-			  		if(res.length==0) THIS.suspendAccount(idu);
+			  		var j =0;
+			  		if(res.length==0) THIS.suspendAccount();
 			  		else
 			  			{
 				  		for(var i=0; i<res.length; i++){
-				  			var c = res[i].id1;
 				  			BaasBox.deleteObject(res[i].id, "Contatto")
 								  .done(function(result) {
-								  		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+c+"'" })
-								  			.done(function(user){
-											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted his account. All his boards has been deleted '" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
-													  .done(function(res1) {
-													  	console.log( res1);
-													  })
-													  .fail(function(error) {
-													  	console.log("error sendPushNotification ", error);
-													  })
-											 })
-											 .fail(function(error2) {
-											 	console.log(error2)
-											 })
+								  	j++;
+								  	if(j==res.length){
+								  		THIS.suspendAccount();
+								  	}
 
 								  })
 								  .fail(function(error) {
 								    console.log("error ", error);
 								  })
-				  			}
-				  		THIS.suspendAccount(idu);
+				  			THIS.deleteContactsId1PushNotifications(res[i].id1);
+				  			}				  		
 				  		}
 				})
 				.fail(function(error) {
@@ -362,7 +363,6 @@ define(function(require) {
 				})
 
 		},
-
 
 
 		saveImage: function(idu, data_url){

@@ -57,7 +57,8 @@ define(function(require) {
       "tap #submit": "salva",
       "tap #addMembers": "goToAddContacts",
       "tap #backHome": "goToHome",
-      "tap #settings": "goToSettings"
+      "tap #settings": "goToSettings",
+      "keyup":"controlSubmit"
     },
 
     render: function() {
@@ -65,6 +66,10 @@ define(function(require) {
       //$(this.el).html(this.template(this.model.models));
 
       return this;
+    },
+    controlSubmit: function(e){
+        if(e.which === 13)
+        this.salva();
     },
     // si occupa di caricare i membri aggiunti dalla pagina AddContacts nel caso
     // sono stati aggiunti membri (lo si fa controllando nel localStorage);

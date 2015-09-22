@@ -151,17 +151,19 @@ define(function(require) {
       });
     },
 
-    removeContact: function(e){
-     /* var name = e.currentTarget.parentNode.id*/
-      console.log(e.currentTarget.parentNode.id);
-      var r = confirm("Are you sure you want to remove this contact");
-      if (r){
+    del: function(results){
+      if (results==1){
         this.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
-        //this.utente.listContacts(localStorage.getItem("idu"));
-        //this.render();
-      }
-      
-      
+        }
+    },
+    removeContact: function(e){
+     var THIS=this;
+      navigator.notification.confirm(
+        'Are you sure you want delete this contact?',  // message
+        THIS.del,                  // callback to invoke
+        'Delete COntact',            // title
+        'Ok,Cancell'             // buttonLabels
+        );
     },
 
     checkInput: function(e){

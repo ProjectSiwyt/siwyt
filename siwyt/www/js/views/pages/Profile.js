@@ -164,12 +164,18 @@ define(function(require) {
 
 
     deleteAccount: function(e){
-      var del = window.confirm("Are you sure you want to delete your account?");
-      console.log(del);
-      if(del) 
-          //this.utente.deleteAccount(localStorage.getItem("idu"));
+      var THIS=this;
+      navigator.notification.confirm(
+        'Are you sure you want delete your account?',  // message
+        THIS.del,                  // callback to invoke
+        'Delete Account',            // title
+        'Ok,Cancell'             // buttonLabels
+        );
+    },
+    del: function(results){
+      if (results==1){
           this.utente.deleteUserDataUser(localStorage.getItem("idu"));
-    
+        }
     },
 
     changeImg: function(e){
