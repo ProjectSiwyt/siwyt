@@ -770,17 +770,10 @@ define(function(require) {
                 }) 
            },
 
-         
-           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
-           rimuoviResponsabili: function(r){
-           	var THIS=this;
-           	var c=0;
-           	var j=0;
-            for(var i=0; i<r.length; i++){
-            		
-            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
+         	rimuoviResponsabiliPushNotifications: function(riga){
+         		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
 			  			.done(function(user){
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
 								 .done(function(board) {
 								 	console.log(board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as admin to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
@@ -798,17 +791,24 @@ define(function(require) {
 						.fail(function(err){
 							console.log("error",err);
 						})  
-					BaasBox.deleteObject(r[i].id, "Responsabile") 
+         	},
+
+           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
+           rimuoviResponsabili: function(r){
+           	var THIS=this;
+           	var c=0;
+            for(var i=0; i<r.length; i++){
+            	BaasBox.deleteObject(r[i].id, "Responsabile") 
 	                    .done(function(res) {
+	                    	THIS.rimuoviResponsabiliPushNotifications(r[c]);
 	                    	c++;
-	                    	j++;
 	                    	if (c==r.length){
 	                    		THIS.trigger("rimuoviResponsabili", true);
 	                    	}
 	                    }) 
 	                    .fail(function(error) { 
 	                        console.log("error ", error); 
-	                    })       
+	                    }) 
             } 
            },
 
@@ -836,18 +836,10 @@ define(function(require) {
                 }) 
            },
 
-         
-           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
-           rimuoviMembri: function(r){
-           	var THIS=this;
-           	var c=0;
-           	var j=0
-            for(var i=0; i<r.length; i++){ 
-            		
-                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
+         	rimuoviMembriPushNotifications: function(riga){
+         		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
 			  			.done(function(user){
-			  				console.log(r[i]);
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
+			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })
 								 .done(function(board) {
 								 	console.log(board);
 								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
@@ -865,10 +857,16 @@ define(function(require) {
 						.fail(function(err){
 							console.log("error",err);
 						})
+         	},
+           //rimuove dalla tabella 'Responsabile' l'array passato come parametro 
+           rimuoviMembri: function(r){
+           	var THIS=this;
+           	var c=0;
+            for(var i=0; i<r.length; i++){                   
 					BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
 	                    .done(function(res) {
+	                    	THIS.rimuoviMembriPushNotifications(r[c]);
 	                    	c++;
-	                    	j++;
 	                    	if (c==r.length){
 	                    		console.log("eliminato");
 	                    		THIS.trigger("rimuoviMembri", true); 
@@ -902,44 +900,44 @@ define(function(require) {
 	            }) 
 	       },
 
-	       rimuoviTuttiResponsabili: function(r){
-           	var THIS=this;
-           	var c=0;
-           	var j=0;
-            for(var i=0; i<r.length; i++){ 
-        
-                    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
-			  			.done(function(user){
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
-								 .done(function(board) {
-								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as admin to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
-										  .done(function(res1) {
-										  	console.log( res1);
-										  })
-										  .fail(function(error1) {
-										  	console.log("error sendPushNotification ", error1);
-										  })
-									
-								 })
-								 .fail(function(error2) {
-								 	console.log(error2)
-								 })
-							BaasBox.deleteObject(r[i].id, "Responsabile") 
-			                    .done(function(res) {
-			                    	c++;
-			                    	j++; 
-			                    	if (c==r.length){
-			                    		THIS.trigger("rimuoviTuttiResponsabili", r);
-			                    	}
-			                    }) 
-			                    .fail(function(error) { 
-			                        console.log("error ", error); 
-			                    })
+	       rimuoviTuttiResponsabiliPushNotifications: function(riga, board){
+         		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+			  			.done(function(user){	 
+							 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as admin to board '"+board.nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+									  .done(function(res1) {
+									  	console.log( res1);
+									  })
+									  .fail(function(error1) {
+									  	console.log("error sendPushNotification ", error1);
+									  })
 						})
 						.fail(function(err){
 							console.log("error",err);
 						})
-            } 
+         	},
+
+	       rimuoviTuttiResponsabili: function(r){
+	       	var THIS=this;
+           	var c=0;
+           	BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[0].idb+"'" })
+           		.done(function(board){
+           			for(var i=0;i<r.length;i++){
+           				THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
+						BaasBox.deleteObject(r[i].id, "Responsabile") 
+				                    .done(function(res) {
+				                    	c++;
+				                    	if (c==r.length){
+				                    		THIS.trigger("rimuoviTuttiResponsabili", r);
+				                    	}
+				                    }) 
+				                    .fail(function(error) { 
+				                        console.log("error ", error); 
+				                    })
+           			}
+           		})
+           		.fail(function(err){
+           			console.log(err);
+           		})
            },
            idRigheTuttiMembri: function(idb){
 	        var a= new Array();
@@ -963,48 +961,43 @@ define(function(require) {
 	                console.log("error ", error); 
 	            }) 
 	       },
-	       rimuoviTuttiMembri: function(r){
-           	var THIS=this;
-           	var c=0;
-           	var j=0;
-            for(var i=0; i<r.length; i++){ 
-
-            		//console.log("riga",riga);
-            		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+r[j].idu+"'" })
-
-			  			.done(function(user){
-			  				//console.log(riga)
-			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[j].idb+"'" })
-								 .done(function(board) {
-								 	console.log("board",board);
-								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board[0].nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
-										  .done(function(res1) {
-										  	console.log( res1);
-										  })
-										  .fail(function(error1) {
-										  	console.log("error sendPushNotification ", error1);
-										  })
-								 })
-								 .fail(function(error2) {
-								 	console.log(error2)
-								 })
-							BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
-			                    .done(function(res) {
-			                    	c++;
-			                    	j++; 
-			                    	if (c==r.length){
-			                    		THIS.trigger("rimuoviTuttiMembri", r);
-			                    	}
-			                    }) 
-			                    .fail(function(error) { 
-			                        console.log("error ", error); 
-			                    })
+	       rimuoviTuttiMembriPushNotifications: function(riga, board){
+         		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
+			  			.done(function(user){	 
+							 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has removed you as user to board '"+board.nome+"'", "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+									  .done(function(res1) {
+									  	console.log( res1);
+									  })
+									  .fail(function(error1) {
+									  	console.log("error sendPushNotification ", error1);
+									  })
 						})
 						.fail(function(err){
 							console.log("error",err);
 						})
-					      
-            } 
+         	},
+	       rimuoviTuttiMembri: function(r){
+           	var THIS=this;
+           	var c=0;
+           	BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+r[0].idb+"'" })
+           		.done(function(board){
+           			for(var i=0;i<r.length;i++){
+           				THIS.rimuoviTuttiMembriPushNotifications(r[i],board);
+						BaasBox.deleteObject(r[i].id, "Bacheca_Utente") 
+				                    .done(function(res) {
+				                    	c++;
+				                    	if (c==r.length){
+				                    		THIS.trigger("rimuoviTuttiMembri", r);
+				                    	}
+				                    }) 
+				                    .fail(function(error) { 
+				                        console.log("error ", error); 
+				                    })
+           			}
+           		})
+           		.fail(function(err){
+           			console.log(err);
+           		})
            },
            idRigheTuttiAmministratori: function(idb){
 	        var a= new Array();
