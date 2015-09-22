@@ -142,6 +142,7 @@ define(function(require) {
                     if (px<ax && py<ay){
                         if (p.x>px &&p.x<ax && p.y>py && p.y<ay){
                             var THIS=this;
+                            var j=i;
                               navigator.notification.confirm(
                                 'Are you sure you want delete this relation?',  // message
                                 del,                  // callback to invoke
@@ -150,8 +151,9 @@ define(function(require) {
                                 );
                             function del(results){
                                 if (results==1){
-                                THIS.relazione.rimuoviRelazione(THIS.rel[i].id);
-                                THIS.rel.splice(i,1);
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
                                 THIS.appendRelations(THIS.rel);
                                 }
                             }
@@ -160,6 +162,7 @@ define(function(require) {
                     if (px<ax && ay<py){
                         if(p.x>px &&p.x<ax && p.y>ay && p.y<py){
                             var THIS=this;
+                            var j=i;
                               navigator.notification.confirm(
                                 'Are you sure you want delete this relation?',  // message
                                 del,                  // callback to invoke
@@ -168,8 +171,9 @@ define(function(require) {
                                 );
                             function del(results){
                                 if (results==1){
-                                THIS.relazione.rimuoviRelazione(THIS.rel[i].id);
-                                THIS.rel.splice(i,1);
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
                                 THIS.appendRelations(THIS.rel);
                                 }
                             }
@@ -178,6 +182,7 @@ define(function(require) {
                     if (ax<px && ay<py){
                         if(p.x>ax &&p.x<px && p.y>ay && p.y<py){
                             var THIS=this;
+                            var j=i;
                               navigator.notification.confirm(
                                 'Are you sure you want delete this relation?',  // message
                                 del,                  // callback to invoke
@@ -186,8 +191,9 @@ define(function(require) {
                                 );
                             function del(results){
                                 if (results==1){
-                                THIS.relazione.rimuoviRelazione(THIS.rel[i].id);
-                                THIS.rel.splice(i,1);
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
                                 THIS.appendRelations(THIS.rel);
                                 }
                             }
@@ -196,6 +202,7 @@ define(function(require) {
                     if (ax<px && py<ay){
                         if(p.x>ax &&p.x<px && p.y>py && p.y<ay){
                             var THIS=this;
+                            var j=i;
                               navigator.notification.confirm(
                                 'Are you sure you want delete this relation?',  // message
                                 del,                  // callback to invoke
@@ -204,8 +211,11 @@ define(function(require) {
                                 );
                             function del(results){
                                 if (results==1){
-                                THIS.relazione.rimuoviRelazione(THIS.rel[i].id);
-                                THIS.rel.splice(i,1);
+                                    console.log(THIS.rel);
+                                    console.log(j);
+                                    console.log(THIS.rel[j]);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
                                 THIS.appendRelations(THIS.rel);
                                 }
                             }
@@ -338,6 +348,7 @@ define(function(require) {
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){
+            console.log("-----------------------------------------")
             if (res!=null){
                 this.rel=res;
                 $("#boardCanvas").remove();

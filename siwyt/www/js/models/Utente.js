@@ -13,6 +13,8 @@ define(function(require) {
 			confermato: ""
 		},
 		constructorName: "Utente",
+		BAASBOX_URL : "http://192.168.1.234:9000",
+
 		
 		parse: function(response) {
         	//unwrap the response from the server....
@@ -83,12 +85,25 @@ define(function(require) {
 
 		//sospende l account di idu impedendo il login
 		suspendAccount: function(idu){
+			var THIS=this;
 			console.log(localStorage.getItem("usernameLogged"));
-			$.ajax({
-                  url:"http://192.168.1.57:9000/me/suspend",
+			/*BaasBox.suspend()
+				.done(function(res){
+					this.logout();
+				})
+				.fail(function(err){
+
+				})
+			*/
+			var result=$.ajax({
+                  url:THIS.BAASBOX_URL+"/me/suspend",
                   method: "PUT"
-                });
-			this.logout();
+                }).done(function(res){
+                	Backbone.history.navigate("login",{
+				        trigger: true
+				      });
+                	localStorage.clear();
+                });	
 		},
 
 

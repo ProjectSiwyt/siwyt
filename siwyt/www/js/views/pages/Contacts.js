@@ -151,19 +151,19 @@ define(function(require) {
       });
     },
 
-    del: function(results){
-      if (results==1){
-        this.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
-        }
-    },
     removeContact: function(e){
      var THIS=this;
       navigator.notification.confirm(
         'Are you sure you want delete this contact?',  // message
-        THIS.del,                  // callback to invoke
+        del,                  // callback to invoke
         'Delete COntact',            // title
         'Ok,Cancell'             // buttonLabels
         );
+      function del(results){
+          if (results==1){
+           THIS.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
+          }
+      }
     },
 
     checkInput: function(e){
