@@ -357,13 +357,17 @@ define(function(require) {
         //Viene gestita l'apertura e la chiusura del menu laterale
         gestionemenu: function(e) {
             var menu = document.getElementById("contenutoBacheca");
-
+            var icon = document.getElementById("aprimenu").children[0];
             if (menu.classList.contains('open')) {
                 menu.classList.remove('open');
                 menu.classList.add('close');
+                icon.classList.remove('fa-angle-double-left');
+                icon.classList.add('fa-angle-double-right');
             } else {
                 menu.classList.remove('close');
                 menu.classList.add('open');
+                icon.classList.remove('fa-angle-double-right');
+                icon.classList.add('fa-angle-double-left');
             }
         },
         //Aggiunge i postit alla bacheca

@@ -941,7 +941,8 @@ define(function(require) {
 	       rimuoviTuttiMembri: function(r){
            	var THIS=this;
            	var c=0;
-            for(var i=0; i<r.length; i++){ 
+            for(var i=0; i<r.length; i++){
+            	var riga = r[i]; 
             		BaasBox.loadCollectionWithParams("Utente", {where: "id='"+riga.idu+"'" })
 			  			.done(function(user){
 			  				BaasBox.loadCollectionWithParams("Bacheca", {where: "id='"+riga.idb+"'" })

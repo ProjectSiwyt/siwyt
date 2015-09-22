@@ -46,8 +46,8 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    BAASBOX_URL : "http://192.168.1.55:9000",
-
+    BAASBOX_URL : "http://192.168.1.57:9000",
+    ICON: "/www/res/icon/android/icon-36-ldpi.png",
     id: "settings",
     className: "i-g page size",
 
@@ -151,7 +151,7 @@ define(function(require) {
                         sounds=true;
                     }
                     console.log(sounds,vibration);
-                    window.push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": sounds, "vibrate": vibration}}, true );
+                    window.push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": sounds, "vibrate": vibration, "icon":THIS.ICON, "clearNotifications":"false"}}, true );
                     console.log(push);
 
                     push.on('registration', function(data) {

@@ -32,6 +32,7 @@ define({
     login: "templates/login.html",
     profile: "templates/profile.html",
     appSettings: "templates/appSettings.html",
-    contentPostit: "templates/content_postit.html"
+    contentPostit: "templates/content_postit.html",
+    tutorial: "templates/carousel.html"
     
 });

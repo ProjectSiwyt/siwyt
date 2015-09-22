@@ -21,6 +21,7 @@ define(function(require) {
   var Register = require("views/pages/Register");
   var NoticeboardManagement = require("views/pages/NoticeboardManagement");
   var PostitHome = require("views/pages/PostitHome");
+  var Tutorial = require("views/pages/Carousel");
   var Spinner= require("spin");
 
   var AppRouter = Backbone.Router.extend({
@@ -41,10 +42,11 @@ define(function(require) {
       "register":"register",
       "boardManagement/:idb/:idpage":"boardManagement",
       "postit/:idp/:idb": "postit",
-      "activePushNotification": "activePushNotification"
+      "activePushNotification": "activePushNotification",
+      "tutorial": "tutorial"
     },
 
-    BAASBOX_URL : "http://192.168.1.115:9000",
+    BAASBOX_URL : "http://192.168.1.57:9000",
 
     BAASBOX_APP_CODE : "1234567890",
 
@@ -54,25 +56,9 @@ define(function(require) {
       var THIS = this;
       BaasBox.setEndPoint(this.BAASBOX_URL); //the address of your BaasBox server
       BaasBox.appcode = this.BAASBOX_APP_CODE;               //the application code of your server
-      //this.settings_val=[];
+
       this.initializeSettings();
 
-      
-      /*$.get('../../res/settings.txt', function(file) {
-
-        var riga = file.split(";");
-        console.log(riga);
-        for(var i =0; i< riga.length;i++){
-          console.log("riga[elem]: ",riga[i]);
-          THIS.settings_val[i]= riga[i];             
-        }
-
-        console.log("settings_val: ",THIS.settings_val);
-        localStorage.setItem("notification_boards", THIS.settings_val[0]);
-        localStorage.setItem("notification_sounds", THIS.settings_val[1]);
-        localStorage.setItem("notification_vibration", THIS.settings_val[2]);
-
-      });*/
       navigator.splashscreen.hide();
 
       if(localStorage.getItem("idu")==null){
@@ -85,16 +71,7 @@ define(function(require) {
         utente.login(localStorage.getItem("usernameLogged"), localStorage.getItem("passwordLogged"));
         this.firstView="homeSiwyt";
       }
-      //at the moment we log in as admin  
-     /* BaasBox.login("admin", "admin")
-          .done(function (user) {
-              console.log("Logged in ", user);
-              //once we are logged in, let's start backbone
-              //Backbone.history.start();
-      })
-          .fail(function (err) {
-            console.log("error ", err);
-      });*/
+
       var opts = {
           lines: 13 // The number of lines to draw
           , length: 11 // The length of each line
@@ -237,7 +214,13 @@ define(function(require) {
       this.spinner.stop();
       page.set_notification();
     },
-    
+
+    tutorial: function(){
+      var page = new Tutorial();
+      this.changePage(page);
+      this.spinner.stop();
+    },
+
     login: function(){
       var page= new Login();
       this.spinner.stop();
@@ -328,7 +311,15 @@ define(function(require) {
         document.body.removeChild(main);
         document.body.appendChild(this.structureView.render().el);
         this.structureView.trigger("inTheDOM");
-        this.navigate("homeSiwyt", {trigger: true});
+        //Access to the tutorial the first time of the app
+        localStorage.setItem("tutorial","true");
+        debugger;
+        if(localStorage.getItem("tutorial")=="true"){ 
+          this.navigate("tutorial", {trigger: true});
+        }
+        else{
+          this.navigate("homeSiwyt", {trigger: true});  
+        }        
     },
 
     showNoticeboard: function(idb, ruolo){

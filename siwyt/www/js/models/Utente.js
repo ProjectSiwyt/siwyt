@@ -85,7 +85,7 @@ define(function(require) {
 		suspendAccount: function(idu){
 			console.log(localStorage.getItem("usernameLogged"));
 			$.ajax({
-                  url:"http://192.168.1.225:9000/me/suspend",
+                  url:"http://192.168.1.57:9000/me/suspend",
                   method: "PUT"
                 });
 			this.logout();

@@ -18,20 +18,39 @@ define(function(require) {
       "tap #homeMenu": "goToHome",
       "tap #back": "goBack"
     },
+
+    BAASBOX_URL : "http://192.168.1.57:9000",
+    ICON: "/www/res/icon/android/icon-36-ldpi.png",
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java
     initialize: function(options) {
+          var THIS=this;
           if(localStorage.getItem("usernameLogged")){
-
-          var push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": "true"}}, true );
+              var vibration=false;
+              var sounds=false;
+              if(localStorage.getItem("vibration")==1){
+                vibration=true;
+              }
+              if(localStorage.getItem("sounds")==1){
+                  sounds=true;
+              }
+              console.log(sounds,vibration);
+              window.push = PushNotification.init({ "android": {"senderID": "746595440813", "sound": sounds, "vibrate": vibration, "icon":THIS.ICON, "clearNotifications":"false"}}, true );          
           console.log(push);
           push.on('registration', function(data) {
                 //alert(data.registrationId);
                 localStorage.setItem("registrationId", data.registrationId);
-                $.ajax({
-                  url:"http://192.168.1.115:9000/push/enable/android/"+data.registrationId,
-                  method: "PUT"
-                });
+                if(localStorage.getItem("boards")==1){
+                  $.ajax({
+                    url:THIS.BAASBOX_URL+"/push/enable/android/"+data.registrationId,
+                    method: "PUT"
+                  });
+                }else{
+                      $.ajax({
+                          url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
+                          method: "PUT"
+                      });
+                }
             });
           
            push.on('notification', function(data) {

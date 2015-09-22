@@ -92,6 +92,7 @@ define(function(require) {
             "tap #newPostit": "addPostit",
             "tap #backBoard": "goToHome",
             "tap #export": "exportToJPG",
+            "tap #appSettings":"goToSettings",
             "tap .postit": "manageAction",
             "tap .rename": "rename",
             "touchstart .postit": "saveEvent",
@@ -356,13 +357,17 @@ define(function(require) {
         //Viene gestita l'apertura e la chiusura del menu laterale
         gestionemenu: function(e) {
             var menu = document.getElementById("contenutoBacheca");
-
+            var icon = document.getElementById("aprimenu").children[0];
             if (menu.classList.contains('open')) {
                 menu.classList.remove('open');
                 menu.classList.add('close');
+                icon.classList.remove('fa-angle-double-left');
+                icon.classList.add('fa-angle-double-right');
             } else {
                 menu.classList.remove('close');
                 menu.classList.add('open');
+                icon.classList.remove('fa-angle-double-right');
+                icon.classList.add('fa-angle-double-left');
             }
         },
         //Aggiunge i postit alla bacheca
@@ -579,7 +584,7 @@ define(function(require) {
             }
         },
         renameManagement:function(e){
-            var idPopup = e.target.parentNode.parentNode.id;
+            var idPopup = e.currentTarget.parentNode.parentNode.id;
             this.showDialog(idPopup.replace("LinkPopup",""));
             this.showPopup(idPopup.replace("LinkPopup",""));
         },
@@ -677,6 +682,11 @@ define(function(require) {
             Backbone.history.navigate("boardManagement/" + this.idb+"/"+this.id, {
                 trigger: true
             });
+        },
+        goToSettings: function(event){
+          Backbone.history.navigate("settings",{
+            trigger: true
+          });
         }
     });
 
