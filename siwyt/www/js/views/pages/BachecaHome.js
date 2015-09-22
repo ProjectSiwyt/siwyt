@@ -348,7 +348,6 @@ define(function(require) {
             this.relazione.elencoRelazioniBacheca(this.idb);
         },
         appendRelations: function(res){
-            console.log("-----------------------------------------")
             if (res!=null){
                 this.rel=res;
                 $("#boardCanvas").remove();

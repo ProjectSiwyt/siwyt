@@ -102,7 +102,7 @@ define(function(require) {
       var b = localStorage.getItem("boards");
       var s = localStorage.getItem("sounds");
       var v = localStorage.getItem("vibration");
-      var str = b+";"+s+";"+v;
+      var str = b+";"+s+";"+v+";0";
       console.log(str);
       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
         console.log("got main dir",dir);

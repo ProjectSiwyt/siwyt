@@ -636,22 +636,23 @@ define(function(require) {
 		},
 
 		// invia una mail che invita all indirizzo specificato a iscriversi a siwyt
-		inviaMailInvito: function(nome, cognome, mail){
+		inviaMailInvito: function(nome, cognome, mail, emailDestinatario){
 			var THIS = this;
 			var jqXHR = $.ajax({
 
-				url: "http://siwyt.altervista.org/sendInviteMail.php", //percorso script php che invia
+				url: "http://siwyt.altervista.org/invito.php", //percorso script php che invia
 				data: {
 					nome : nome,
 					cognome : cognome,
-					mail: mail
+					mail: mail,
+					emailDestinatario: emailDestinatario
 					
 				},
 				type: 'POST',
 				dataType: 'json',
 				async: false
 			});
-			//console.log(jqXHR.responseText);
+			console.log(jqXHR.responseText);
 			THIS.trigger("mailSent ", true);
 
 		},

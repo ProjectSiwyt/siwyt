@@ -164,6 +164,8 @@ define(function(require) {
            THIS.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
           }
       }
+      
+      
     },
 
     checkInput: function(e){
@@ -189,7 +191,8 @@ define(function(require) {
                 }
       
       if(valid){
-          //this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),mail);
+        console.log(mail);
+          this.utente.inviaMailInvito(localStorage.getItem("nameLogged"),localStorage.getItem("surnameLogged"),localStorage.getItem("emailLogged"), email);
           textmessage = "Inviting Mail sent to "+email;
           document.getElementById("mail").value=""; 
         }
