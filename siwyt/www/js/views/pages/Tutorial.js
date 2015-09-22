@@ -97,27 +97,35 @@ define(function(require) {
         goToLeft: function(e) {
             var THIS = this;
             if (THIS.current_screen!=1) {
-            var current = document.getElementById("screen_" + (THIS.current_screen - 1));   
-                current.classList.remove("prev");
-                var next = document.getElementById("screen_" + THIS.current_screen);
-                next.classList.add("next");
-                THIS.current_screen = THIS.current_screen - 1;
-                var prev = document.getElementById("screen_" + (THIS.current_screen - 1));
-                    prev.classList.add("prev");
-                    prev.classList.remove("hide");                
+              var prev_page = document.getElementById("page_" + THIS.current_screen);
+              prev_page.classList.remove("current");
+              var current = document.getElementById("screen_" + (THIS.current_screen - 1));   
+              current.classList.remove("prev");
+              var next = document.getElementById("screen_" + THIS.current_screen);
+              next.classList.add("next");
+              THIS.current_screen = THIS.current_screen - 1;
+              var current_page = document.getElementById("page_" + THIS.current_screen);
+              current_page.classList.add("current");
+              var prev = document.getElementById("screen_" + (THIS.current_screen - 1));
+              prev.classList.add("prev");
+              prev.classList.remove("hide");                
             }
         },
         goToRight: function(e) {
             var THIS = this;
-            if (THIS.current_screen!=2) {
-                var current = document.getElementById("screen_" + (THIS.current_screen + 1));
-                current.classList.remove("next");
-                var prev = document.getElementById("screen_" + THIS.current_screen);
-                prev.classList.add("prev");
-                THIS.current_screen = THIS.current_screen + 1;
-                var next = document.getElementById("screen_" + (THIS.current_screen + 1));
-                next.classList.add("next");
-                next.classList.remove("hide");
+            if (THIS.current_screen!=7) {
+              var prev_page = document.getElementById("page_" + THIS.current_screen);
+              prev_page.classList.remove("current");
+              var current = document.getElementById("screen_" + (THIS.current_screen + 1));
+              current.classList.remove("next");
+              var prev = document.getElementById("screen_" + THIS.current_screen);
+              prev.classList.add("prev");
+              THIS.current_screen = THIS.current_screen + 1;
+              var current_page = document.getElementById("page_" + THIS.current_screen);
+              current_page.classList.add("current");
+              var next = document.getElementById("screen_" + (THIS.current_screen + 1));
+              next.classList.add("next");
+              next.classList.remove("hide");
             } else {
                 THIS.skip(e);
             }
