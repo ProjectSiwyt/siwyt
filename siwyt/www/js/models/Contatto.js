@@ -35,6 +35,19 @@ define(function(require) {
 			BaasBox.grantRoleAccessToObject("Contatto",result.id, BaasBox.ALL_PERMISSION, BaasBox.REGISTERED_ROLE)
 			  .done(function(res) {
 			    console.log("res ", res);
+					    BaasBox.loadCollectionWithParams("Utente", {where: "id='"+result.id2+"'" })
+					  			.done(function(user){
+								 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has added you in his contacts'" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+										  .done(function(res1) {
+										  	console.log( res1);
+										  })
+										  .fail(function(error) {
+										  	console.log("error sendPushNotification ", error);
+										  })
+								 })
+								 .fail(function(error2) {
+								 	console.log(error2)
+								 })
 			    THIS.trigger("resultAggiungiContatto", result.id2);
 			  })
 			  .fail(function(error) {
@@ -42,49 +55,31 @@ define(function(require) {
 			  })
 		},
 
-		aggiungiContattoConNotifica: function(id1, id2){
-			
-			var THIS=this;
-			var post = new Object();
-			post.id1 = id1;
-			post.id2 = id2;
-
-			BaasBox.save(post, "Contatto")
-				.done(function(res) {
-					BaasBox.sendPushNotification({"message" : "sei stato aggiunto a una lista contatti", "users" : [id2]})
-					  .done(function(res) {
-					  	console.log("contatto aggiunto con notifica");
-					  	THIS.trigger("resultAggiungiContatto", post.id2);
-					    console.log("res ", res);
-					  })
-					  .fail(function(error) {
-					  	THIS.trigger("resultAggiungiContatto", false);
-					    console.log("error ", error);
-					  })
-				})
-				.fail(function(error) {
-					THIS.trigger("resultAggiungiContatto", false);
-					THIS.trigger("error", true);
-				})
-
-		},
-
    		//Prende come parametri due id e rimuove la riga corrispondente della tabella 'Contatto'
    		rimuoviContatto: function(id1, id2){
    			var THIS =	this;
 			
 			BaasBox.loadCollection("Contatto")
-
 				.done(function(res) {
-					
-					console.log("res ", res);
-					
-					for(var i=0; i<res.length; i++){
-						
+					console.log("res ", res);					
+					for(var i=0; i<res.length; i++){						
 						if(res[i].id1 == id1 && res[i].id2 == id2 || res[i].id1 == id2 && res[i].id2 == id1){
 					
 							BaasBox.deleteObject(res[i].id, "Contatto")
 								.done(function(res) {
+									BaasBox.loadCollectionWithParams("Utente", {where: "id='"+res.id1+"'" })
+								  			.done(function(user){
+											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted you from his contacts'" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
+													  .done(function(res1) {
+													  	console.log( res1);
+													  })
+													  .fail(function(error) {
+													  	console.log("error sendPushNotification ", error);
+													  })
+											 })
+											 .fail(function(error2) {
+											 	console.log(error2)
+											 })
 									THIS.trigger("contattoCancellato", id1);
 									console.log("r ", res);
 

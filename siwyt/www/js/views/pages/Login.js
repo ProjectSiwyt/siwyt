@@ -67,7 +67,10 @@ define(function(require) {
     events: {
       "tap #btn_login": "validateLogin",
       "tap #sign_up": "goToRegister",
-      "keyup":"controlSubmit"
+      "keyup":"controlSubmit",
+      "tap #recover": "recover",
+      "tap #back_login": "recover",
+      "tap #btn_recover": "sendRecoverMail"
     },
 
     render: function() {
@@ -116,6 +119,23 @@ define(function(require) {
       this.spinner.spin(document.body);
       //setTimeout(function(){THIS.spinner.spin(document.body);},50);
       this.utente.login(username,password);
+    },
+
+    recover: function(e){
+      console.log("recover");
+      document.getElementById("formLogin").classList.toggle('hide');
+      document.getElementById("btn_login").classList.toggle('hide');
+      document.getElementById("btn_recover").classList.toggle('hide');
+      document.getElementById("recover").classList.toggle('hide');
+      document.getElementById("formRecover").classList.toggle('hide');
+      document.getElementById("sign_up").classList.toggle('hide');
+      document.getElementById("back_login").classList.toggle('hide');
+    },
+
+    sendRecoverMail: function(){
+      var user = document.getElementById("recoverUsername").value;
+      console.log(user);
+      this.utente.recoverPass(user);
     },
   
   goToRegister: function(e) {
