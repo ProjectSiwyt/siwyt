@@ -854,30 +854,62 @@ select {
 #listBoardsContacts > .table-view> .scroll > .table-view-cell:last-child {
     border-bottom: 0px;
 }
-#carousel{
+
+#carousel {
     width: 100%;
     height: 100%;
-    position: relative;
+    margin: 0;
 }
-#carousel-left{
+
+#carousel-left {
     position: absolute;
     top: 50%;
     left: 2%;
+    z-index: 10;
 }
-#carousel-right{
+
+#carousel-right {
     position: absolute;
     top: 50%;
     right: 2%;
-}
-#carousel-pagination{
-    position: absolute;
-    bottom: 2%;
-}
-.carousel-img{
-    position: relative;
-    display: inline;
+    z-index: 10;
 }
 
+#carousel-pagination {
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+    text-align: center;
+    width: 100%;
+}
+
+.carousel-img {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transition: left 1s;
+    transition: right 1s;
+}
+.carousel-img > img{
+    height: 99.8%;
+    width: 100%;
+}
+.prev{
+    right:100%;
+}
+.next{
+    left:100%;
+}
+#skip{
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    z-index: 10;
+    color: black;
+}
 @media (max-width:450px) and (min-width:320px) {
     body {
         font-size: 8px;
