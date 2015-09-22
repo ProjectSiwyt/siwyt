@@ -94,7 +94,8 @@ define(function(require) {
         caricaMembriDaHome: function(e) {
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
             });
             this.subview1 = (new ShowListMembers({
                 model: b
@@ -110,7 +111,9 @@ define(function(require) {
             }
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
+
             });
             this.subview1 = (new ShowListMembers({
                 model: b
