@@ -84,12 +84,18 @@ define(function(require) {
             "tap #submitUpdate": "update",
             "tap #addMembers": "goToAddContacts",
             "tap #deleteNoticeboard": "deleteNoticeboard",
-            "tap #backBoard": "goToBacheca"
+            "tap #backBoard": "goToBacheca",
+            "keyup":"controlSubmit"
+        },
+        controlSubmit: function(e){
+        if(e.which === 13)
+            this.update();
         },
         caricaMembriDaHome: function(e) {
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
             });
             this.subview1 = (new ShowListMembers({
                 model: b
@@ -105,7 +111,9 @@ define(function(require) {
             }
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
+
             });
             this.subview1 = (new ShowListMembers({
                 model: b
@@ -372,8 +380,16 @@ define(function(require) {
             }
         },
         deleteNoticeboard: function(e) {
-            var del = confirm("Are you sure you want to delete this noticeboard?")
-            if (del){
+            var THIS=this;
+              navigator.notification.confirm(
+                'Are you sure you want delete this noticeboard?',  // message
+                THIS.del,                  // callback to invoke
+                'Delete Noticeboard',            // title
+                'Ok,Cancell'             // buttonLabels
+                );
+        },
+        del: function(results){
+            if (results==1){
                 this.postit.idRighePostit(this.idb);
             }
         },

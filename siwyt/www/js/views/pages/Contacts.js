@@ -152,16 +152,18 @@ define(function(require) {
     },
 
     removeContact: function(e){
-     /* var name = e.currentTarget.parentNode.id*/
-      console.log(e.currentTarget.parentNode.id);
-      var r = confirm("Are you sure you want to remove this contact");
-      if (r){
-        this.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
-        //this.utente.listContacts(localStorage.getItem("idu"));
-        //this.render();
+     var THIS=this;
+      navigator.notification.confirm(
+        'Are you sure you want delete this contact?',  // message
+        del,                  // callback to invoke
+        'Delete COntact',            // title
+        'Ok,Cancell'             // buttonLabels
+        );
+      function del(results){
+          if (results==1){
+           THIS.contatto.rimuoviContatto(e.currentTarget.parentNode.id, localStorage.getItem("idu"));
+          }
       }
-      
-      
     },
 
     checkInput: function(e){

@@ -64,7 +64,7 @@ define(function(require) {
     },
     controlSubmit: function(e){
         if(e.which === 13)
-        this.submit();
+        this.submitt();
     },
     loadPostit: function(result){
         this.resultpostit=result;
@@ -110,7 +110,7 @@ define(function(require) {
         document.getElementById("postitContent").appendChild(this.subView);
         this.trigger("stop");
     },
-    submit: function(e){
+    submitt: function(e){
       this.commento.aggiungiCommento(this.idp, document.getElementById("textComment").value, localStorage.getItem("idu"));
       document.getElementById("textComment").value="";
     },

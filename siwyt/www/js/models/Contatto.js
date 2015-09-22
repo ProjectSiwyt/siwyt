@@ -64,10 +64,10 @@ define(function(require) {
 					console.log("res ", res);					
 					for(var i=0; i<res.length; i++){						
 						if(res[i].id1 == id1 && res[i].id2 == id2 || res[i].id1 == id2 && res[i].id2 == id1){
-					
+							var contatto=res[i];
 							BaasBox.deleteObject(res[i].id, "Contatto")
 								.done(function(res) {
-									BaasBox.loadCollectionWithParams("Utente", {where: "id='"+res.id1+"'" })
+									BaasBox.loadCollectionWithParams("Utente", {where: "id='"+contatto.id1+"'" })
 								  			.done(function(user){
 											 	BaasBox.sendPushNotification({"message" : localStorage.getItem("nameLogged")+" "+localStorage.getItem("surnameLogged")+" has deleted you from his contacts'" , "users" : [user[0].username], "badge" : 1, "sound" : "sound.aiff"})
 													  .done(function(res1) {
