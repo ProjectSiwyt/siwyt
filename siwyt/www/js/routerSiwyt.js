@@ -21,7 +21,7 @@ define(function(require) {
   var Register = require("views/pages/Register");
   var NoticeboardManagement = require("views/pages/NoticeboardManagement");
   var PostitHome = require("views/pages/PostitHome");
-  var Tutorial = require("views/pages/Carousel");
+  var Tutorial = require("views/pages/Tutorial");
   var Spinner= require("spin");
 
   var AppRouter = Backbone.Router.extend({
