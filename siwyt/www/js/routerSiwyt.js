@@ -133,7 +133,7 @@ define(function(require) {
             dir.getFile("settings.txt", {create:true}, function(file) {
             console.log("got the file", file);
             var logOb = file;
-            THIS.writeSettings("1;1;1", logOb);      
+            THIS.writeSettings("1;1;1;1", logOb);      
             });
 
         }
@@ -161,6 +161,7 @@ define(function(require) {
             localStorage.setItem("boards", settings_val[0]);
             localStorage.setItem("sounds", settings_val[1]);
             localStorage.setItem("vibration", settings_val[2]);
+            localStorage.setItem("tutorial", settings_val[3]);
 
         }
 
@@ -192,6 +193,7 @@ define(function(require) {
             localStorage.setItem("boards", settings_val[0]);
             localStorage.setItem("sounds", settings_val[1]);
             localStorage.setItem("vibration", settings_val[2]);
+            localStorage.setItem("tutorial", settings_val[3]);
           }, function(){console.log("errore write initial settings");});
         },
 
@@ -312,9 +314,7 @@ define(function(require) {
         document.body.appendChild(this.structureView.render().el);
         this.structureView.trigger("inTheDOM");
         //Access to the tutorial the first time of the app
-        localStorage.setItem("tutorial","true");
-        debugger;
-        if(localStorage.getItem("tutorial")=="true"){ 
+        if(localStorage.getItem("tutorial")=="1"){ 
           this.navigate("tutorial", {trigger: true});
         }
         else{

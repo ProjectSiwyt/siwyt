@@ -64,6 +64,21 @@ define(function(require) {
             }
 
             this.spinner = new Spinner(opts);
+
+          var THIS = this;
+          var b = localStorage.getItem("boards");
+          var s = localStorage.getItem("sounds");
+          var v = localStorage.getItem("vibration");
+          var str = b+";"+s+";"+v+";0";
+          console.log(str);
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+            dir.getFile("settings.txt", {create:false}, function(file) {
+              console.log("got the file", file);
+              logOb = file;
+              THIS.disableTutorial(str, logOb);      
+            });
+
+        });
             // here we can register to inTheDOM or removing events
             // this.listenTo(this, "inTheDOM", function() {
             //   $('#content').on("swipe", function(data){
@@ -94,6 +109,35 @@ define(function(require) {
 
             return this;
         },
+
+         disableTutorial: function(str, logOb){
+                if(!logOb) return;
+          //var log = str + " [" + (new Date()) + "]\n";
+          //console.log("going to log "+log);
+              logOb.createWriter(function(fileWriter) {
+                
+                var settings_val = new Array();
+                fileWriter.seek(fileWriter.length);
+                
+                var blob = new Blob([str], {type:'text/plain'});
+                fileWriter.write(blob);
+                console.log("ok, in theory i worked");
+                var riga = str.split(";");
+                console.log(riga);
+                for(var i =0; i< riga.length;i++){
+                  console.log("riga[elem]: ",riga[i]);
+                  settings_val[i]= riga[i];             
+                }
+
+                console.log("settings_val: ", settings_val);
+                localStorage.setItem("boards", settings_val[0]);
+                localStorage.setItem("sounds", settings_val[1]);
+                localStorage.setItem("vibration", settings_val[2]);
+                localStorage.setItem("tutorial", settings_val[3]);
+              }, function(){console.log("errore write disableTutorial");});
+        },
+
+        
         goToLeft: function(e) {
             var THIS = this;
             if (THIS.current_screen!=1) {
