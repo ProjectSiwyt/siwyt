@@ -58,12 +58,13 @@ define(function(require) {
             this.bacheca.on("rimuoviResponsabili", this.rimuoviMembri, this);
             //mi metto in ascolto dell'evento che mi ritorna l'esito della rimozione degli users
             this.bacheca.on("rimuoviMembri", this.goToBacheca, this);
-            //mi metto in ascolto dell'evento che mi ritorna l'esito della query di eliminazione della bacheca
-            this.bacheca.on("rimuoviBacheca", this.rimuoviElementiBacheca, this);
             //mi metto in ascolto dell'evento che mi ritorna l'elenco dei postit eliminati
             this.postit.on("rimuoviPostits", this.rimuoviCommentiPostitBacheca, this)
 
-            this.bacheca.on("rimuoviTuttiAmministratori", this.rimuoviResto, this);
+            this.bacheca.on("rimuoviTuttiAmministratori", this.rimuoviTuttiResponsabili, this);
+            this.bacheca.on("rimuoviTuttiResponsabili", this.rimuoviTuttiMembri, this);
+            this.bacheca.on("rimuoviTuttiMembri", this.rimuoviResto, this);
+
             //this.bacheca.idAmministratore(this.idb);
 
             // here we can register to inTheDOM or removing events
@@ -83,12 +84,18 @@ define(function(require) {
             "tap #submitUpdate": "update",
             "tap #addMembers": "goToAddContacts",
             "tap #deleteNoticeboard": "deleteNoticeboard",
-            "tap #backBoard": "goToBacheca"
+            "tap #backBoard": "goToBacheca",
+            "keyup":"controlSubmit"
+        },
+        controlSubmit: function(e){
+        if(e.which === 13)
+            this.update();
         },
         caricaMembriDaHome: function(e) {
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
             });
             this.subview1 = (new ShowListMembers({
                 model: b
@@ -104,7 +111,9 @@ define(function(require) {
             }
             var b = new Utente({
                 nome: localStorage.getItem('nameLogged'),
-                cognome: localStorage.getItem('surnameLogged')
+                cognome: localStorage.getItem('surnameLogged'),
+                image: localStorage.getItem('imageLogged')
+
             });
             this.subview1 = (new ShowListMembers({
                 model: b
@@ -371,13 +380,18 @@ define(function(require) {
             }
         },
         deleteNoticeboard: function(e) {
-            var del = confirm("Are you sure you want to delete this noticeboard?")
-            if (del){
-                this.bacheca.rimuoviBacheca(this.idb);
-            }
+            var THIS=this;
+              navigator.notification.confirm(
+                'Are you sure you want delete this noticeboard?',  // message
+                THIS.del,                  // callback to invoke
+                'Delete Noticeboard',            // title
+                'Ok,Cancell'             // buttonLabels
+                );
         },
-        rimuoviElementiBacheca: function(res) {
-            this.postit.idRighePostit(this.idb);
+        del: function(results){
+            if (results==1){
+                this.postit.idRighePostit(this.idb);
+            }
         },
         rimuoviCommentiPostitBacheca: function(res) {
             for (var i = 0; i < res.length; i++) {
@@ -386,10 +400,15 @@ define(function(require) {
             //rimuovo subito gli amministratori altrimenti ho problemi quando torno nella home
             this.bacheca.idRigheTuttiAmministratori(this.idb);
         },
-        rimuoviResto: function(res) {
+        rimuoviTuttiResponsabili: function(res){
             this.bacheca.idRigheTuttiResponsabili(this.idb);
+        },
+        rimuoviTuttiMembri: function(res){
             this.bacheca.idRigheTuttiMembri(this.idb);
+        },
+        rimuoviResto: function(res) {
             this.relazione.idRigheRelazioni(this.idb);
+            this.bacheca.rimuoviBacheca(this.idb);
             this.goToHome();
         },
         goToHome: function() {

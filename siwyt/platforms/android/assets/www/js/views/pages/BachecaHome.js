@@ -134,48 +134,90 @@ define(function(require) {
                     console.log((p.x-px)/(ax-px));
                 //controllo che il touch sia sulla relazione verificando l'equazione della retta con un margine di errore
                 var eq=(p.y-py)/(ay-py)-(p.x-px)/(ax-px);
-                if(eq>-0.05 && eq<0.05){
+                if(eq>-0.1 && eq<0.1){
                     console.log("INSERIRE MENU RELAZIONE PER ELIMINARLA");
                     console.log(this.rel[i].id);
                     console.log("AL TAP SU ELIMINA");
                     console.log("CHIMARE QUERY CHE ELIMINA");
                     if (px<ax && py<ay){
                         if (p.x>px &&p.x<ax && p.y>py && p.y<ay){
-                            var del=confirm("Are you sure to delete this relation?")
-                            if (del){
-                                this.relazione.rimuoviRelazione(this.rel[i].id);
-                                this.rel.splice(i,1);    
-                                this.appendRelations(this.rel);
+                            var THIS=this;
+                            var j=i;
+                              navigator.notification.confirm(
+                                'Are you sure you want delete this relation?',  // message
+                                del,                  // callback to invoke
+                                'Delete updateRelations',            // title
+                                'Ok,Cancell'             // buttonLabels
+                                );
+                            function del(results){
+                                if (results==1){
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
+                                THIS.appendRelations(THIS.rel);
+                                }
                             }
                         }
                     }
                     if (px<ax && ay<py){
                         if(p.x>px &&p.x<ax && p.y>ay && p.y<py){
-                            var del=confirm("Are you sure to delete this relation?")
-                            if (del){
-                                this.relazione.rimuoviRelazione(this.rel[i].id);
-                                this.rel.splice(i,1);
-                                this.appendRelations(this.rel);
+                            var THIS=this;
+                            var j=i;
+                              navigator.notification.confirm(
+                                'Are you sure you want delete this relation?',  // message
+                                del,                  // callback to invoke
+                                'Delete updateRelations',            // title
+                                'Ok,Cancell'             // buttonLabels
+                                );
+                            function del(results){
+                                if (results==1){
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
+                                THIS.appendRelations(THIS.rel);
+                                }
                             }
                         }
                     }
                     if (ax<px && ay<py){
                         if(p.x>ax &&p.x<px && p.y>ay && p.y<py){
-                            var del=confirm("Are you sure to delete this relation?")
-                            if (del){
-                                this.relazione.rimuoviRelazione(this.rel[i].id);
-                                this.rel.splice(i,1);
-                                this.appendRelations(this.rel);
+                            var THIS=this;
+                            var j=i;
+                              navigator.notification.confirm(
+                                'Are you sure you want delete this relation?',  // message
+                                del,                  // callback to invoke
+                                'Delete updateRelations',            // title
+                                'Ok,Cancell'             // buttonLabels
+                                );
+                            function del(results){
+                                if (results==1){
+                                    console.log(THIS);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
+                                THIS.appendRelations(THIS.rel);
+                                }
                             }
                         }
                     }
                     if (ax<px && py<ay){
                         if(p.x>ax &&p.x<px && p.y>py && p.y<ay){
-                            var del=confirm("Are you sure to delete this relation?")
-                            if (del){
-                                this.relazione.rimuoviRelazione(this.rel[i].id);
-                                this.rel.splice(i,1);
-                                this.appendRelations(this.rel);
+                            var THIS=this;
+                            var j=i;
+                              navigator.notification.confirm(
+                                'Are you sure you want delete this relation?',  // message
+                                del,                  // callback to invoke
+                                'Delete updateRelations',            // title
+                                'Ok,Cancell'             // buttonLabels
+                                );
+                            function del(results){
+                                if (results==1){
+                                    console.log(THIS.rel);
+                                    console.log(j);
+                                    console.log(THIS.rel[j]);
+                                THIS.relazione.rimuoviRelazione(THIS.rel[j].id);
+                                THIS.rel.splice(j,1);
+                                THIS.appendRelations(THIS.rel);
+                                }
                             }
                         }
                     }
@@ -213,27 +255,30 @@ define(function(require) {
             "Insert name of file", 
             onPrompt,                  // callback to invoke
             'Export To JPG',            // title
-            ['Ok'],             // buttonLabels
+            ['Ok','Annulla'],             // buttonLabels
             'screenshot'                 // defaultText
             );
             function onPrompt(results){
-                setTimeout(function(){
-                    navigator.screenshot.save(function(error,res){
-                  if(error){
-                    console.error(error);
-                  }else{
-                    console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
-                    window.plugins.toast.showWithOptions(
-                      {
-                        message: "The Board has been exported",
-                        position: "center",
-                        duration: "long",
-                        addPixelsY: -200
+                console.log(results);
+                if(results==1){
+                    setTimeout(function(){
+                        navigator.screenshot.save(function(error,res){
+                      if(error){
+                        console.error(error);
+                      }else{
+                        console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
+                        window.plugins.toast.showWithOptions(
+                          {
+                            message: "The Board has been exported",
+                            position: "center",
+                            duration: "long",
+                            addPixelsY: -200
+                          }
+                        );
                       }
-                    );
-                  }
-                },'jpg',50,results.input1);
-                },500);    
+                    },'jpg',50,results.input1);
+                    },500);  
+                } 
             }
             
         },
@@ -441,14 +486,21 @@ define(function(require) {
         saveEvent: function(e){
             this.event=e;
         },
-        deletePostit: function(e){
-            this.obj = e.currentTarget;
-            var del = confirm("Are you sure you want to delete this postit?");
-            if (del){
-                this.idp = this.obj.parentNode.parentNode.id.replace('LinkPopup',''); 
-                console.log(this.idp);
-                this.postits.rimuoviPostit(this.idp);
-            }
+        deletePostit: function(e) {
+            var THIS=this;
+            this.obj=e.currentTarget;
+              navigator.notification.confirm(
+                'Are you sure you want delete this postit?',  // message
+                del,                  // callback to invoke
+                'Delete Postit',            // title
+                'Ok,Cancell'             // buttonLabels
+                );
+              function del(results){
+                if (results==1){
+                   THIS.idp = THIS.obj.parentNode.parentNode.id.replace('LinkPopup',''); 
+                    THIS.postits.rimuoviPostit(THIS.idp);
+                }
+              }
         },
         deleteComments: function(res){
             $("#"+res).remove();
@@ -649,9 +701,17 @@ define(function(require) {
             this.relazione.aggiungiRelazione(this.idb,postitpartenza.id, postitarrivo.id,"");
             
         },
-        leaveBoard:function(e){
-            var del = confirm("Are you sure you want to leave this noticeboard?")
-            if (del){
+        deleteNoticeboard: function(e) {
+            var THIS=this;
+              navigator.notification.confirm(
+                'Are you sure you want delete this noticeboard?',  // message
+                THIS.del,                  // callback to invoke
+                'Delete Noticeboard',            // title
+                'Ok,Cancell'             // buttonLabels
+                );
+        },
+        del: function(results){
+            if (results==1){
                 if (this.ruolo=='admin'){
                     this.bacheca.idRigaResponsabile(localStorage.getItem('idu'), this.idb);
                 }
@@ -660,6 +720,15 @@ define(function(require) {
                 }
                 this.goToHome();
             }
+        },
+        leaveBoard:function(e){
+            var THIS=this;
+              navigator.notification.confirm(
+                'Are you sure you want leave this noticeboard?',  // message
+                THIS.del,                  // callback to invoke
+                'Leave Noticeboard',            // title
+                'Ok,Cancell'             // buttonLabels
+                );
         },
         //Funzioni di cambio pagina
         goToHome: function(e) {

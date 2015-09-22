@@ -46,7 +46,7 @@ define(function(require) {
       "tutorial": "tutorial"
     },
 
-    BAASBOX_URL : "http://192.168.1.57:9000",
+    BAASBOX_URL : "http://192.168.1.234:9000",
 
     BAASBOX_APP_CODE : "1234567890",
 

@@ -46,7 +46,7 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    BAASBOX_URL : "http://192.168.1.57:9000",
+    BAASBOX_URL : "http://192.168.1.234:9000",
     ICON: "/www/res/icon/android/icon-36-ldpi.png",
     id: "settings",
     className: "i-g page size",
@@ -102,7 +102,7 @@ define(function(require) {
       var b = localStorage.getItem("boards");
       var s = localStorage.getItem("sounds");
       var v = localStorage.getItem("vibration");
-      var str = b+";"+s+";"+v+";0";
+      var str = b+";"+s+";"+v;
       console.log(str);
       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
         console.log("got main dir",dir);

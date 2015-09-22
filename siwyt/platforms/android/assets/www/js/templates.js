@@ -33,6 +33,6 @@ define({
     profile: "templates/profile.html",
     appSettings: "templates/appSettings.html",
     contentPostit: "templates/content_postit.html",
-    tutorial: "templates/carousel.html"
+    tutorial: "templates/tutorial.html"
     
 });

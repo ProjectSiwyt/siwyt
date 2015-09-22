@@ -21,7 +21,7 @@ define(function(require) {
   var Register = require("views/pages/Register");
   var NoticeboardManagement = require("views/pages/NoticeboardManagement");
   var PostitHome = require("views/pages/PostitHome");
-  var Tutorial = require("views/pages/Carousel");
+  var Tutorial = require("views/pages/Tutorial");
   var Spinner= require("spin");
 
   var AppRouter = Backbone.Router.extend({
@@ -46,7 +46,7 @@ define(function(require) {
       "tutorial": "tutorial"
     },
 
-    BAASBOX_URL : "http://192.168.1.57:9000",
+    BAASBOX_URL : "http://192.168.1.234:9000",
 
     BAASBOX_APP_CODE : "1234567890",
 
@@ -133,7 +133,7 @@ define(function(require) {
             dir.getFile("settings.txt", {create:true}, function(file) {
             console.log("got the file", file);
             var logOb = file;
-            THIS.writeSettings("1;1;1", logOb);      
+            THIS.writeSettings("1;1;1;1", logOb);      
             });
 
         }
@@ -161,6 +161,7 @@ define(function(require) {
             localStorage.setItem("boards", settings_val[0]);
             localStorage.setItem("sounds", settings_val[1]);
             localStorage.setItem("vibration", settings_val[2]);
+            localStorage.setItem("tutorial", settings_val[3]);
 
         }
 
@@ -192,6 +193,7 @@ define(function(require) {
             localStorage.setItem("boards", settings_val[0]);
             localStorage.setItem("sounds", settings_val[1]);
             localStorage.setItem("vibration", settings_val[2]);
+            localStorage.setItem("tutorial", settings_val[3]);
           }, function(){console.log("errore write initial settings");});
         },
 
@@ -312,9 +314,7 @@ define(function(require) {
         document.body.appendChild(this.structureView.render().el);
         this.structureView.trigger("inTheDOM");
         //Access to the tutorial the first time of the app
-        localStorage.setItem("tutorial","true");
-        debugger;
-        if(localStorage.getItem("tutorial")=="true"){ 
+        if(localStorage.getItem("tutorial")=="1"){ 
           this.navigate("tutorial", {trigger: true});
         }
         else{

@@ -19,7 +19,7 @@ define(function(require) {
       "tap #back": "goBack"
     },
 
-    BAASBOX_URL : "http://192.168.1.57:9000",
+    BAASBOX_URL : "http://192.168.1.234:9000",
     ICON: "/www/res/icon/android/icon-36-ldpi.png",
     //initialize e render sono le funzioni che ci aspettiamo sempre in una view
     //initialize corrisponde ad un costruttore in java

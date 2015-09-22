@@ -164,14 +164,21 @@ define(function(require) {
 
 
     deleteAccount: function(e){
-      var del = window.confirm("Are you sure you want to delete your account?");
-      console.log(del);
-      if(del) 
-          //this.utente.deleteAccount(localStorage.getItem("idu"));
-          this.utente.deleteUserDataUser(localStorage.getItem("idu"));
-    
+      var THIS=this;
+      navigator.notification.confirm(
+        'Are you sure you want delete your account?',  // message
+        del,                  // callback to invoke
+        'Delete Account',            // title
+        'Ok,Cancell'             // buttonLabels
+        );
+      function del(results){
+        if (results==1){
+          console.log("ccccccccccccccc", THIS);
+          THIS.utente.deleteUserDataUser(localStorage.getItem("idu"));
+        }
+      }
     },
-
+    
     changeImg: function(e){
      
 
@@ -193,9 +200,9 @@ define(function(require) {
           //var THIS = this;
           console.log("PHOTOLIBRARY"); 
          navigator.camera.getPicture(saveImgAlbum, onFail, 
-          { quality: 80, 
-           targetWidth: 150,
-           targetHeight: 150,
+          { quality: 50, 
+           targetWidth: 250,
+           targetHeight: 250,
            destinationType: Camera.DestinationType.DATA_URL,
            sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM });
             var THISS = THIS;
@@ -224,9 +231,9 @@ define(function(require) {
             //var THIS = this;
             console.log("Camera"); 
             navigator.camera.getPicture(saveImgCamera, onFail, 
-              { quality: 80, 
-               targetWidth: 150,
-               targetHeight: 150,
+              { quality: 50, 
+               targetWidth: 250,
+               targetHeight: 250,
                //allowEdit: true,
                encodingType: Camera.EncodingType.JPEG,
                destinationType: Camera.DestinationType.DATA_URL,
@@ -330,9 +337,7 @@ define(function(require) {
           localStorage.setItem('surnameLogged',surname);
           localStorage.setItem("emailLogged", email);
           $(".edit").attr("disabled", "disabled");
-           this.utente.saveName(localStorage.getItem("idu"), name);
-           this.utente.saveSurname(localStorage.getItem("idu"), surname);
-           this.utente.saveEmail(localStorage.getItem("idu"), email);
+           this.utente.saveData(localStorage.getItem("idu"), name, surname, email);
            
          }
     },
@@ -367,6 +372,7 @@ define(function(require) {
             document.getElementById("profileConfirm").value ="";
             $(".editPass").attr("disabled","disabled");
             $(".errorReg.pass").removeAttr("style");
+            this.utente.updatePass(result, localStorage.getItem("idu"));
            }
         else
           $("#errPassword").attr("style","display:inline-block");
