@@ -150,9 +150,11 @@ define(function(require) {
               THIS.current_screen = THIS.current_screen - 1;
               var current_page = document.getElementById("page_" + THIS.current_screen);
               current_page.classList.add("current");
-              var prev = document.getElementById("screen_" + (THIS.current_screen - 1));
-              prev.classList.add("prev");
-              prev.classList.remove("hide");                
+              if((THIS.current_screen - 1) >= 1){
+                var prev = document.getElementById("screen_" + (THIS.current_screen - 1));
+                prev.classList.add("prev");
+                prev.classList.remove("hide");                
+              }
             }
         },
         goToRight: function(e) {
@@ -167,9 +169,11 @@ define(function(require) {
               THIS.current_screen = THIS.current_screen + 1;
               var current_page = document.getElementById("page_" + THIS.current_screen);
               current_page.classList.add("current");
-              var next = document.getElementById("screen_" + (THIS.current_screen + 1));
-              next.classList.add("next");
-              next.classList.remove("hide");
+              if((THIS.current_screen + 1) <= 7){
+                  var next = document.getElementById("screen_" + (THIS.current_screen + 1));
+                  next.classList.add("next");
+                  next.classList.remove("hide");
+              }
             } else {
                 THIS.skip(e);
             }
