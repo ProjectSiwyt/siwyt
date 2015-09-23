@@ -29,7 +29,7 @@ define(function(require) {
         back.classList.remove('hide');
       }
       this.utente = new Utente();
-      this.utente.on("baasboxLogout", this.logOut , this) ;
+      this.utente.on("baasboxLogout", this.goToLogin , this) ;
       //this.set_notification();
       
 
@@ -46,7 +46,7 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    BAASBOX_URL : "http://192.168.1.234:9000",
+    BAASBOX_URL : "http://192.168.1.64:9000",
     ICON: "/www/res/icon/android/icon-36-ldpi.png",
     id: "settings",
     className: "i-g page size",
@@ -201,13 +201,16 @@ define(function(require) {
           url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
           method: "PUT"
       }).done(function(res){
+          this.utente.logout();
+            });
+
+    },
+
+    goToLogin: function(e){
       		localStorage.clear();
       		Backbone.history.navigate("login",{
 		        trigger: true
 		      });
-
-      });
-
       
     },
 

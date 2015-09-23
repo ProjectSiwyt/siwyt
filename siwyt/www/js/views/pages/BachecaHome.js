@@ -260,7 +260,8 @@ define(function(require) {
             );
             function onPrompt(results){
                 console.log(results);
-                if(results==1){
+                if(results.buttonIndex==1){
+                    console.log("!1");
                     setTimeout(function(){
                         navigator.screenshot.save(function(error,res){
                       if(error){
