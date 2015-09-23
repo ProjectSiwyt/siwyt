@@ -53,7 +53,7 @@ define(function(require) {
     className: "i-g page",
 
     events: {
-      "tap #submitComment":"submit",
+      "tap #submitComment":"submitt",
       "keyup":"controlSubmit"
       //"tap": "goToContacts",
       
