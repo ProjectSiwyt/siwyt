@@ -46,7 +46,7 @@ define(function(require) {
       // by convention, all the inner views of a view must be stored in this.subViews
     },
 
-    BAASBOX_URL : "http://192.168.1.64:9000",
+    BAASBOX_URL : "http://10.170.14.154:9000",
     ICON: "/www/res/icon/android/icon-36-ldpi.png",
     id: "settings",
     className: "i-g page size",
@@ -201,7 +201,7 @@ define(function(require) {
           url:THIS.BAASBOX_URL+"/push/disable/"+localStorage.getItem("registrationId"),
           method: "PUT"
       }).done(function(res){
-          this.utente.logout();
+          THIS.utente.logout();
             });
 
     },
